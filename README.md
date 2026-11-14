@@ -23,7 +23,9 @@ O Catalogames é um app para Windows que organiza os jogos que você já zerou, 
 
 ### Listas e rankings
 - Crie listas como "Top 10 RPGs" ou "Musous favoritos", com ou sem numeração. O top 3 aparece em ouro, prata e bronze.
-- Arraste as capas para reordenar.
+- Cada lista abre em tela cheia, com busca, tamanho das capas ajustável e botões de editar e excluir.
+- Arraste as capas para reordenar, tanto na lista aberta quanto no editor. Os números do ranking se ajustam na hora.
+- Opção de esconder os nomes embaixo das capas.
 - Ao digitar o nome de um jogo, o app sugere os jogos que você já catalogou e reaproveita a capa deles.
 - **Lista a partir da busca:** pesquisou ou filtrou? Um botão cria uma lista com os jogos que estão aparecendo.
 - **Seleção com Ctrl:** segure <kbd>Ctrl</kbd> e clique nas capas para marcar. <kbd>Ctrl</kbd>+<kbd>A</kbd> marca todas. Depois é só criar uma lista com as marcadas.
@@ -31,6 +33,7 @@ O Catalogames é um app para Windows que organiza os jogos que você já zerou, 
 ### Capas
 - **SteamGridDB integrado:** digite o nome do jogo e clique em *Buscar capa no SteamGridDB*. Abre uma grade com as capas da comunidade, e um clique baixa a escolhida. Precisa de uma [chave gratuita da API](https://www.steamgriddb.com/profile/preferences/api), configurada uma única vez.
 - Também dá para colar uma imagem (<kbd>Ctrl</kbd>+<kbd>V</kbd>), arrastar um arquivo ou usar um link, inclusive o link da página do jogo na Steam.
+- Ao cadastrar um jogo que já está em alguma lista, o app sugere ele e reaproveita a capa.
 - As imagens grandes são reduzidas automaticamente para não pesar a pasta.
 
 ### Aparência
@@ -88,6 +91,14 @@ npm run dist       # gera o instalador do Windows em dist/
 ---
 
 ## 📜 Versões
+
+### 1.3.0
+- As listas abrem em tela cheia, com voltar, busca, tamanho das capas e editar/excluir.
+- Arrastar para reordenar com a lista aberta, com o ranking renumerando sozinho.
+- Opção de esconder os nomes dos jogos embaixo das capas.
+- Números do ranking do 4º em diante em branco com número preto.
+- No cadastro, o app sugere jogos que já estão nas listas, com capa.
+- Botões de tema alinhados nas configurações.
 
 ### 1.2.0
 - O nome mudou para **Catalogames**. A atualização por cima da versão antiga mantém tudo.

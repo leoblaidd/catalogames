@@ -48,7 +48,7 @@ kbd{background:var(--bg4);border:1px solid var(--line);border-bottom-width:2px;b
 .btn.sm{padding:5px 10px;font-size:13px}
 .btn:disabled{opacity:.45;cursor:not-allowed}
 .link{background:none;border:0;color:var(--acc2);cursor:pointer;padding:0;text-decoration:underline;font-size:13px}
-input[type=text],input[type=number],input[type=search],input:not([type]),select,textarea{
+input[type=text],input[type=number],input[type=search],input[type=password],input:not([type]),select,textarea{
   background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px 10px;outline:none;width:100%}
 input:focus,select:focus,textarea:focus{border-color:var(--acc)}
 select{cursor:pointer}
@@ -129,10 +129,13 @@ body.ctrl #main .card,body.selecting #main .card{cursor:copy}
 .tile{position:relative;user-select:none}
 .tile .cv{position:relative;aspect-ratio:2/3;border-radius:8px;overflow:hidden;background:var(--bg3);box-shadow:0 4px 12px var(--sh)}
 .tile .tt{font-size:12px;margin-top:6px;line-height:1.25;color:var(--txt2);text-align:center;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
-.rank{position:absolute;top:6px;left:6px;min-width:26px;height:26px;padding:0 6px;border-radius:7px;background:var(--acc);color:var(--acctxt);font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.5)}
-.tile:nth-child(1) .rank.top{background:#e8b923;color:#1a1300}
-.tile:nth-child(2) .rank.top{background:#c3cbd6;color:#15181d}
-.tile:nth-child(3) .rank.top{background:#cd8a4f;color:#1b0f04}
+.rank{position:absolute;top:6px;left:6px;min-width:26px;height:26px;padding:0 6px;border-radius:7px;background:#fff;color:#111;font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.5)}
+.rank.r1{background:#e8b923;color:#1a1300}
+.rank.r2{background:#c3cbd6;color:#15181d}
+.rank.r3{background:#cd8a4f;color:#1b0f04}
+.nonames .tile .tt{display:none}
+.tile[draggable="true"]{cursor:grab}
+.tile[draggable="true"]:active{cursor:grabbing}
 .tgrid.edit .tile{cursor:grab}
 .tgrid.edit .tile:active{cursor:grabbing}
 .tile.dragging{opacity:.35}
@@ -197,7 +200,8 @@ body.ctrl #main .card,body.selecting #main .card{cursor:copy}
 
 /* editor de lista */
 .le-body{padding:18px 20px 20px}
-.le-top{display:flex;gap:14px;align-items:flex-end;margin-bottom:16px}
+.le-top{display:flex;gap:10px;align-items:flex-end;margin-bottom:16px}
+.le-top .switches{display:flex;gap:8px}
 .le-top .f{flex:1}
 .le-top input#leNome{font-size:18px;font-weight:700;padding:10px 12px}
 .switch{display:flex;align-items:center;gap:8px;cursor:pointer;user-select:none;padding:10px 14px;border:1px solid var(--line);border-radius:8px;background:var(--bg);white-space:nowrap}
@@ -229,8 +233,16 @@ body.ctrl #main .card,body.selecting #main .card{cursor:copy}
 .review{margin-top:18px;padding:14px 16px;background:var(--bg);border:1px solid var(--line);border-radius:10px;white-space:pre-wrap;line-height:1.6;color:var(--txt2)}
 .tagrow{display:flex;flex-wrap:wrap;gap:5px}
 .tag{font-size:12px;padding:2px 9px;border-radius:20px;background:var(--bg4);color:var(--txt2)}
-.lv-body{padding:20px}
-.lv-body .tgrid{--card:150px}
+/* lista aberta em tela cheia */
+.lpage-head{display:flex;align-items:baseline;gap:14px;margin:4px 0 20px;flex-wrap:wrap}
+.lpage-head h1{margin:0;font-size:26px;letter-spacing:-.01em}
+.lpage-head .hint{font-size:12.5px;color:var(--dim)}
+.tgrid.lpage{--card:var(--lcard,170px);gap:18px}
+.tgrid.lpage .tile .cv{border-radius:var(--r)}
+.tgrid.lpage .tile .tt{font-size:13px}
+.tools .back{flex:none}
+.tools .lv-actions{display:flex;gap:8px}
+#toolsListView .size{margin-right:6px}
 
 
 /* sugestões do catálogo (editor de lista) */
@@ -278,8 +290,10 @@ body.ctrl #main .card,body.selecting #main .card{cursor:copy}
 .cfg-body section:last-child{border-bottom:0}
 .cfg-body h3{margin:0 0 10px;font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--mut)}
 .seg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.seg button{border:1px solid var(--line);background:var(--bg);border-radius:10px;padding:10px 8px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;font-weight:600}
-.seg button small{font-weight:400;color:var(--mut);font-size:11.5px}
+.seg button{border:1px solid var(--line);background:var(--bg);border-radius:10px;padding:12px 8px 10px;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-weight:600;text-align:center;width:100%;line-height:1.2}
+.seg button .ic{font-size:20px;line-height:1;display:block}
+.seg button b{display:block;font-weight:600}
+.seg button small{display:block;font-weight:400;color:var(--mut);font-size:11.5px}
 .seg button:hover{border-color:var(--line2)}
 .seg button.on{border-color:var(--acc);background:var(--accbg);color:var(--acc2)}
 .swatches{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
@@ -318,6 +332,7 @@ body.selecting .toast{bottom:86px}
   .form-body .drop,.detail .dc{max-width:220px;margin:0 auto}
   .stats{display:none}
   .le-top{flex-direction:column;align-items:stretch}
+  .le-top .switches{flex-wrap:wrap}
 }
 </style>
 </head>
@@ -368,6 +383,16 @@ body.selecting .toast{bottom:86px}
   <div class="tools hidden" id="toolsList">
     <div class="search"><svg><use href="#lupa"/></svg><input id="lq" type="search" placeholder="Buscar lista ou jogo dentro das listas…" autocomplete="off"></div>
   </div>
+
+  <div class="tools hidden" id="toolsListView">
+    <button class="btn back" id="lvBack" title="Voltar para as listas (Esc)">← Listas</button>
+    <div class="search"><svg><use href="#lupa"/></svg><input id="lvq" type="search" placeholder="Buscar nesta lista…" autocomplete="off"></div>
+    <label class="size" title="Tamanho das capas">▫<input type="range" id="lvSize" min="110" max="280" step="10">▣</label>
+    <div class="lv-actions">
+      <button class="btn" id="lvEdit">✎ Editar lista</button>
+      <button class="btn ghost danger" id="lvDel">🗑 Excluir</button>
+    </div>
+  </div>
 </header>
 <main id="main"></main>
 <main id="listsMain" class="hidden"></main>
@@ -387,9 +412,9 @@ body.selecting .toast{bottom:86px}
     <div class="cfg-body">
       <section><h3>Tema</h3>
         <div class="seg" id="cfgTema">
-          <button type="button" data-v="auto">🖥 Automático<small>segue o Windows</small></button>
-          <button type="button" data-v="escuro">🌙 Escuro<small>&nbsp;</small></button>
-          <button type="button" data-v="claro">☀ Claro<small>&nbsp;</small></button>
+          <button type="button" data-v="auto"><span class="ic">🖥️</span><b>Automático</b><small>segue o Windows</small></button>
+          <button type="button" data-v="escuro"><span class="ic">🌙</span><b>Escuro</b><small>sempre escuro</small></button>
+          <button type="button" data-v="claro"><span class="ic">☀️</span><b>Claro</b><small>sempre claro</small></button>
         </div>
       </section>
       <section><h3>Cor de destaque</h3><div class="swatches" id="cfgCores"></div></section>
@@ -428,7 +453,7 @@ body.selecting .toast{bottom:86px}
         <p class="tip">Dica: achou a capa? Clique com o botão direito nela → <b>Copiar imagem</b>, volte aqui e aperte <kbd>Ctrl</kbd>+<kbd>V</kbd>.</p>
       </div>
       <div class="fields">
-        <label class="f full"><span>Título *</span><input id="fTitulo" required></label>
+        <label class="f full"><span>Título *</span><div class="ac"><input id="fTitulo" required autocomplete="off" placeholder="Digite o nome (se o jogo já estiver numa lista, dá pra puxar com a capa)"><div class="sugg" id="fSugg"></div></div></label>
         <label class="f"><span>Plataforma</span><input id="fPlat" list="dlPlat" placeholder="PC, PS5, Switch…"></label>
         <label class="f"><span>Status</span><select id="fStatus"></select></label>
         <label class="f"><span>Terminado em <small>(ano)</small></span><input id="fAno" type="number" min="1970" max="2100" placeholder="ex: 2025"></label>
@@ -461,7 +486,10 @@ body.selecting .toast{bottom:86px}
     <div class="le-body">
       <div class="le-top">
         <label class="f"><span>Nome da lista *</span><input id="leNome" placeholder="ex: Top 10 RPGs da vida, Musous favoritos…"></label>
-        <label class="switch"><input type="checkbox" id="leRank"> 🏅 Ranquear (numerar posições)</label>
+        <div class="switches">
+          <label class="switch"><input type="checkbox" id="leRank"> 🏅 Ranquear (numerar posições)</label>
+          <label class="switch" title="Mostra só as capas, sem o nome embaixo"><input type="checkbox" id="leNames"> 🏷️ Esconder nomes</label>
+        </div>
       </div>
 
       <div class="add-panel" id="lPicker">
@@ -503,7 +531,6 @@ body.selecting .toast{bottom:86px}
 </div>
 
 <!-- ===== Modal: ver lista ===== -->
-<div class="modal-bg" id="lvBg"><div class="modal wide" id="lv"></div></div>
 
 <!-- ===== Modal: capas do SteamGridDB (abre por cima) ===== -->
 <div class="modal-bg subbg" id="sgBg">
@@ -583,12 +610,13 @@ function applyAccent(){
 applyTheme(); applyAccent();
 
 const view = Object.assign(
-  { q:'', plat:'', gen:'', status:'', ano:'', nota:'', sort:'ano-desc', group:true, fav:false, card:170, tab:'cat', filtrosOcultos:false },
+  { q:'', plat:'', gen:'', status:'', ano:'', nota:'', sort:'ano-desc', group:true, fav:false, card:170, lcard:170, tab:'cat', filtrosOcultos:false },
   CFG.view
 );
 Object.assign(view, { q:'', plat:'', gen:'', status:'', ano:'', nota:'', fav:false });
 if (!['ano-desc','ano-asc','nota-desc','nota-asc','titulo','horas-desc','lanc-desc','lanc-asc','criado-desc'].includes(view.sort)) view.sort = 'ano-desc';
-function saveView(){ const { sort, group, card, tab, filtrosOcultos } = view; CFG.view = { sort, group, card, tab, filtrosOcultos }; saveConfig(); }
+function saveView(){ const { sort, group, card, lcard, tab, filtrosOcultos } = view; CFG.view = { sort, group, card, lcard, tab, filtrosOcultos }; saveConfig(); }
+document.documentElement.style.setProperty('--lcard', view.lcard + 'px');
 
 /* ---------------- erros visíveis ---------------- */
 function reportError(msg, e){
@@ -900,7 +928,9 @@ function setTab(t){
   view.tab = t; saveView();
   const cat = t === 'cat';
   $('#main').classList.toggle('hidden', !cat); $('#filtBtn').classList.toggle('hidden', !cat);
-  $('#toolsList').classList.toggle('hidden', cat); $('#listsMain').classList.toggle('hidden', cat);
+  $('#listsMain').classList.toggle('hidden', cat);
+  if (cat) { $('#toolsList').classList.add('hidden'); $('#toolsListView').classList.add('hidden'); }
+  else openListId = null;
   $('#tabBtn').innerHTML = cat ? '📚 Listas' : '🎮 Catalogar';
   $('#tabBtn').title = cat ? 'Ir para as listas' : 'Voltar para o catálogo';
   $('#addBtn').innerHTML = cat ? '＋ Adicionar jogo' : '＋ Criar lista';
@@ -1169,8 +1199,46 @@ async function saveForm(e){
   finally { btn.disabled = false; }
 }
 
+/* sugestões no cadastro: jogos que já estão em listas (com capa) */
+const FS = { items: [], hi: -1 };
+function renderFSugg(){
+  const box = $('#fSugg');
+  const q = norm($('#fTitulo').value).trim();
+  if (!q || !lists.length) { FS.items = []; box.classList.remove('open'); return; }
+  const seen = new Set(), out = [];
+  for (const l of lists) for (const it of l.itens) {
+    const temCapa = (it.capa && it.capa !== 'idb') || it.capaUrl;
+    const t = norm(it.titulo || '').trim();
+    if (!temCapa || !t || !t.includes(q) || seen.has(t)) continue;
+    if (games.some(g => g.id !== form.id && norm(g.titulo).trim() === t)) continue;   // já está no catálogo
+    seen.add(t); out.push({ it, lista: l.nome });
+  }
+  out.sort((a, b) => (norm(b.it.titulo).startsWith(q) - norm(a.it.titulo).startsWith(q)) || a.it.titulo.localeCompare(b.it.titulo, 'pt-BR'));
+  FS.items = out.slice(0, 8); FS.hi = Math.min(FS.hi, FS.items.length - 1);
+  if (!FS.items.length) { box.classList.remove('open'); return; }
+  box.innerHTML = `<div class="sh">Das suas listas · clique pra usar com a capa</div>` + FS.items.map(({ it, lista }, i) =>
+    `<div class="sg${i === FS.hi ? ' hi' : ''}" data-i="${i}"><div class="cv">${placeholder(it.titulo)}</div>
+      <div><div class="t">${esc(it.titulo)}</div><div class="m">na lista “${esc(lista)}”</div></div></div>`).join('');
+  box.classList.add('open');
+  box.querySelectorAll('.sg').forEach(el => { const { it } = FS.items[+el.dataset.i]; coverURL(it).then(u => putImg(el.querySelector('.cv'), u, it.titulo)); });
+}
+function closeFSugg(){ FS.items = []; FS.hi = -1; $('#fSugg').classList.remove('open'); }
+async function chooseFSugg(i){
+  const x = FS.items[i]; if (!x) return;
+  closeFSugg();
+  $('#fTitulo').value = x.it.titulo; gp.links();
+  const b = await gameCoverBlob(x.it);
+  if (b) gp.setBlob(b); else if (x.it.capaUrl) gp.setUrl(x.it.capaUrl);
+  toast('Capa puxada da lista “' + x.lista + '”');
+  $('#fPlat').focus();
+}
+
 /* ---------------- LISTAS ---------------- */
+let openListId = null;
 function renderLists(){
+  if (openListId && lists.some(l => l.id === openListId)) return renderListPage();
+  openListId = null;
+  $('#toolsList').classList.remove('hidden'); $('#toolsListView').classList.add('hidden');
   const q = norm($('#lq').value).trim();
   const arr = lists
     .filter(l => !q || norm(l.nome + ' ' + l.itens.map(i => i.titulo).join(' ')).includes(q))
@@ -1191,31 +1259,40 @@ function renderLists(){
     for (const cv of card.querySelectorAll('.cv')) { const it = l.itens.find(i => i.id === cv.dataset.item); coverURL(it).then(u => putImg(cv, u, it.titulo)); }
   }
 }
-function tileHTML(it, i, ranked, editable){
-  return `<div class="tile" data-id="${it.id}" ${editable ? 'draggable="true"' : ''}>
-    <div class="cv">${placeholder(it.titulo)}${ranked ? `<div class="rank top">${i + 1}</div>` : ''}
+const rankCls = i => 'rank' + (i < 3 ? ' r' + (i + 1) : '');
+function tileHTML(it, i, ranked, editable, sortable = editable){
+  return `<div class="tile" data-id="${it.id}" title="${esc(it.titulo || '')}" ${sortable ? 'draggable="true"' : ''}>
+    <div class="cv">${placeholder(it.titulo)}${ranked ? `<div class="${rankCls(i)}">${i + 1}</div>` : ''}
       ${editable ? `<div class="tact"><button type="button" data-act="edit" title="Editar">✎</button><button type="button" class="del" data-act="del" title="Tirar da lista">✕</button></div>` : ''}</div>
     ${it.titulo ? `<div class="tt">${esc(it.titulo)}</div>` : ''}
   </div>`;
 }
 
-/* ver lista */
-function openListView(id){
-  const l = lists.find(x => x.id === id); if (!l) return;
-  $('#lv').innerHTML = `
-    <header><div><h2>${esc(l.nome)}</h2><div class="sub">${plural(l.itens.length, 'jogo')}${l.ranqueada ? ' · 🏅 ranqueada' : ''}</div></div><button class="x" data-close>✕</button></header>
-    <div class="lv-body">${l.itens.length ? `<div class="tgrid">${l.itens.map((it, i) => tileHTML(it, i, l.ranqueada, false)).join('')}</div>` : '<div class="empty" style="padding:40px">Essa lista ainda está vazia.</div>'}</div>
-    <footer><button class="btn ghost danger" id="lvDel">Excluir lista</button><span class="sp"></span><button class="btn primary" id="lvEdit">✎ Editar lista</button></footer>`;
-  for (const t of $('#lv').querySelectorAll('.tile')) { const it = l.itens.find(i => i.id === t.dataset.id); coverURL(it).then(u => putImg(t.querySelector('.cv'), u, it.titulo)); }
-  $('#lvEdit').onclick = () => { closeModals(true); openListEditor(l.id); };
-  $('#lvDel').onclick = () => deleteList(l.id);
-  openModal('#lvBg');
+/* lista aberta em tela cheia */
+function openListPage(id){ openListId = id; $('#lvq').value = ''; renderLists(); window.scrollTo(0, 0); }
+function closeListPage(){ openListId = null; renderLists(); window.scrollTo(0, 0); }
+function renderListPage(){
+  const l = lists.find(x => x.id === openListId);
+  $('#toolsList').classList.add('hidden'); $('#toolsListView').classList.remove('hidden');
+  $('#lvSize').value = view.lcard;
+  const q = norm($('#lvq').value).trim();
+  const shown = l.itens.map((it, i) => ({ it, i })).filter(({ it }) => !q || norm(it.titulo).includes(q));
+  $('#stats').innerHTML = `<strong>${plural(l.itens.length, 'jogo')}</strong>${l.ranqueada ? ' · 🏅 ranqueada' : ''}${q ? ` · mostrando <strong>${shown.length}</strong>` : ''}`;
+  const podeArrastar = !q && l.itens.length > 1;
+  const m = $('#listsMain');
+  let body;
+  if (!l.itens.length) body = `<div class="empty"><h3>Essa lista ainda está vazia</h3><p>Clique em <b>✎ Editar lista</b> pra adicionar jogos.</p></div>`;
+  else if (!shown.length) body = `<div class="empty"><h3>Nenhum jogo encontrado nessa lista</h3></div>`;
+  else body = `<div class="tgrid lpage${l.semNomes ? ' nonames' : ''}" id="lpGrid">${shown.map(({ it, i }) => tileHTML(it, i, l.ranqueada, false, podeArrastar)).join('')}</div>`;
+  m.innerHTML = `<div class="lpage-head"><h1>${esc(l.nome)}</h1>${podeArrastar ? '<span class="hint">arraste as capas pra mudar a ordem</span>' : q && l.itens.length > 1 ? '<span class="hint">limpe a busca pra poder reordenar</span>' : ''}</div>${body}`;
+  for (const t of m.querySelectorAll('.tile')) { const it = l.itens.find(i => i.id === t.dataset.id); coverURL(it).then(u => putImg(t.querySelector('.cv'), u, it.titulo)); }
 }
 async function deleteList(id){
   const l = lists.find(x => x.id === id); if (!l) return;
   if (!confirm(`Excluir a lista "${l.nome}"? Os jogos dela também somem (o catálogo não é afetado).`)) return;
   for (const it of l.itens) await removeCover(it);
   lists = lists.filter(x => x.id !== id);
+  if (openListId === id) openListId = null;
   await persist(); closeModals(true); renderLists(); toast('Lista excluída');
 }
 
@@ -1228,12 +1305,13 @@ const lp = makePicker($('#lPicker'), {
 function openListEditor(id, preset){
   const src = id ? lists.find(l => l.id === id) : null;
   LE.list = src
-    ? { id: src.id, nome: src.nome, ranqueada: !!src.ranqueada, criadoEm: src.criadoEm, itens: src.itens.map(i => ({ ...i })) }
+    ? { id: src.id, nome: src.nome, ranqueada: !!src.ranqueada, semNomes: !!src.semNomes, criadoEm: src.criadoEm, itens: src.itens.map(i => ({ ...i })) }
     : { id: uid(), nome: '', ranqueada: true, criadoEm: new Date().toISOString(), itens: [], ...(preset || {}) };
   LE.removed = []; LE.dirty = !!(preset && preset.itens && preset.itens.length); LE.origem = preset && preset.origem || null;
   $('#leTitle').textContent = src ? 'Editar lista' : 'Nova lista';
   $('#leNome').value = LE.list.nome;
   $('#leRank').checked = LE.list.ranqueada;
+  $('#leNames').checked = !!LE.list.semNomes;
   $('#leDelete').classList.toggle('hidden', !src);
   resetItemPanel(); renderTiles();
   openModal('#leBg');
@@ -1317,6 +1395,7 @@ async function itemSrc(it){
 }
 function renderTiles(){
   const g = $('#leGrid'), items = LE.list.itens, ranked = $('#leRank').checked;
+  g.classList.toggle('nonames', $('#leNames').checked);
   $('#leCount').textContent = items.length ? `${plural(items.length, 'jogo')} · arraste as capas pra trocar de lugar` : '';
   if (!items.length) { g.innerHTML = `<div class="le-empty">Nenhum jogo ainda. Digite o nome, cole a capa e clique em <b>Adicionar à lista</b> ↑</div>`; return; }
   g.innerHTML = items.map((it, i) => tileHTML(it, i, ranked, true)).join('');
@@ -1397,7 +1476,7 @@ async function saveList(){
       else if (it._rm) await removeCover(it);
       delete it._blob; delete it._url; delete it._rm; delete it._v;
     }
-    const l = { ...LE.list, nome, ranqueada: $('#leRank').checked, atualizadoEm: new Date().toISOString() };
+    const l = { ...LE.list, nome, ranqueada: $('#leRank').checked, semNomes: $('#leNames').checked, atualizadoEm: new Date().toISOString() };
     const idx = lists.findIndex(x => x.id === l.id);
     const isNew = idx < 0;
     if (isNew) lists.push(l); else lists[idx] = l;
@@ -1415,46 +1494,51 @@ function cleanupEditor(){
   LE.urls.clear();
 }
 
-/* arrastar pra reordenar */
-(function(){
-  const grid = $('#leGrid');
-  let dragId = null;
-  const renumber = () => grid.querySelectorAll('.tile').forEach((t, i) => { const r = t.querySelector('.rank'); if (r) r.textContent = i + 1; });
-  grid.addEventListener('dragstart', e => {
-    const t = e.target.closest('.tile'); if (!t) return;
-    dragId = t.dataset.id; draggingTile = true;
+/* arrastar pra reordenar (editor e lista aberta) */
+function makeSortable(root, onEnd){
+  let dragId = null, grid = null;
+  const renumber = () => grid.querySelectorAll('.tile').forEach((t, i) => { const r = t.querySelector('.rank'); if (r) { r.textContent = i + 1; r.className = rankCls(i); } });
+  root.addEventListener('dragstart', e => {
+    const t = e.target.closest && e.target.closest('.tile[draggable="true"]'); if (!t) return;
+    grid = t.parentElement; dragId = t.dataset.id; draggingTile = true;
     e.dataTransfer.effectAllowed = 'move';
-    e.dataTransfer.setData('text/x-catalogame', dragId);
+    e.dataTransfer.setData('text/x-catalogames', dragId);
     requestAnimationFrame(() => t.classList.add('dragging'));
   });
-  grid.addEventListener('dragover', e => {
+  root.addEventListener('dragover', e => {
     if (!dragId) return;
     e.preventDefault(); e.dataTransfer.dropEffect = 'move';
     const t = e.target.closest('.tile');
     const dragged = grid.querySelector(`.tile[data-id="${dragId}"]`);
-    if (!t || !dragged || t === dragged) return;
+    if (!t || !dragged || t === dragged || t.parentElement !== grid) return;
     const r = t.getBoundingClientRect();
     const after = (e.clientX - r.left) > r.width / 2;
     if (after) { if (t.nextElementSibling !== dragged) t.after(dragged); }
     else if (t.previousElementSibling !== dragged) t.before(dragged);
     renumber();
   });
-  grid.addEventListener('drop', e => { if (dragId) { e.preventDefault(); e.stopPropagation(); } });
-  grid.addEventListener('dragend', () => {
+  root.addEventListener('drop', e => { if (dragId) { e.preventDefault(); e.stopPropagation(); } });
+  root.addEventListener('dragend', () => {
     if (!dragId) return;
     const order = [...grid.querySelectorAll('.tile')].map(t => t.dataset.id);
-    const before = LE.list.itens.map(i => i.id).join();
-    LE.list.itens.sort((a, b) => order.indexOf(a.id) - order.indexOf(b.id));
-    if (before !== LE.list.itens.map(i => i.id).join()) LE.dirty = true;
     grid.querySelectorAll('.tile.dragging').forEach(t => t.classList.remove('dragging'));
     dragId = null; setTimeout(() => { draggingTile = false; }, 0);
+    onEnd(order);
   });
-  grid.addEventListener('click', e => {
-    const b = e.target.closest('button[data-act]'); if (!b) return;
-    const id = b.closest('.tile').dataset.id;
-    b.dataset.act === 'edit' ? editItem(id) : removeItem(id);
-  });
-})();
+}
+const sortByOrder = (arr, order) => { const before = arr.map(i => i.id).join(); arr.sort((a, b) => order.indexOf(a.id) - order.indexOf(b.id)); return before !== arr.map(i => i.id).join(); };
+makeSortable($('#leGrid'), order => { if (sortByOrder(LE.list.itens, order)) LE.dirty = true; });
+makeSortable($('#listsMain'), async order => {
+  const l = lists.find(x => x.id === openListId); if (!l) return;
+  if (!sortByOrder(l.itens, order)) return;
+  l.atualizadoEm = new Date().toISOString();
+  try { await persist(); toast('✓ Nova ordem salva', 1600); } catch {}
+});
+$('#leGrid').addEventListener('click', e => {
+  const b = e.target.closest('button[data-act]'); if (!b) return;
+  const id = b.closest('.tile').dataset.id;
+  b.dataset.act === 'edit' ? editItem(id) : removeItem(id);
+});
 
 /* ---------------- modais / menu ---------------- */
 function openModal(sel){ $(sel).classList.add('open'); document.body.style.overflow = 'hidden'; }
@@ -1558,7 +1642,12 @@ $('#filtBtn').onclick = () => toggleFilters();
 addEventListener('keydown', e => { if (e.key === 'Control' || e.key === 'Meta') document.body.classList.add('ctrl'); });
 addEventListener('keyup', e => { if (e.key === 'Control' || e.key === 'Meta') document.body.classList.remove('ctrl'); });
 addEventListener('blur', () => document.body.classList.remove('ctrl'));
-$('#listsMain').addEventListener('click', e => { const c = e.target.closest('.lcard'); if (c) openListView(c.dataset.id); });
+$('#listsMain').addEventListener('click', e => { const c = e.target.closest('.lcard'); if (c) openListPage(c.dataset.id); });
+$('#lvBack').onclick = closeListPage;
+$('#lvq').addEventListener('input', renderListPage);
+$('#lvEdit').onclick = () => { if (openListId) openListEditor(openListId); };
+$('#lvDel').onclick = () => { if (openListId) deleteList(openListId); };
+$('#lvSize').addEventListener('input', e => { view.lcard = +e.target.value; document.documentElement.style.setProperty('--lcard', view.lcard + 'px'); saveView(); });
 $('#q').addEventListener('input', e => { view.q = e.target.value; render(); });
 $('#lq').addEventListener('input', renderLists);
 const bindSel = (sel, key) => $(sel).addEventListener('change', e => { view[key] = e.target.value; saveView(); render(); e.target.blur(); });
@@ -1603,17 +1692,34 @@ document.addEventListener('keydown', e => {
   if (e.key === 'Escape' && $('#msgBg').classList.contains('open')) { e.preventDefault(); closeMsg(null); return; }
   if (e.key === 'Escape' && sgOpen()) { e.preventDefault(); closeSgdb(); return; }
   if (e.key === 'Escape' && $('#liSugg').classList.contains('open')) { e.preventDefault(); closeSugg(); return; }
-  if (e.key === 'Escape') { if (anyModalOpen()) closeModals(); else if (sel.size) clearSel(); return; }
+  if (e.key === 'Escape') {
+    if (anyModalOpen()) closeModals();
+    else if (sel.size) clearSel();
+    else if (view.tab === 'lists' && openListId && document.activeElement !== $('#lvq')) closeListPage();
+    return;
+  }
   const typing = /INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName);
   if (typing || anyModalOpen()) return;
-  if (e.key === '/') { e.preventDefault(); if (view.tab === 'cat' && view.filtrosOcultos) toggleFilters(true); (view.tab === 'cat' ? $('#q') : $('#lq')).focus(); }
+  if (e.key === '/') { e.preventDefault(); if (view.tab === 'cat' && view.filtrosOcultos) toggleFilters(true); (view.tab === 'cat' ? $('#q') : openListId ? $('#lvq') : $('#lq')).focus(); }
   if (view.tab === 'cat' && (e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'a') { e.preventDefault(); selectAllVisible(); }
   if (e.key.toLowerCase() === 'n' && !e.ctrlKey && !e.metaKey) { e.preventDefault(); $('#addBtn').click(); }
 });
 
 // formulário do jogo
 $('#form').addEventListener('submit', saveForm);
-$('#fTitulo').addEventListener('input', () => gp.links());
+$('#fTitulo').addEventListener('input', () => { gp.links(); FS.hi = -1; renderFSugg(); });
+$('#fTitulo').addEventListener('blur', () => setTimeout(closeFSugg, 150));
+$('#fTitulo').addEventListener('keydown', e => {
+  const open = $('#fSugg').classList.contains('open') && FS.items.length;
+  if (!open) return;
+  if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+    e.preventDefault();
+    FS.hi = e.key === 'ArrowDown' ? (FS.hi + 1) % FS.items.length : (FS.hi <= 0 ? FS.items.length - 1 : FS.hi - 1);
+    $('#fSugg').querySelectorAll('.sg').forEach((el, i) => el.classList.toggle('hi', i === FS.hi));
+  } else if (e.key === 'Enter' && FS.hi >= 0) { e.preventDefault(); chooseFSugg(FS.hi); }
+  else if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); closeFSugg(); }
+});
+$('#fSugg').addEventListener('mousedown', e => { const el = e.target.closest('.sg'); if (!el) return; e.preventDefault(); chooseFSugg(+el.dataset.i); });
 $('#fNota').addEventListener('input', e => setNota(+e.target.value));
 $('#notaClear').onclick = () => setNota(null);
 $('#fDelete').onclick = () => deleteGame(form.id);
@@ -1653,6 +1759,7 @@ $('#liSugg').addEventListener('mousedown', e => { const el = e.target.closest('.
 $('#leNome').addEventListener('input', () => { LE.dirty = true; });
 $('#leNome').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); $('#liTitulo').focus(); } });
 $('#leRank').addEventListener('change', () => { LE.dirty = true; renderTiles(); });
+$('#leNames').addEventListener('change', () => { LE.dirty = true; renderTiles(); });
 $('#leSave').onclick = saveList;
 $('#leDelete').onclick = () => deleteList(LE.list.id);
 
