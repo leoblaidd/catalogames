@@ -13,5 +13,7 @@ contextBridge.exposeInMainWorld('catalogame', {
   setConfig:      c              => ipcRenderer.invoke('config:set', c),
   fetchImage:     url            => ipcRenderer.invoke('fetch-image', url),
   openDataFolder: ()             => ipcRenderer.invoke('open-data-folder'),
+  sgdbSearch:     termo          => ipcRenderer.invoke('sgdb:search', termo),
+  sgdbGrids:      (id, page, st) => ipcRenderer.invoke('sgdb:grids', id, page, st),
   importPick:     kind           => ipcRenderer.invoke('import:pick', kind),
 });

@@ -1,7 +1,7 @@
 {
-  "name": "catalogame",
-  "version": "1.1.0",
-  "description": "Catálogo de jogos zerados",
+  "name": "catalogames",
+  "version": "1.2.0",
+  "description": "Catálogo de jogos zerados, com listas e capas",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
@@ -13,10 +13,10 @@
     "electron-builder": "^26.18.0",
     "resedit": "^3.1.0"
   },
-  "productName": "Catalogame",
+  "productName": "Catalogames",
   "build": {
     "appId": "com.leandro.catalogame",
-    "productName": "Catalogame",
+    "productName": "Catalogames",
     "files": [
       "main.js",
       "preload.js",
@@ -46,8 +46,8 @@
       "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": "always",
       "createStartMenuShortcut": true,
-      "shortcutName": "Catalogame",
-      "uninstallDisplayName": "Catalogame",
+      "shortcutName": "Catalogames",
+      "uninstallDisplayName": "Catalogames",
       "installerIcon": "build/icon.ico",
       "uninstallerIcon": "build/icon.ico",
       "include": "build/installer.nsh",
@@ -57,7 +57,7 @@
       "installerLanguages": [
         "pt_BR"
       ],
-      "artifactName": "Catalogame-Instalador-${version}.${ext}"
+      "artifactName": "Catalogames-Instalador-${version}.${ext}"
     },
     "publish": null
   }

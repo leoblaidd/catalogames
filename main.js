@@ -1,4 +1,4 @@
-// Catalogame — processo principal (Electron)
+// Catalogames — processo principal (Electron)
 // Os dados ficam em <pasta onde o app foi instalado>\dados
 //   dados\biblioteca.json  -> jogos e listas
 //   dados\capas\           -> imagens das capas
@@ -29,7 +29,10 @@ function resolveDataDir(){
   if (canWrite(preferido)) return preferido;
   // pasta de instalação sem permissão de escrita (ex.: Arquivos de Programas)
   dataFallback = true;
-  const alt = path.join(app.getPath('appData'), 'Catalogame', 'dados');
+  // versões antigas (Catalogame, sem S) usavam essa pasta: continua nela se já existir
+  const antigo = path.join(app.getPath('appData'), 'Catalogame', 'dados');
+  if (fs.existsSync(path.join(antigo, 'biblioteca.json'))) return antigo;
+  const alt = path.join(app.getPath('appData'), 'Catalogames', 'dados');
   fs.mkdirSync(alt, { recursive: true });
   return alt;
 }
@@ -57,7 +60,7 @@ function createWindow(){
   win = new BrowserWindow({
     width: 1440, height: 920, minWidth: 900, minHeight: 600,
     backgroundColor: nativeTheme.shouldUseDarkColors ? '#0d1016' : '#f3f5f9',
-    title: 'Catalogame',
+    title: 'Catalogames',
     icon: path.join(__dirname, 'build', 'icon.png'),
     autoHideMenuBar: true,
     show: false,
@@ -141,7 +144,7 @@ ipcMain.handle('cover:url', (_e, name) => {
 ipcMain.handle('fetch-image', async (_e, url) => {
   try {
     if (!/^https?:\/\//i.test(url)) return null;
-    const r = await net.fetch(url, { headers: { 'User-Agent': 'Mozilla/5.0 Catalogame' } });
+    const r = await net.fetch(url, { headers: { 'User-Agent': 'Mozilla/5.0 Catalogames' } });
     if (!r.ok) return null;
     const type = (r.headers.get('content-type') || '').split(';')[0].trim();
     if (!type.startsWith('image/')) return null;
@@ -149,6 +152,32 @@ ipcMain.handle('fetch-image', async (_e, url) => {
     if (buf.byteLength > 25 * 1024 * 1024) return null;
     return { type, bytes: new Uint8Array(buf) };
   } catch { return null; }
+});
+
+/* ---------- SteamGridDB (API v2, precisa da chave do usuário) ---------- */
+async function sgdb(rota){
+  const key = String(config.sgdbKey || '').trim();
+  if (!key) return { erro: 'sem-chave' };
+  try {
+    const r = await net.fetch('https://www.steamgriddb.com/api/v2' + rota, {
+      headers: { Authorization: 'Bearer ' + key, 'User-Agent': 'Catalogames', Accept: 'application/json' },
+    });
+    if (r.status === 401 || r.status === 403) return { erro: 'chave' };
+    if (r.status === 404) return { data: [] };
+    const j = await r.json().catch(() => null);
+    if (!r.ok || !j || j.success === false) return { erro: 'falha', detalhe: (j && j.errors && [].concat(j.errors).join(', ')) || ('HTTP ' + r.status) };
+    return { data: Array.isArray(j.data) ? j.data : [] };
+  } catch (e) { return { erro: 'rede', detalhe: e.message }; }
+}
+ipcMain.handle('sgdb:search', (_e, termo) => {
+  termo = String(termo || '').trim(); if (!termo) return { data: [] };
+  return sgdb('/search/autocomplete/' + encodeURIComponent(termo));
+});
+ipcMain.handle('sgdb:grids', (_e, gameId, page, estilo) => {
+  const id = parseInt(gameId, 10); if (!id) return { data: [] };
+  const q = new URLSearchParams({ dimensions: '600x900,342x482,660x930', types: 'static', nsfw: 'false', humor: 'any', limit: '50', page: String(parseInt(page, 10) || 0) });
+  if (/^[a-z_]+$/.test(estilo || '')) q.set('styles', estilo);
+  return sgdb(`/grids/game/${id}?${q}`);
 });
 
 ipcMain.handle('open-data-folder', () => shell.openPath(DATA_DIR));
