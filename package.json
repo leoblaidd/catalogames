@@ -1,0 +1,64 @@
+{
+  "name": "catalogame",
+  "version": "1.0.0",
+  "description": "Catálogo de jogos zerados",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --win nsis --x64"
+  },
+  "author": "Leandro",
+  "devDependencies": {
+    "electron": "^45.3.2",
+    "electron-builder": "^26.18.0",
+    "resedit": "^3.1.0"
+  },
+  "productName": "Catalogame",
+  "build": {
+    "appId": "com.leandro.catalogame",
+    "productName": "Catalogame",
+    "files": [
+      "main.js",
+      "preload.js",
+      "app/**/*",
+      "build/icon.png"
+    ],
+    "directories": {
+      "output": "dist",
+      "buildResources": "build"
+    },
+    "asar": true,
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "build/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowElevation": true,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": "always",
+      "createStartMenuShortcut": true,
+      "shortcutName": "Catalogame",
+      "uninstallDisplayName": "Catalogame",
+      "installerIcon": "build/icon.ico",
+      "uninstallerIcon": "build/icon.ico",
+      "include": "build/installer.nsh",
+      "deleteAppDataOnUninstall": false,
+      "runAfterFinish": true,
+      "language": "1046",
+      "installerLanguages": [
+        "pt_BR"
+      ],
+      "artifactName": "Catalogame-Instalador-${version}.${ext}"
+    },
+    "publish": null
+  }
+}

@@ -1,0 +1,1233 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Catalogame</title>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' file: data: blob: https: http:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; connect-src 'self' data: blob:">
+<style>
+:root{
+  color-scheme:dark;
+  --bg:#0d1016; --bg2:#141922; --bg3:#1b212d; --bg4:#242b3a; --line:#283041;
+  --txt:#e8edf5; --mut:#8791a7; --dim:#5b6479;
+  --acc:#3b82f6; --acch:#2f6fe0; --acc2:#7cb6ff; --accbg:rgba(59,130,246,.15); --accsolid:#132541;
+  --ok:#3ecf8e; --warn:#f5b942; --bad:#ef5a5a;
+  --card:170px; --r:10px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--txt);font:14px/1.45 "Segoe UI",system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif}
+button,input,select,textarea{font:inherit;color:inherit}
+option,optgroup{background:var(--bg2);color:var(--txt)}
+a{color:var(--acc2)}
+kbd{background:var(--bg4);border:1px solid var(--line);border-bottom-width:2px;border-radius:4px;padding:0 5px;font-size:12px}
+::selection{background:var(--acc);color:#fff}
+::-webkit-scrollbar{width:10px;height:10px}::-webkit-scrollbar-thumb{background:var(--bg4);border-radius:10px}::-webkit-scrollbar-track{background:transparent}
+.hidden{display:none!important}
+
+/* ---------- botões e campos ---------- */
+.btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--bg3);padding:8px 14px;border-radius:8px;cursor:pointer;white-space:nowrap;transition:.15s}
+.btn:hover{background:var(--bg4);border-color:#3a4458}
+.btn.primary{background:var(--acc);border-color:var(--acc);color:#fff;font-weight:600}
+.btn.primary:hover{background:var(--acch)}
+.btn.ghost{background:transparent}
+.btn.danger{color:var(--bad)}
+.btn.sm{padding:5px 10px;font-size:13px}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.link{background:none;border:0;color:var(--acc2);cursor:pointer;padding:0;text-decoration:underline;font-size:13px}
+input[type=text],input[type=number],input[type=search],input:not([type]),select,textarea{
+  background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px 10px;outline:none;width:100%}
+input:focus,select:focus,textarea:focus{border-color:var(--acc)}
+select{cursor:pointer}
+textarea{resize:vertical}
+
+/* ---------- topo ---------- */
+header.top{position:sticky;top:0;z-index:20;background:rgba(13,16,22,.93);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.bar{display:flex;align-items:center;gap:12px;padding:12px 22px}
+.logo{font-weight:800;letter-spacing:.12em;font-size:18px;display:flex;align-items:center;gap:8px;color:var(--txt)}
+.logo b{color:var(--acc2)}
+.logo svg{width:24px;height:24px;color:var(--acc2)}
+.stats{color:var(--mut);font-size:13px;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.stats strong{color:var(--txt);font-weight:600}
+.where{font-size:12px;color:var(--mut);border:1px solid var(--line);border-radius:20px;padding:4px 10px;cursor:pointer;max-width:220px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;background:none}
+.where:hover{color:var(--txt)}
+.tools{display:flex;flex-wrap:wrap;gap:8px;padding:0 22px 12px;align-items:center}
+.search{flex:1 1 220px;max-width:320px;position:relative}
+.search input{padding-left:32px}
+.search svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);width:15px;height:15px;color:var(--dim)}
+.tools select{width:auto;padding:7px 10px;font-size:13px;background:var(--bg2)}
+.tools select.on{border-color:var(--acc);background:var(--accsolid)}
+.toggle{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--mut);border:1px solid var(--line);border-radius:8px;padding:6px 10px;cursor:pointer;user-select:none;background:var(--bg2)}
+.toggle.on{color:var(--txt);border-color:var(--acc);background:var(--accsolid)}
+.size{display:inline-flex;align-items:center;gap:6px;color:var(--dim);font-size:12px;margin-left:auto}
+.size input{width:90px;accent-color:var(--acc)}
+
+/* ---------- grade de jogos ---------- */
+main{padding:18px 22px 60px}
+.group{margin-bottom:26px}
+.group h2{font-size:15px;font-weight:700;margin:0 0 12px;display:flex;align-items:baseline;gap:10px}
+.group h2 span{font-weight:400;color:var(--mut);font-size:13px}
+.group h2::after{content:"";flex:1;height:1px;background:var(--line);transform:translateY(-4px)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(var(--card),1fr));gap:16px}
+.card{position:relative;aspect-ratio:2/3;border-radius:var(--r);overflow:hidden;cursor:pointer;background:var(--bg3);box-shadow:0 4px 14px rgba(0,0,0,.35);transition:transform .18s,box-shadow .18s}
+.card:hover{transform:translateY(-4px);box-shadow:0 12px 28px rgba(0,0,0,.55),0 0 0 2px var(--acc)}
+.card img,.cv img{width:100%;height:100%;object-fit:cover;display:block}
+.ph{width:100%;height:100%;display:flex;align-items:center;justify-content:center;text-align:center;padding:12%;font-weight:800;line-height:1.15;
+  background:linear-gradient(160deg,hsl(var(--h) 42% 30%),hsl(calc(var(--h) + 50) 48% 12%));font-size:calc(var(--card) * .105);text-shadow:0 2px 8px rgba(0,0,0,.5);word-break:break-word}
+.card .info{position:absolute;inset:auto 0 0 0;padding:38px 10px 9px;background:linear-gradient(transparent,rgba(0,0,0,.93) 45%);opacity:0;transform:translateY(6px);transition:.18s}
+.card:hover .info{opacity:1;transform:none}
+.card .info .t{font-weight:700;font-size:13px;line-height:1.2}
+.card .info .s{display:flex;align-items:center;justify-content:space-between;gap:6px;font-size:11.5px;color:#c6ccd8;margin-top:4px;min-height:19px}
+.n{color:#0b0d12;font-weight:800;font-size:12px;padding:1px 7px;border-radius:5px;flex:none}
+.flags{position:absolute;top:7px;left:7px;display:flex;flex-direction:column;gap:4px;align-items:flex-start}
+.pill{display:inline-block;font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:20px;background:rgba(10,12,18,.85);border:1px solid;letter-spacing:.02em}
+.fav{width:22px;height:22px;border-radius:50%;background:rgba(10,12,18,.85);color:var(--warn);display:flex;align-items:center;justify-content:center;font-size:13px}
+.empty{text-align:center;color:var(--mut);padding:80px 20px}
+.empty h3{color:var(--txt);font-size:18px;margin:0 0 6px}
+
+/* ---------- listas ---------- */
+.lgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:18px}
+.lcard{background:var(--bg2);border:1px solid var(--line);border-radius:14px;overflow:hidden;cursor:pointer;transition:.18s}
+.lcard:hover{border-color:var(--acc);transform:translateY(-3px);box-shadow:0 14px 30px rgba(0,0,0,.45)}
+.lstack{--card:90px;display:flex;justify-content:center;align-items:flex-end;padding:20px 18px 16px;background:linear-gradient(180deg,var(--bg3),var(--bg2));min-height:170px}
+.lstack .cv{width:30%;aspect-ratio:2/3;margin-left:-9%;border-radius:7px;overflow:hidden;box-shadow:-4px 4px 12px rgba(0,0,0,.55);transition:margin .2s,transform .2s;flex:none}
+.lstack .cv:first-child{margin-left:0}
+.lcard:hover .lstack .cv{margin-left:-5%}
+.lcard:hover .lstack .cv:first-child{margin-left:0}
+.lstack .lempty{color:var(--dim);font-size:13px;align-self:center}
+.lbody{padding:12px 16px 14px}
+.lname{font-weight:700;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lmeta{font-size:12.5px;color:var(--mut);margin-top:2px}
+
+/* tiles (dentro do editor e da visualização) */
+.tgrid{--card:120px;display:grid;grid-template-columns:repeat(auto-fill,minmax(var(--card),1fr));gap:14px}
+.tile{position:relative;user-select:none}
+.tile .cv{position:relative;aspect-ratio:2/3;border-radius:8px;overflow:hidden;background:var(--bg3);box-shadow:0 4px 12px rgba(0,0,0,.35)}
+.tile .tt{font-size:12px;margin-top:6px;line-height:1.25;color:#cfd5e1;text-align:center;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.rank{position:absolute;top:6px;left:6px;min-width:26px;height:26px;padding:0 6px;border-radius:7px;background:var(--acc);color:#fff;font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.5)}
+.tile:nth-child(1) .rank.top{background:#e8b923;color:#1a1300}
+.tile:nth-child(2) .rank.top{background:#c3cbd6;color:#15181d}
+.tile:nth-child(3) .rank.top{background:#cd8a4f;color:#1b0f04}
+.tgrid.edit .tile{cursor:grab}
+.tgrid.edit .tile:active{cursor:grabbing}
+.tile.dragging{opacity:.35}
+.tile.editing .cv{box-shadow:0 0 0 3px var(--acc)}
+.tact{position:absolute;top:5px;right:5px;display:flex;flex-direction:column;gap:4px;opacity:0;transition:.15s}
+.tile:hover .tact{opacity:1}
+.tact button{width:26px;height:26px;border-radius:7px;border:0;background:rgba(10,12,18,.88);cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center}
+.tact button:hover{background:var(--acc)}
+.tact button.del:hover{background:var(--bad)}
+.le-empty{grid-column:1/-1;text-align:center;color:var(--dim);padding:36px 10px;border:2px dashed var(--line);border-radius:12px}
+
+/* ---------- modais ---------- */
+.modal-bg{position:fixed;inset:0;background:rgba(4,6,10,.74);backdrop-filter:blur(3px);display:none;align-items:flex-start;justify-content:center;z-index:50;padding:36px 16px;overflow:auto}
+.modal-bg.open{display:flex}
+.modal{background:var(--bg2);border:1px solid var(--line);border-radius:14px;width:100%;max-width:860px;box-shadow:0 30px 80px rgba(0,0,0,.6)}
+.modal.wide{max-width:1120px}
+.modal>header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 20px;border-bottom:1px solid var(--line)}
+.modal>header h2{margin:0;font-size:17px}
+.modal>header .sub{color:var(--mut);font-size:13px;margin-top:2px}
+.x{background:none;border:0;color:var(--mut);font-size:18px;cursor:pointer;padding:4px 8px;border-radius:6px}
+.x:hover{background:var(--bg4);color:var(--txt)}
+.modal>footer{display:flex;gap:8px;align-items:center;padding:14px 20px;border-top:1px solid var(--line)}
+.sp{flex:1}
+
+.form-body{display:grid;grid-template-columns:230px 1fr;gap:22px;padding:20px}
+.drop{aspect-ratio:2/3;border:2px dashed var(--line);border-radius:var(--r);position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;background:var(--bg);outline:none;transition:.15s;cursor:pointer}
+.drop.over,.drop:focus{border-color:var(--acc);background:var(--accbg)}
+.drop .prev{position:absolute;inset:0}
+.drop .prev img{width:100%;height:100%;object-fit:cover}
+.drop .hint{position:relative;text-align:center;color:var(--mut);font-size:13px;padding:12px;line-height:1.7}
+.drop.has .hint{display:none}
+.drop .busy{position:absolute;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;font-size:13px}
+.drop.loading .busy{display:flex}
+.cover-actions{display:flex;gap:6px;margin-top:10px}
+.cover-actions .btn{flex:1;justify-content:center}
+.url-row{display:flex;gap:6px;margin-top:8px}
+.url-row input{font-size:12.5px;padding:6px 8px}
+.search-links{font-size:12.5px;color:var(--mut);margin-top:10px}
+.tip{font-size:12px;color:var(--dim);margin:8px 0 0;line-height:1.5}
+.cover-note{font-size:11.5px;color:var(--warn);margin-top:6px;display:none}
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:12px 14px;align-content:start}
+.f{display:flex;flex-direction:column;gap:5px}
+.f>span{font-size:12px;color:var(--mut);font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+.f>span small{text-transform:none;font-weight:400;letter-spacing:0}
+.f.full{grid-column:1/-1}
+.chk{display:flex;align-items:center;gap:8px;padding:8px 0;cursor:pointer;user-select:none}
+.chk input{accent-color:var(--acc);width:16px;height:16px}
+.nota-row{display:flex;align-items:center;gap:12px}
+.nota-row input{flex:1;accent-color:var(--acc)}
+.nota-row output{font-size:24px;font-weight:800;min-width:46px;text-align:center}
+.nota-row.unset input{opacity:.35}
+.nota-row.unset output{color:var(--dim)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-size:12.5px;padding:4px 10px;border-radius:20px;border:1px solid var(--line);background:var(--bg);cursor:pointer;user-select:none;transition:.12s}
+.chip:hover{border-color:#3d475c}
+.chip.on{background:var(--accbg);border-color:var(--acc);color:var(--acc2)}
+.chip-add{width:130px!important;padding:4px 10px!important;border-radius:20px!important;font-size:12.5px}
+
+/* editor de lista */
+.le-body{padding:18px 20px 20px}
+.le-top{display:flex;gap:14px;align-items:flex-end;margin-bottom:16px}
+.le-top .f{flex:1}
+.le-top input#leNome{font-size:18px;font-weight:700;padding:10px 12px}
+.switch{display:flex;align-items:center;gap:8px;cursor:pointer;user-select:none;padding:10px 14px;border:1px solid var(--line);border-radius:8px;background:var(--bg);white-space:nowrap}
+.switch input{accent-color:var(--acc);width:16px;height:16px}
+.add-panel{display:grid;grid-template-columns:120px 1fr;gap:16px;padding:14px;border:1px solid var(--line);border-radius:12px;background:var(--bg3);margin-bottom:18px}
+.add-panel.editing{border-color:var(--acc)}
+.add-panel .drop{font-size:12px}
+.add-panel .drop .hint{font-size:11.5px;line-height:1.5;padding:6px}
+.add-panel .right{display:flex;flex-direction:column;gap:8px;min-width:0}
+.add-panel .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.add-panel .row>input{flex:1;min-width:180px}
+.add-panel .url-row,.add-panel .cover-actions,.add-panel .search-links{margin-top:0}
+.add-panel .cover-actions .btn{flex:none}
+.le-head{display:flex;align-items:baseline;gap:10px;margin:0 0 12px}
+.le-head h3{margin:0;font-size:14px}
+.le-head span{color:var(--mut);font-size:12.5px}
+
+/* detalhe */
+.detail{display:grid;grid-template-columns:260px 1fr;gap:24px;padding:22px}
+.detail .dc{aspect-ratio:2/3;border-radius:var(--r);overflow:hidden;--card:260px;box-shadow:0 10px 30px rgba(0,0,0,.5)}
+.detail .dc img{width:100%;height:100%;object-fit:cover}
+.detail h1{margin:0 0 8px;font-size:26px;line-height:1.15}
+.detail .big{margin:14px 0 18px}
+.detail .bignota{font-size:40px;font-weight:900;line-height:1}
+.detail .bignota small{font-size:16px;color:var(--mut);font-weight:600}
+.meta{display:grid;grid-template-columns:auto 1fr;gap:6px 16px;font-size:13.5px}
+.meta dt{color:var(--mut)}
+.meta dd{margin:0}
+.review{margin-top:18px;padding:14px 16px;background:var(--bg);border:1px solid var(--line);border-radius:10px;white-space:pre-wrap;line-height:1.6;color:#d3d8e2}
+.tagrow{display:flex;flex-wrap:wrap;gap:5px}
+.tag{font-size:12px;padding:2px 9px;border-radius:20px;background:var(--bg4);color:#cdd3de}
+.lv-body{padding:20px}
+.lv-body .tgrid{--card:150px}
+
+
+/* menu e toast */
+.menu{position:fixed;z-index:40;background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:6px;min-width:270px;box-shadow:0 18px 40px rgba(0,0,0,.6);display:none}
+.menu.open{display:block}
+.menu button{display:block;width:100%;text-align:left;background:none;border:0;padding:9px 12px;border-radius:7px;cursor:pointer}
+.menu button:hover{background:var(--bg4)}
+.menu .info{font-size:12px;color:var(--mut);padding:8px 12px 6px;border-top:1px solid var(--line);margin-top:4px;line-height:1.5}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--bg4);border:1px solid var(--line);padding:10px 18px;border-radius:10px;opacity:0;transition:.25s;z-index:95;pointer-events:none;box-shadow:0 10px 30px rgba(0,0,0,.5);max-width:90vw}
+.toast.show{opacity:1;transform:translateX(-50%)}
+
+/* mensagens (avisos e ajuda) */
+.modal-bg.msgbg{z-index:85;padding-top:12vh}
+.modal.msg{max-width:560px}
+.msg-body{padding:18px 20px;line-height:1.6;color:#d3d8e2}
+.msg-body p{margin:0 0 10px}
+.msg-body ol{padding-left:20px;margin:6px 0 0}
+.msg-body li{margin:0 0 10px}
+.msg-body code{background:var(--bg);border:1px solid var(--line);border-radius:5px;padding:1px 6px;font-size:12.5px;white-space:nowrap}
+.msg-body .tech{font-size:12px;color:var(--dim);margin-top:12px;word-break:break-word}
+
+
+@media (max-width:720px){
+  .form-body,.detail{grid-template-columns:1fr}
+  .form-body .drop,.detail .dc{max-width:220px;margin:0 auto}
+  .stats{display:none}
+  .size{margin-left:0}
+  .le-top{flex-direction:column;align-items:stretch}
+}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute">
+  <symbol id="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="6"/><path d="M6 12h4M8 10v4"/><circle cx="15.5" cy="11" r=".6" fill="currentColor"/><circle cx="17.5" cy="13" r=".6" fill="currentColor"/></symbol>
+  <symbol id="lupa" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></symbol>
+</svg>
+
+<!-- ===== App ===== -->
+<div id="app">
+<header class="top">
+  <div class="bar">
+    <div class="logo"><svg><use href="#ico"/></svg><span>CATALO<b>GAME</b></span></div>
+    <div class="stats" id="stats"></div>
+    <button class="btn ghost sm" id="menuBtn" title="Mais opções">⋯</button>
+    <button class="btn" id="tabBtn"></button>
+    <button class="btn primary" id="addBtn"></button>
+  </div>
+
+  <div class="tools" id="toolsCat">
+    <div class="search"><svg><use href="#lupa"/></svg><input id="q" type="search" placeholder="Buscar jogo…  ( / )" autocomplete="off"></div>
+    <select id="fiPlat"></select>
+    <select id="fiGen"></select>
+    <select id="fiStatus"></select>
+    <select id="fiAno"></select>
+    <select id="fiNota">
+      <option value="">Qualquer nota</option>
+      <option value="9">Nota 9+</option><option value="8">Nota 8+</option><option value="7">Nota 7+</option>
+      <option value="6">Nota 6+</option><option value="5">Nota 5+</option><option value="-1">Sem nota</option>
+    </select>
+    <select id="sort" title="Ordenar">
+      <option value="ano-desc">↓ Terminado recentemente</option>
+      <option value="ano-asc">↑ Terminado há mais tempo</option>
+      <option value="nota-desc">↓ Maior nota</option>
+      <option value="nota-asc">↑ Menor nota</option>
+      <option value="titulo">A–Z</option>
+      <option value="horas-desc">↓ Mais horas</option>
+      <option value="lanc-desc">↓ Lançamento mais novo</option>
+      <option value="lanc-asc">↑ Lançamento mais antigo</option>
+      <option value="criado-desc">↓ Adicionado recentemente</option>
+    </select>
+    <span class="toggle" id="tFav">★ Favoritos</span>
+    <span class="toggle" id="tGroup">Agrupar por ano</span>
+    <button class="link hidden" id="clearF">limpar filtros</button>
+    <label class="size" title="Tamanho das capas">▫<input type="range" id="cardSize" min="110" max="280" step="10">▣</label>
+  </div>
+
+  <div class="tools hidden" id="toolsList">
+    <div class="search"><svg><use href="#lupa"/></svg><input id="lq" type="search" placeholder="Buscar lista ou jogo dentro das listas…" autocomplete="off"></div>
+  </div>
+</header>
+<main id="main"></main>
+<main id="listsMain" class="hidden"></main>
+</div>
+
+<div class="menu" id="menu"></div>
+
+<!-- ===== Modal: jogo do catálogo ===== -->
+<div class="modal-bg" id="formBg">
+  <form class="modal" id="form" autocomplete="off">
+    <header><h2 id="formTitle">Adicionar jogo</h2><button type="button" class="x" data-close>✕</button></header>
+    <div class="form-body">
+      <div id="gPicker">
+        <div class="drop" data-r="drop" tabindex="0" title="Clique aqui e cole uma imagem (Ctrl+V)">
+          <div class="prev" data-r="prev"></div>
+          <div class="hint">Arraste uma imagem aqui<br>ou cole com <kbd>Ctrl</kbd>+<kbd>V</kbd></div>
+          <div class="busy">Carregando…</div>
+        </div>
+        <div class="cover-note" data-r="note">Essa capa ficou salva só como link (precisa de internet pra aparecer). Pra guardar de vez, use "Copiar imagem" + Ctrl+V.</div>
+        <div class="cover-actions">
+          <label class="btn sm">Escolher arquivo<input type="file" accept="image/*" data-r="file" hidden></label>
+          <button type="button" class="btn sm ghost" data-r="rm">Remover</button>
+        </div>
+        <div class="url-row"><input data-r="url" placeholder="Link da imagem ou da página na Steam"><button type="button" class="btn sm" data-r="urlbtn">Usar</button></div>
+        <div class="search-links">Buscar capa: <a href="#" data-r="google" target="_blank" rel="noopener">Google Imagens</a> · <a href="#" data-r="grid" target="_blank" rel="noopener">SteamGridDB</a></div>
+        <p class="tip">Dica: achou a capa? Clique com o botão direito nela → <b>Copiar imagem</b>, volte aqui e aperte <kbd>Ctrl</kbd>+<kbd>V</kbd>.</p>
+      </div>
+      <div class="fields">
+        <label class="f full"><span>Título *</span><input id="fTitulo" required></label>
+        <label class="f"><span>Plataforma</span><input id="fPlat" list="dlPlat" placeholder="PC, PS5, Switch…"></label>
+        <label class="f"><span>Status</span><select id="fStatus"></select></label>
+        <label class="f"><span>Terminado em <small>(ano)</small></span><input id="fAno" type="number" min="1970" max="2100" placeholder="ex: 2025"></label>
+        <label class="f"><span>Ano de lançamento</span><input id="fLanc" type="number" min="1970" max="2100" placeholder="ex: 2022"></label>
+        <label class="f"><span>Horas jogadas</span><input id="fHoras" type="number" min="0" step="0.5" placeholder="ex: 45"></label>
+        <div class="f"><span>Favorito</span><label class="chk"><input type="checkbox" id="fFav"> ★ Um dos meus favoritos</label></div>
+        <div class="f full"><span>Nota</span>
+          <div class="nota-row" id="notaRow"><input type="range" id="fNota" min="0" max="10" step="0.5"><output id="notaOut">–</output><button type="button" class="link" id="notaClear">sem nota</button></div>
+        </div>
+        <div class="f full"><span>Gêneros <small>(clique pra marcar)</small></span><div class="chips" id="genChips"></div></div>
+        <label class="f full"><span>Comentário / review</span><textarea id="fReview" rows="4" placeholder="O que achou? Momentos marcantes, se jogaria de novo…"></textarea></label>
+      </div>
+    </div>
+    <footer>
+      <button type="button" class="btn ghost danger" id="fDelete">Excluir</button>
+      <span class="sp"></span>
+      <button type="button" class="btn ghost" data-close>Cancelar</button>
+      <button type="submit" class="btn primary" id="fSave">Salvar</button>
+    </footer>
+  </form>
+</div>
+
+<!-- ===== Modal: detalhes do jogo ===== -->
+<div class="modal-bg" id="detailBg"><div class="modal" id="detail"></div></div>
+
+<!-- ===== Modal: editor de lista ===== -->
+<div class="modal-bg" id="leBg">
+  <div class="modal wide">
+    <header><h2 id="leTitle">Nova lista</h2><button type="button" class="x" data-close>✕</button></header>
+    <div class="le-body">
+      <div class="le-top">
+        <label class="f"><span>Nome da lista *</span><input id="leNome" placeholder="ex: Top 10 RPGs da vida, Musous favoritos…"></label>
+        <label class="switch"><input type="checkbox" id="leRank"> 🏅 Ranquear (numerar posições)</label>
+      </div>
+
+      <div class="add-panel" id="lPicker">
+        <div class="drop" data-r="drop" tabindex="0" title="Clique aqui e cole uma imagem (Ctrl+V)">
+          <div class="prev" data-r="prev"></div>
+          <div class="hint">Arraste ou cole a capa<br><kbd>Ctrl</kbd>+<kbd>V</kbd></div>
+          <div class="busy">…</div>
+        </div>
+        <div class="right">
+          <div class="row">
+            <input id="liTitulo" placeholder="Nome do jogo (Enter adiciona)">
+            <button type="button" class="btn primary" id="liAdd">＋ Adicionar à lista</button>
+            <button type="button" class="btn ghost hidden" id="liCancel">Cancelar edição</button>
+          </div>
+          <div class="row">
+            <div class="url-row" style="flex:1;min-width:240px"><input data-r="url" placeholder="Link da imagem ou da página na Steam"><button type="button" class="btn sm" data-r="urlbtn">Usar</button></div>
+            <div class="cover-actions">
+              <label class="btn sm">Escolher arquivo<input type="file" accept="image/*" data-r="file" hidden></label>
+              <button type="button" class="btn sm ghost" data-r="rm">Tirar capa</button>
+            </div>
+          </div>
+          <div class="search-links">Buscar capa: <a href="#" data-r="google" target="_blank" rel="noopener">Google Imagens</a> · <a href="#" data-r="grid" target="_blank" rel="noopener">SteamGridDB</a>
+            <span style="color:var(--dim)"> — clique direito na imagem → <b>Copiar imagem</b> → <kbd>Ctrl</kbd>+<kbd>V</kbd> aqui</span></div>
+          <div class="cover-note" data-r="note">Capa salva só como link (precisa de internet pra aparecer).</div>
+        </div>
+      </div>
+
+      <div class="le-head"><h3>Jogos na lista</h3><span id="leCount"></span></div>
+      <div class="tgrid edit" id="leGrid"></div>
+    </div>
+    <footer>
+      <button type="button" class="btn ghost danger" id="leDelete">Excluir lista</button>
+      <span class="sp"></span>
+      <button type="button" class="btn ghost" data-close>Cancelar</button>
+      <button type="button" class="btn primary" id="leSave">Salvar lista</button>
+    </footer>
+  </div>
+</div>
+
+<!-- ===== Modal: ver lista ===== -->
+<div class="modal-bg" id="lvBg"><div class="modal wide" id="lv"></div></div>
+
+<!-- ===== Modal: mensagens / ajuda ===== -->
+<div class="modal-bg msgbg" id="msgBg"><div class="modal msg" id="msg"></div></div>
+
+<datalist id="dlPlat"></datalist>
+<div class="toast" id="toast"></div>
+
+<script>
+/* =====================================================================
+   CATALOGAME — catálogo de jogos + listas (app instalado)
+   Os dados ficam na pasta onde o app foi instalado:
+     dados\biblioteca.json  e  dados\capas\
+   Quem grava no disco é o app (window.catalogame, ver preload.js).
+   ===================================================================== */
+
+const $ = s => document.querySelector(s);
+const STATUS = {
+  terminado: { n: 'Terminado',   c: '#3ecf8e' },
+  jogado:    { n: 'Jogado',      c: '#f5b942' },
+  quero:     { n: 'Quero jogar', c: '#8a95ab' },
+};
+const STATUS_ANTIGO = { zerado: 'terminado', '100': 'terminado', jogando: 'jogado', abandonado: 'jogado', backlog: 'quero' };
+const PLAT_DEF = ['PC','PS5','PS4','PS3','PS2','PS1','PSP','PS Vita','Switch','Switch 2','Wii U','Wii','GameCube','N64','SNES','NES','3DS','DS','GBA','Game Boy','Xbox Series','Xbox One','Xbox 360','Xbox','Mega Drive','Master System','Dreamcast','Saturn','Arcade','Mobile','Emulador'];
+const GEN_DEF = ['Ação','Aventura','RPG','Action RPG','JRPG','Soulslike','Musou','Hack and slash','Mundo aberto','Plataforma','Metroidvania','Tiro','Luta','Terror','Furtividade','Corrida','Esporte','Estratégia','Puzzle','Roguelike','Simulação','Indie','Narrativo'];
+const ANO_ATUAL = new Date().getFullYear();
+
+let games = [], lists = [];
+const api = window.catalogame;
+let DADOS = '';
+const urlCache = new Map();
+
+const view = Object.assign(
+  { q:'', plat:'', gen:'', status:'', ano:'', nota:'', sort:'ano-desc', group:true, fav:false, card:170, tab:'cat' },
+  (() => { try { return JSON.parse(localStorage.getItem('catalogame.view') || '{}'); } catch { return {}; } })()
+);
+if (!['ano-desc','ano-asc','nota-desc','nota-asc','titulo','horas-desc','lanc-desc','lanc-asc','criado-desc'].includes(view.sort)) view.sort = 'ano-desc';
+function saveView(){ try { const { sort, group, card, tab } = view; localStorage.setItem('catalogame.view', JSON.stringify({ sort, group, card, tab })); } catch {} }
+
+/* ---------------- erros visíveis ---------------- */
+function reportError(msg, e){
+  console.error(msg, e);
+  showMsg('Algo deu errado', `<p>${esc(msg)}</p>${e ? `<div class="tech">Detalhe técnico: ${esc(e.name || 'Erro')} — ${esc(e.message || e)}</div>` : ''}`);
+}
+
+/* ---------------- janela de mensagem (substitui alert) ---------------- */
+let msgResolve = null;
+function showMsg(title, body, buttons = [{ label: 'Ok', primary: true, value: true }]){
+  if (msgResolve) { msgResolve(null); msgResolve = null; }
+  return new Promise(resolve => {
+    msgResolve = resolve;
+    $('#msg').innerHTML = `<header><h2>${esc(title)}</h2><button type="button" class="x" data-mclose>✕</button></header>
+      <div class="msg-body">${body}</div>
+      <footer><span class="sp"></span>${buttons.map((b, i) => `<button type="button" class="btn ${b.primary ? 'primary' : 'ghost'}" data-mb="${i}">${esc(b.label)}</button>`).join('')}</footer>`;
+    $('#msg').dataset.buttons = JSON.stringify(buttons.map(b => b.value ?? null));
+    $('#msgBg').classList.add('open'); document.body.style.overflow = 'hidden';
+    setTimeout(() => { const p = $('#msg [data-mb].primary') || $('#msg [data-mb]'); p && p.focus(); }, 0);
+  });
+}
+function closeMsg(value = null){
+  $('#msgBg').classList.remove('open');
+  if (!document.querySelector('.modal-bg.open')) document.body.style.overflow = '';
+  const r = msgResolve; msgResolve = null; r && r(value);
+}
+/* ---------------- dados ---------------- */
+function migrateGame(g){
+  if (STATUS_ANTIGO[g.status]) g.status = STATUS_ANTIGO[g.status];
+  if (!STATUS[g.status]) g.status = 'terminado';
+  if (g.ano == null && g.zeradoEm) g.ano = parseInt(g.zeradoEm.slice(0, 4)) || null;
+  delete g.zeradoEm;
+  return g;
+}
+function loadData(data){
+  games = ((data && data.jogos) || []).map(migrateGame);
+  lists = (data && data.listas) || [];
+}
+function libraryJSON(){ return JSON.stringify({ app: 'Catalogame', versao: 2, atualizadoEm: new Date().toISOString(), jogos: games, listas: lists }, null, 2); }
+
+/* ---------------- salvar ---------------- */
+let saving = Promise.resolve();
+function persist(){
+  // salva em fila, pra duas gravações nunca se atropelarem
+  const p = saving.then(() => api.save(libraryJSON()));
+  saving = p.catch(() => {});
+  return p.catch(e => { reportError('⚠ Erro ao salvar seus dados!', e); throw e; });
+}
+
+/* ---------------- capas (jogos e itens de listas) ---------------- */
+async function coverURL(o){
+  if (o.capa && o.capa !== 'idb') {
+    const key = o.capa + '|' + (o.capaV || 0);
+    if (!urlCache.has(key)) urlCache.set(key, api.coverURL(o.capa).then(u => u ? `${u}?v=${o.capaV || 0}` : null));
+    const u = await urlCache.get(key);
+    if (u) return u;
+  }
+  return o.capaUrl || null;
+}
+function clearUrlCache(){ urlCache.clear(); }
+async function normalizeImage(blob){
+  try {
+    const bmp = await createImageBitmap(blob);
+    const max = 700;
+    if (bmp.width <= max && blob.size < 600_000) { bmp.close && bmp.close(); return blob; }
+    const s = Math.min(1, max / bmp.width);
+    const c = document.createElement('canvas');
+    c.width = Math.round(bmp.width * s); c.height = Math.round(bmp.height * s);
+    c.getContext('2d').drawImage(bmp, 0, 0, c.width, c.height);
+    bmp.close && bmp.close();
+    const out = await new Promise(r => c.toBlob(r, 'image/webp', 0.9));
+    return out && out.size ? out : blob;
+  } catch { return blob; }
+}
+async function storeCover(o, blob){
+  const ext = ((blob.type.split('/')[1] || 'jpg').replace('jpeg', 'jpg').replace('svg+xml', 'svg').replace(/[^a-z0-9]/g, '')) || 'jpg';
+  const name = `${o.id}.${ext}`;
+  if (o.capa && o.capa !== name && o.capa !== 'idb') await api.removeCover(o.capa);
+  await api.writeCover(name, new Uint8Array(await blob.arrayBuffer()));
+  o.capa = name; o.capaUrl = ''; o.capaV = Date.now();
+}
+async function removeCover(o){
+  if (o.capa && o.capa !== 'idb') await api.removeCover(o.capa);
+  o.capa = ''; o.capaUrl = ''; o.capaV = Date.now();
+}
+async function tryFetchImage(url){
+  try {
+    if (url.startsWith('data:')) { const b = await (await fetch(url)).blob(); return b.type.startsWith('image/') ? b : null; }
+    const r = await api.fetchImage(url);   // o app baixa direto, sem bloqueio de CORS
+    return r ? new Blob([r.bytes], { type: r.type }) : null;
+  } catch { return null; }
+}
+function steamInfo(url){
+  const m = url.match(/(?:store\.steampowered\.com|steamcommunity\.com)\/app\/(\d+)(?:\/([^/?#]+))?/i);
+  if (!m) return null;
+  return {
+    cover: `https://cdn.cloudflare.steamstatic.com/steam/apps/${m[1]}/library_600x900.jpg`,
+    alt: `https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/${m[1]}/library_600x900.jpg`,
+    name: m[2] ? decodeURIComponent(m[2]).replace(/_/g, ' ').trim() : ''
+  };
+}
+
+/* ---------------- utilidades ---------------- */
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
+const norm = s => String(s ?? '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+const hue = s => { let h = 0; for (const c of String(s)) h = (h * 31 + c.charCodeAt(0)) % 360; return h; };
+const fmtNum = (n, d = 1) => Number(n).toLocaleString('pt-BR', { maximumFractionDigits: d });
+const plural = (n, s, p) => `${n} ${n === 1 ? s : (p || s + 's')}`;
+const yearOf = g => g.ano ? String(g.ano) : '';
+function notaColor(n){ return n >= 9 ? '#3ecf8e' : n >= 7.5 ? '#9fd450' : n >= 6 ? '#f5b942' : n >= 4 ? '#f28c4b' : '#ef5a5a'; }
+function placeholder(title){ return `<div class="ph" style="--h:${hue(title || '?')}">${esc(title || '?')}</div>`; }
+function putImg(el, src, alt){
+  if (!src || !el) return;
+  const img = new Image(); img.alt = alt || ''; img.draggable = false;
+  img.onload = () => { const ph = el.querySelector('.ph'); if (ph) ph.replaceWith(img); };
+  img.src = src;
+}
+let toastT;
+function toast(msg, ms = 2600){ const t = $('#toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('show'), ms); }
+
+/* ---------------- seletor de capa (reutilizável) ---------------- */
+let draggingTile = false;
+function makePicker(root, { getTitle, setTitle }){
+  const q = r => root.querySelector(`[data-r="${r}"]`);
+  const drop = q('drop'), prev = q('prev'), note = q('note'), fileIn = q('file'), urlIn = q('url'), urlBtn = q('urlbtn'), rm = q('rm'), gl = q('google'), sg = q('grid');
+  const P = { pending: null, objUrl: null };
+  function show(src, isLink){
+    if (P.objUrl && P.objUrl !== src) { URL.revokeObjectURL(P.objUrl); P.objUrl = null; }
+    prev.innerHTML = src ? `<img src="${esc(src)}" alt="" draggable="false">` : '';
+    if (src) prev.querySelector('img').onerror = () => {
+      prev.innerHTML = ''; drop.classList.remove('has'); note.style.display = 'none';
+      if (P.pending && P.pending.url === src) { P.pending = null; toast('Não consegui carregar essa imagem'); }
+    };
+    drop.classList.toggle('has', !!src);
+    note.style.display = isLink ? 'block' : 'none';
+  }
+  function setBlob(blob){ P.pending = { blob }; const u = URL.createObjectURL(blob); show(u, false); P.objUrl = u; }
+  async function setUrl(url){
+    url = (url || '').trim(); if (!url) return;
+    const st = steamInfo(url);
+    if (st) { if (!getTitle().trim() && st.name) setTitle(st.name); url = st.cover; }
+    drop.classList.add('loading');
+    let blob = await tryFetchImage(url);
+    if (!blob && st) blob = await tryFetchImage(st.alt);
+    drop.classList.remove('loading');
+    if (blob) return setBlob(blob);
+    if (url.startsWith('data:')) return toast('Não consegui ler essa imagem');
+    P.pending = { url }; show(url, true);
+  }
+  async function take(dt){
+    if (draggingTile || !dt) return false;
+    for (const f of dt.files || []) if (f.type.startsWith('image/')) { setBlob(f); return true; }
+    if (dt.items) for (const it of dt.items) if (it.kind === 'file' && it.type.startsWith('image/')) { const f = it.getAsFile(); if (f) { setBlob(f); return true; } }
+    let url = '';
+    const html = dt.getData && dt.getData('text/html');
+    if (html) { const m = html.match(/<img[^>]+src=["']([^"']+)["']/i); if (m) url = m[1].replace(/&amp;/g, '&'); }
+    if (!url) url = (dt.getData('text/uri-list') || dt.getData('text/plain') || '').split('\n').find(l => l && !l.startsWith('#')) || '';
+    url = url.trim();
+    if (/^(https?:|data:image)/i.test(url)) { await setUrl(url); return true; }
+    return false;
+  }
+  function links(){
+    const t = getTitle().trim();
+    gl.href = 'https://www.google.com/search?tbm=isch&q=' + encodeURIComponent((t || 'jogo') + ' capa game cover');
+    sg.href = 'https://www.steamgriddb.com/search/grids?term=' + encodeURIComponent(t);
+  }
+  fileIn.addEventListener('change', e => { const f = e.target.files[0]; if (f) setBlob(f); e.target.value = ''; });
+  rm.addEventListener('click', () => { P.pending = { remove: true }; show(null, false); });
+  urlBtn.addEventListener('click', () => setUrl(urlIn.value));
+  urlIn.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); setUrl(urlIn.value); } });
+  drop.addEventListener('dragover', e => { if (draggingTile) return; e.preventDefault(); drop.classList.add('over'); });
+  drop.addEventListener('dragleave', () => drop.classList.remove('over'));
+  drop.addEventListener('drop', async e => { if (draggingTile) return; e.preventDefault(); e.stopPropagation(); drop.classList.remove('over'); if (!(await take(e.dataTransfer))) toast('Não reconheci uma imagem aí'); });
+  drop.addEventListener('click', () => drop.focus());
+  return {
+    get pending(){ return P.pending; },
+    reset(src = null, isLink = false){ P.pending = null; urlIn.value = ''; show(src, isLink); links(); },
+    show, take, setUrl, links,
+  };
+}
+
+/* ---------------- inicialização ---------------- */
+async function boot(){
+  const info = await api.info();
+  DADOS = info.dados;
+  let data = null, falhou = false;
+  try { data = await api.load(); }
+  catch (e) { falhou = true; reportError('Não consegui abrir sua biblioteca. Nada foi apagado — me chama que a gente resolve.', e); }
+  loadData(data);
+  if (!data && !falhou) { try { await persist(); } catch {} }   // cria a biblioteca.json vazia
+  startApp();
+  if (info.fallback) showMsg('Aviso sobre onde os dados ficam',
+    `<p>A pasta onde o Catalogame foi instalado não permite gravar arquivos (isso acontece em <b>Arquivos de Programas</b>).</p>
+     <p>Por isso seus jogos estão sendo salvos em:<br><code>${esc(DADOS)}</code></p>
+     <p>Se quiser tudo junto na pasta do app, reinstale escolhendo outra pasta, por exemplo <code>D:\\Jogos\\Catalogame</code>.</p>`);
+}
+
+/* ---------------- app / abas ---------------- */
+function startApp(){
+  setTab(view.tab === 'lists' ? 'lists' : 'cat');
+}
+function setTab(t){
+  view.tab = t; saveView();
+  const cat = t === 'cat';
+  $('#toolsCat').classList.toggle('hidden', !cat); $('#main').classList.toggle('hidden', !cat);
+  $('#toolsList').classList.toggle('hidden', cat); $('#listsMain').classList.toggle('hidden', cat);
+  $('#tabBtn').innerHTML = cat ? '📚 Listas' : '🎮 Catalogar';
+  $('#tabBtn').title = cat ? 'Ir para as listas' : 'Voltar para o catálogo';
+  $('#addBtn').innerHTML = cat ? '＋ Adicionar jogo' : '＋ Criar lista';
+  cat ? render() : renderLists();
+  window.scrollTo(0, 0);
+}
+
+/* ---------------- catálogo ---------------- */
+function filtered(){
+  const q = norm(view.q).trim();
+  const list = games.filter(g => {
+    if (q && !norm([g.titulo, g.plataforma, (g.generos || []).join(' '), g.review].join(' ')).includes(q)) return false;
+    if (view.plat && g.plataforma !== view.plat) return false;
+    if (view.gen && !(g.generos || []).includes(view.gen)) return false;
+    if (view.status && g.status !== view.status) return false;
+    if (view.ano && (yearOf(g) || 'sem') !== view.ano) return false;
+    if (view.nota) { const n = +view.nota; if (n === -1 ? g.nota != null : (g.nota == null || g.nota < n)) return false; }
+    if (view.fav && !g.favorito) return false;
+    return true;
+  });
+  const by = {
+    'ano-desc':    (a, b) => (b.ano ?? -1) - (a.ano ?? -1) || (b.criadoEm || '').localeCompare(a.criadoEm || ''),
+    'ano-asc':     (a, b) => (a.ano ?? 9999) - (b.ano ?? 9999) || (a.criadoEm || '').localeCompare(b.criadoEm || ''),
+    'nota-desc':   (a, b) => (b.nota ?? -1) - (a.nota ?? -1),
+    'nota-asc':    (a, b) => (a.nota ?? 99) - (b.nota ?? 99),
+    'titulo':      (a, b) => a.titulo.localeCompare(b.titulo, 'pt-BR'),
+    'horas-desc':  (a, b) => (b.horas ?? -1) - (a.horas ?? -1),
+    'lanc-desc':   (a, b) => (b.lancamento ?? -1) - (a.lancamento ?? -1),
+    'lanc-asc':    (a, b) => (a.lancamento ?? 9999) - (b.lancamento ?? 9999),
+    'criado-desc': (a, b) => (b.criadoEm || '').localeCompare(a.criadoEm || ''),
+  }[view.sort];
+  return list.sort((a, b) => by(a, b) || a.titulo.localeCompare(b.titulo, 'pt-BR'));
+}
+function fillSelect(sel, label, values, current, fmt = v => v){
+  sel.innerHTML = `<option value="">${label}</option>` + values.map(v => `<option value="${esc(v)}">${esc(fmt(v))}</option>`).join('');
+  sel.value = values.includes(current) ? current : '';
+  sel.classList.toggle('on', !!sel.value);
+  return sel.value;
+}
+function renderFilters(){
+  const plats = [...new Set(games.map(g => g.plataforma).filter(Boolean))].sort((a, b) => a.localeCompare(b, 'pt-BR'));
+  const gens = [...new Set(games.flatMap(g => g.generos || []))].sort((a, b) => a.localeCompare(b, 'pt-BR'));
+  const anos = [...new Set(games.map(g => yearOf(g) || 'sem'))].sort().reverse();
+  const sts = Object.keys(STATUS).filter(k => games.some(g => g.status === k));
+  view.plat = fillSelect($('#fiPlat'), 'Todas as plataformas', plats, view.plat);
+  view.gen = fillSelect($('#fiGen'), 'Todos os gêneros', gens, view.gen);
+  view.status = fillSelect($('#fiStatus'), 'Todos os status', sts, view.status, k => STATUS[k].n);
+  view.ano = fillSelect($('#fiAno'), 'Todos os anos', anos, view.ano, a => a === 'sem' ? 'Sem ano' : 'Terminados em ' + a);
+  $('#fiNota').value = view.nota; $('#fiNota').classList.toggle('on', !!view.nota);
+  $('#sort').value = view.sort;
+  $('#tFav').classList.toggle('on', view.fav);
+  $('#tGroup').classList.toggle('on', view.group);
+  $('#cardSize').value = view.card;
+  document.documentElement.style.setProperty('--card', view.card + 'px');
+  $('#clearF').classList.toggle('hidden', !(view.q || view.plat || view.gen || view.status || view.ano || view.nota || view.fav));
+  $('#dlPlat').innerHTML = [...new Set([...plats, ...PLAT_DEF])].map(p => `<option value="${esc(p)}">`).join('');
+}
+function renderStats(list){
+  const done = games.filter(g => g.status === 'terminado');
+  const thisYear = done.filter(g => g.ano === ANO_ATUAL).length;
+  const parts = [`<strong>${done.length}</strong> terminado${done.length === 1 ? '' : 's'}`, `<strong>${thisYear}</strong> em ${ANO_ATUAL}`];
+  if (list.length !== games.length) parts.push(`mostrando <strong>${list.length}</strong> de ${games.length}`);
+  $('#stats').innerHTML = parts.join(' · ');
+}
+function cardHTML(g){
+  const st = STATUS[g.status];
+  const sub = [g.plataforma, g.ano].filter(Boolean).join(' · ');
+  return `<div class="card" data-id="${g.id}" title="${esc(g.titulo)}">
+    ${placeholder(g.titulo)}
+    <div class="flags">
+      ${g.favorito ? '<div class="fav">★</div>' : ''}
+      ${st && g.status !== 'terminado' ? `<div class="pill" style="color:${st.c};border-color:${st.c}">${st.n}</div>` : ''}
+    </div>
+    <div class="info"><div class="t">${esc(g.titulo)}</div>
+      <div class="s"><span>${esc(sub)}</span>${g.nota != null ? `<b class="n" style="background:${notaColor(g.nota)}">${fmtNum(g.nota)}</b>` : ''}</div></div>
+  </div>`;
+}
+function render(){
+  renderFilters();
+  const list = filtered();
+  renderStats(list);
+  const main = $('#main');
+  if (!games.length) { main.innerHTML = `<div class="empty"><h3>Seu catálogo está vazio</h3><p>Clique em <b>＋ Adicionar jogo</b> pra cadastrar o primeiro.</p><p style="margin-top:22px;font-size:13px">Já usava o Catalogame antes? <button class="link" onclick="openImport()">Trazer sua biblioteca antiga</button></p></div>`; return; }
+  if (!list.length) { main.innerHTML = `<div class="empty"><h3>Nenhum jogo com esses filtros</h3><p><button class="link" onclick="clearFilters()">Limpar filtros</button></p></div>`; return; }
+  if (view.group) {
+    const groups = new Map();
+    for (const g of list) { const y = yearOf(g) || 'Sem ano'; if (!groups.has(y)) groups.set(y, []); groups.get(y).push(g); }
+    let keys = [...groups.keys()];
+    if (!view.sort.startsWith('ano')) keys.sort((a, b) => (a === 'Sem ano') - (b === 'Sem ano') || b.localeCompare(a));
+    main.innerHTML = keys.map(y => { const arr = groups.get(y); return `<section class="group"><h2>${y}<span>${plural(arr.length, 'jogo')}</span></h2><div class="grid">${arr.map(cardHTML).join('')}</div></section>`; }).join('');
+  } else main.innerHTML = `<div class="grid">${list.map(cardHTML).join('')}</div>`;
+  for (const el of main.querySelectorAll('.card')) {
+    const g = games.find(x => x.id === el.dataset.id);
+    coverURL(g).then(u => putImg(el, u, g.titulo));
+  }
+}
+function clearFilters(){ Object.assign(view, { q:'', plat:'', gen:'', status:'', ano:'', nota:'', fav:false }); $('#q').value = ''; render(); }
+
+/* ---------------- detalhes do jogo ---------------- */
+function openDetail(id){
+  const g = games.find(x => x.id === id); if (!g) return;
+  const st = STATUS[g.status];
+  const rows = [
+    ['Plataforma', esc(g.plataforma)],
+    ['Terminado em', g.ano ?? ''],
+    ['Lançamento', g.lancamento ?? ''],
+    ['Horas', g.horas != null ? fmtNum(g.horas) + ' h' : ''],
+    ['Gêneros', (g.generos || []).length ? `<div class="tagrow">${g.generos.map(t => `<span class="tag">${esc(t)}</span>`).join('')}</div>` : ''],
+  ].filter(r => r[1] !== '' && r[1] != null);
+  $('#detail').innerHTML = `
+    <header><h2 style="font-size:14px;color:var(--mut);font-weight:600">Detalhes</h2><button class="x" data-close>✕</button></header>
+    <div class="detail">
+      <div class="dc" id="dCover">${placeholder(g.titulo)}</div>
+      <div>
+        <h1>${esc(g.titulo)} ${g.favorito ? '<span style="color:var(--warn)">★</span>' : ''}</h1>
+        ${st ? `<span class="pill" style="color:${st.c};border-color:${st.c}">${st.n}</span>` : ''}
+        <div class="big">${g.nota != null ? `<div class="bignota" style="color:${notaColor(g.nota)}">${fmtNum(g.nota)}<small> / 10</small></div>` : `<div style="color:var(--dim)">Sem nota</div>`}</div>
+        <dl class="meta">${rows.map(r => `<dt>${r[0]}</dt><dd>${r[1]}</dd>`).join('')}</dl>
+        ${g.review ? `<div class="review">${esc(g.review)}</div>` : ''}
+      </div>
+    </div>
+    <footer>
+      <button class="btn ghost danger" id="dDel">Excluir</button>
+      <span class="sp"></span>
+      <button class="btn ghost" id="dFav">${g.favorito ? '☆ Tirar dos favoritos' : '★ Favoritar'}</button>
+      <button class="btn primary" id="dEdit">Editar</button>
+    </footer>`;
+  openModal('#detailBg');
+  coverURL(g).then(u => { if (u) $('#dCover').innerHTML = `<img src="${esc(u)}" alt="">`; });
+  $('#dEdit').onclick = () => { closeModals(true); openForm(g.id); };
+  $('#dDel').onclick = () => deleteGame(g.id);
+  $('#dFav').onclick = async () => { g.favorito = !g.favorito; await persist(); render(); openDetail(g.id); };
+}
+async function deleteGame(id){
+  const g = games.find(x => x.id === id); if (!g) return;
+  if (!confirm(`Excluir "${g.titulo}" do catálogo?`)) return;
+  await removeCover(g);
+  games = games.filter(x => x.id !== id);
+  await persist(); closeModals(true); render(); toast('Jogo excluído');
+}
+
+/* ---------------- formulário do jogo ---------------- */
+const form = { id: null, nota: null, gens: new Set() };
+const gp = makePicker($('#gPicker'), {
+  getTitle: () => $('#fTitulo').value,
+  setTitle: t => { $('#fTitulo').value = t; gp.links(); },
+});
+function setNota(v){
+  form.nota = v;
+  $('#notaRow').classList.toggle('unset', v == null);
+  $('#fNota').value = v == null ? 5 : v;
+  $('#notaOut').textContent = v == null ? '–' : fmtNum(v);
+  $('#notaOut').style.color = v == null ? '' : notaColor(v);
+}
+function renderGenChips(){
+  const all = [...new Set([...games.flatMap(g => g.generos || []), ...GEN_DEF, ...form.gens])];
+  $('#genChips').innerHTML = all.map(t => `<span class="chip ${form.gens.has(t) ? 'on' : ''}" data-g="${esc(t)}">${esc(t)}</span>`).join('')
+    + `<input class="chip-add" id="genNew" placeholder="+ outro gênero">`;
+}
+function openForm(id){
+  const g = id ? games.find(x => x.id === id) : null;
+  form.id = g ? g.id : null;
+  form.gens = new Set(g ? g.generos || [] : []);
+  $('#formTitle').textContent = g ? 'Editar jogo' : 'Adicionar jogo';
+  $('#fTitulo').value = g ? g.titulo : '';
+  $('#fPlat').value = g ? g.plataforma || '' : '';
+  $('#fStatus').innerHTML = Object.entries(STATUS).map(([k, v]) => `<option value="${k}">${v.n}</option>`).join('');
+  $('#fStatus').value = g ? g.status : 'terminado';
+  $('#fAno').value = g ? g.ano ?? '' : ANO_ATUAL;
+  $('#fLanc').value = g ? g.lancamento ?? '' : '';
+  $('#fHoras').value = g ? g.horas ?? '' : '';
+  $('#fFav').checked = g ? !!g.favorito : false;
+  $('#fReview').value = g ? g.review || '' : '';
+  setNota(g ? g.nota ?? null : null);
+  renderGenChips();
+  $('#fDelete').classList.toggle('hidden', !g);
+  gp.reset();
+  if (g) coverURL(g).then(u => { if (u && !gp.pending) gp.show(u, !!g.capaUrl && !g.capa); });
+  openModal('#formBg');
+  $('#fTitulo').focus();
+}
+async function saveForm(e){
+  e.preventDefault();
+  const titulo = $('#fTitulo').value.trim();
+  if (!titulo) { $('#fTitulo').focus(); return toast('Coloca o nome do jogo'); }
+  const btn = $('#fSave'); btn.disabled = true;
+  try {
+    const isNew = !form.id;
+    const g = isNew ? { id: uid(), criadoEm: new Date().toISOString(), capa: '', capaUrl: '' } : games.find(x => x.id === form.id);
+    const num = v => v === '' || v == null ? null : Number(v);
+    Object.assign(g, {
+      titulo,
+      plataforma: $('#fPlat').value.trim(),
+      status: $('#fStatus').value,
+      ano: num($('#fAno').value),
+      lancamento: num($('#fLanc').value),
+      horas: num($('#fHoras').value),
+      favorito: $('#fFav').checked,
+      nota: form.nota,
+      generos: [...form.gens],
+      review: $('#fReview').value.trim(),
+    });
+    const p = gp.pending;
+    if (p) {
+      if (p.remove) await removeCover(g);
+      else if (p.blob) await storeCover(g, await normalizeImage(p.blob));
+      else if (p.url) { await removeCover(g); g.capaUrl = p.url; }
+    }
+    if (isNew) games.push(g);
+    await persist();
+    closeModals(true); render();
+    toast(isNew ? `“${titulo}” adicionado ao catálogo` : 'Alterações salvas');
+  } catch (err) { console.error(err); }
+  finally { btn.disabled = false; }
+}
+
+/* ---------------- LISTAS ---------------- */
+function renderLists(){
+  const q = norm($('#lq').value).trim();
+  const arr = lists
+    .filter(l => !q || norm(l.nome + ' ' + l.itens.map(i => i.titulo).join(' ')).includes(q))
+    .sort((a, b) => (b.atualizadoEm || '').localeCompare(a.atualizadoEm || ''));
+  $('#stats').innerHTML = `<strong>${lists.length}</strong> lista${lists.length === 1 ? '' : 's'}` + (arr.length !== lists.length ? ` · mostrando <strong>${arr.length}</strong>` : '');
+  const m = $('#listsMain');
+  if (!lists.length) { m.innerHTML = `<div class="empty"><h3>Nenhuma lista ainda</h3><p>Clique em <b>＋ Criar lista</b> pra montar a primeira — tipo um top 10, seus musous favoritos, etc.</p></div>`; return; }
+  if (!arr.length) { m.innerHTML = `<div class="empty"><h3>Nenhuma lista encontrada</h3></div>`; return; }
+  m.innerHTML = `<div class="lgrid">${arr.map(l => {
+    const capas = l.itens.slice(0, 4);
+    return `<div class="lcard" data-id="${l.id}">
+      <div class="lstack">${capas.length ? capas.map((it, i) => `<div class="cv" data-item="${it.id}" style="z-index:${10 - i}">${placeholder(it.titulo)}</div>`).join('') : '<div class="lempty">Lista vazia</div>'}</div>
+      <div class="lbody"><div class="lname">${esc(l.nome)}</div><div class="lmeta">${plural(l.itens.length, 'jogo')}${l.ranqueada ? ' · 🏅 ranqueada' : ''}</div></div>
+    </div>`;
+  }).join('')}</div>`;
+  for (const card of m.querySelectorAll('.lcard')) {
+    const l = lists.find(x => x.id === card.dataset.id);
+    for (const cv of card.querySelectorAll('.cv')) { const it = l.itens.find(i => i.id === cv.dataset.item); coverURL(it).then(u => putImg(cv, u, it.titulo)); }
+  }
+}
+function tileHTML(it, i, ranked, editable){
+  return `<div class="tile" data-id="${it.id}" ${editable ? 'draggable="true"' : ''}>
+    <div class="cv">${placeholder(it.titulo)}${ranked ? `<div class="rank top">${i + 1}</div>` : ''}
+      ${editable ? `<div class="tact"><button type="button" data-act="edit" title="Editar">✎</button><button type="button" class="del" data-act="del" title="Tirar da lista">✕</button></div>` : ''}</div>
+    ${it.titulo ? `<div class="tt">${esc(it.titulo)}</div>` : ''}
+  </div>`;
+}
+
+/* ver lista */
+function openListView(id){
+  const l = lists.find(x => x.id === id); if (!l) return;
+  $('#lv').innerHTML = `
+    <header><div><h2>${esc(l.nome)}</h2><div class="sub">${plural(l.itens.length, 'jogo')}${l.ranqueada ? ' · 🏅 ranqueada' : ''}</div></div><button class="x" data-close>✕</button></header>
+    <div class="lv-body">${l.itens.length ? `<div class="tgrid">${l.itens.map((it, i) => tileHTML(it, i, l.ranqueada, false)).join('')}</div>` : '<div class="empty" style="padding:40px">Essa lista ainda está vazia.</div>'}</div>
+    <footer><button class="btn ghost danger" id="lvDel">Excluir lista</button><span class="sp"></span><button class="btn primary" id="lvEdit">✎ Editar lista</button></footer>`;
+  for (const t of $('#lv').querySelectorAll('.tile')) { const it = l.itens.find(i => i.id === t.dataset.id); coverURL(it).then(u => putImg(t.querySelector('.cv'), u, it.titulo)); }
+  $('#lvEdit').onclick = () => { closeModals(true); openListEditor(l.id); };
+  $('#lvDel').onclick = () => deleteList(l.id);
+  openModal('#lvBg');
+}
+async function deleteList(id){
+  const l = lists.find(x => x.id === id); if (!l) return;
+  if (!confirm(`Excluir a lista "${l.nome}"? Os jogos dela também somem (o catálogo não é afetado).`)) return;
+  for (const it of l.itens) await removeCover(it);
+  lists = lists.filter(x => x.id !== id);
+  await persist(); closeModals(true); renderLists(); toast('Lista excluída');
+}
+
+/* editor de lista */
+const LE = { list: null, removed: [], editingItemId: null, urls: new Map(), dirty: false };
+const lp = makePicker($('#lPicker'), {
+  getTitle: () => $('#liTitulo').value,
+  setTitle: t => { $('#liTitulo').value = t; lp.links(); },
+});
+function openListEditor(id){
+  const src = id ? lists.find(l => l.id === id) : null;
+  LE.list = src
+    ? { id: src.id, nome: src.nome, ranqueada: !!src.ranqueada, criadoEm: src.criadoEm, itens: src.itens.map(i => ({ ...i })) }
+    : { id: uid(), nome: '', ranqueada: true, criadoEm: new Date().toISOString(), itens: [] };
+  LE.removed = []; LE.dirty = false;
+  $('#leTitle').textContent = src ? 'Editar lista' : 'Nova lista';
+  $('#leNome').value = LE.list.nome;
+  $('#leRank').checked = LE.list.ranqueada;
+  $('#leDelete').classList.toggle('hidden', !src);
+  resetItemPanel(); renderTiles();
+  openModal('#leBg');
+  (src ? $('#liTitulo') : $('#leNome')).focus();
+}
+function resetItemPanel(){
+  LE.editingItemId = null;
+  $('#liTitulo').value = '';
+  lp.reset();
+  $('#liAdd').textContent = '＋ Adicionar à lista';
+  $('#liCancel').classList.add('hidden');
+  $('#lPicker').classList.remove('editing');
+  document.querySelectorAll('#leGrid .tile.editing').forEach(t => t.classList.remove('editing'));
+}
+async function itemSrc(it){
+  if (it._blob) { const k = it.id + '|' + it._v; if (!LE.urls.has(k)) LE.urls.set(k, URL.createObjectURL(it._blob)); return LE.urls.get(k); }
+  if (it._url) return it._url;
+  if (it._rm) return null;
+  return coverURL(it);
+}
+function renderTiles(){
+  const g = $('#leGrid'), items = LE.list.itens, ranked = $('#leRank').checked;
+  $('#leCount').textContent = items.length ? `${plural(items.length, 'jogo')} · arraste as capas pra trocar de lugar` : '';
+  if (!items.length) { g.innerHTML = `<div class="le-empty">Nenhum jogo ainda. Digite o nome, cole a capa e clique em <b>Adicionar à lista</b> ↑</div>`; return; }
+  g.innerHTML = items.map((it, i) => tileHTML(it, i, ranked, true)).join('');
+  for (const t of g.querySelectorAll('.tile')) {
+    const it = items.find(x => x.id === t.dataset.id);
+    if (it.id === LE.editingItemId) t.classList.add('editing');
+    itemSrc(it).then(u => putImg(t.querySelector('.cv'), u, it.titulo));
+  }
+}
+function applyPending(it, p){
+  if (!p) return;
+  delete it._blob; delete it._url; delete it._rm;
+  if (p.blob) it._blob = p.blob; else if (p.url) it._url = p.url; else if (p.remove) it._rm = true;
+  it._v = (it._v || 0) + 1;
+}
+function panelHasContent(){ const p = lp.pending; return !!($('#liTitulo').value.trim() || (p && (p.blob || p.url))); }
+function submitItem(silent){
+  const titulo = $('#liTitulo').value.trim();
+  const p = lp.pending;
+  if (LE.editingItemId) {
+    const it = LE.list.itens.find(x => x.id === LE.editingItemId);
+    if (it) { it.titulo = titulo; applyPending(it, p); }
+  } else {
+    if (!titulo && !(p && (p.blob || p.url))) { if (!silent) toast('Coloque o nome do jogo ou uma capa'); return false; }
+    const it = { id: uid(), titulo, capa: '', capaUrl: '' };
+    applyPending(it, p);
+    LE.list.itens.push(it);
+  }
+  LE.dirty = true;
+  const wasAdd = !LE.editingItemId;
+  resetItemPanel(); renderTiles();
+  if (!silent) { $('#liTitulo').focus(); if (wasAdd) { const last = $('#leGrid .tile:last-child'); last && last.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); } }
+  return true;
+}
+async function editItem(id){
+  const it = LE.list.itens.find(x => x.id === id); if (!it) return;
+  resetItemPanel();
+  LE.editingItemId = id;
+  $('#liTitulo').value = it.titulo || '';
+  lp.links();
+  $('#liAdd').textContent = '✓ Atualizar jogo';
+  $('#liCancel').classList.remove('hidden');
+  $('#lPicker').classList.add('editing');
+  document.querySelector(`#leGrid .tile[data-id="${id}"]`)?.classList.add('editing');
+  const u = await itemSrc(it);
+  if (u && !lp.pending && LE.editingItemId === id) lp.show(u, !!it._url || (!!it.capaUrl && !it.capa && !it._blob));
+  $('#lPicker').scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+  $('#liTitulo').focus();
+}
+function removeItem(id){
+  const i = LE.list.itens.findIndex(x => x.id === id); if (i < 0) return;
+  const [it] = LE.list.itens.splice(i, 1);
+  if (it.capa) LE.removed.push(it);
+  if (LE.editingItemId === id) resetItemPanel();
+  LE.dirty = true; renderTiles();
+}
+async function saveList(){
+  const nome = $('#leNome').value.trim();
+  if (!nome) { $('#leNome').focus(); return toast('Dê um nome pra lista'); }
+  if (panelHasContent() || LE.editingItemId) submitItem(true);
+  const btn = $('#leSave'); btn.disabled = true;
+  try {
+    for (const it of LE.removed) await removeCover(it);
+    for (const it of LE.list.itens) {
+      if (it._blob) await storeCover(it, await normalizeImage(it._blob));
+      else if (it._url) { await removeCover(it); it.capaUrl = it._url; }
+      else if (it._rm) await removeCover(it);
+      delete it._blob; delete it._url; delete it._rm; delete it._v;
+    }
+    const l = { ...LE.list, nome, ranqueada: $('#leRank').checked, atualizadoEm: new Date().toISOString() };
+    const idx = lists.findIndex(x => x.id === l.id);
+    const isNew = idx < 0;
+    if (isNew) lists.push(l); else lists[idx] = l;
+    await persist();
+    LE.dirty = false; closeModals(true); renderLists();
+    toast(isNew ? `Lista “${nome}” criada` : 'Lista salva');
+  } catch (e) { console.error(e); }
+  finally { btn.disabled = false; }
+}
+function cleanupEditor(){
+  for (const u of LE.urls.values()) URL.revokeObjectURL(u);
+  LE.urls.clear();
+}
+
+/* arrastar pra reordenar */
+(function(){
+  const grid = $('#leGrid');
+  let dragId = null;
+  const renumber = () => grid.querySelectorAll('.tile').forEach((t, i) => { const r = t.querySelector('.rank'); if (r) r.textContent = i + 1; });
+  grid.addEventListener('dragstart', e => {
+    const t = e.target.closest('.tile'); if (!t) return;
+    dragId = t.dataset.id; draggingTile = true;
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/x-catalogame', dragId);
+    requestAnimationFrame(() => t.classList.add('dragging'));
+  });
+  grid.addEventListener('dragover', e => {
+    if (!dragId) return;
+    e.preventDefault(); e.dataTransfer.dropEffect = 'move';
+    const t = e.target.closest('.tile');
+    const dragged = grid.querySelector(`.tile[data-id="${dragId}"]`);
+    if (!t || !dragged || t === dragged) return;
+    const r = t.getBoundingClientRect();
+    const after = (e.clientX - r.left) > r.width / 2;
+    if (after) { if (t.nextElementSibling !== dragged) t.after(dragged); }
+    else if (t.previousElementSibling !== dragged) t.before(dragged);
+    renumber();
+  });
+  grid.addEventListener('drop', e => { if (dragId) { e.preventDefault(); e.stopPropagation(); } });
+  grid.addEventListener('dragend', () => {
+    if (!dragId) return;
+    const order = [...grid.querySelectorAll('.tile')].map(t => t.dataset.id);
+    const before = LE.list.itens.map(i => i.id).join();
+    LE.list.itens.sort((a, b) => order.indexOf(a.id) - order.indexOf(b.id));
+    if (before !== LE.list.itens.map(i => i.id).join()) LE.dirty = true;
+    grid.querySelectorAll('.tile.dragging').forEach(t => t.classList.remove('dragging'));
+    dragId = null; setTimeout(() => { draggingTile = false; }, 0);
+  });
+  grid.addEventListener('click', e => {
+    const b = e.target.closest('button[data-act]'); if (!b) return;
+    const id = b.closest('.tile').dataset.id;
+    b.dataset.act === 'edit' ? editItem(id) : removeItem(id);
+  });
+})();
+
+/* ---------------- modais / menu ---------------- */
+function openModal(sel){ $(sel).classList.add('open'); document.body.style.overflow = 'hidden'; }
+function closeModals(force){
+  if (!force && $('#leBg').classList.contains('open') && (LE.dirty || panelHasContent()) && !confirm('Descartar as alterações dessa lista?')) return false;
+  if ($('#leBg').classList.contains('open')) cleanupEditor();
+  document.querySelectorAll('.modal-bg.open:not(.msgbg)').forEach(m => m.classList.remove('open'));
+  if (!$('#msgBg').classList.contains('open')) document.body.style.overflow = '';
+  gp.reset(); lp.reset();
+  return true;
+}
+const anyModalOpen = () => !!document.querySelector('.modal-bg.open');
+
+function openMenu(anchor){
+  const m = $('#menu');
+  m.innerHTML = `<button data-a="folder">📂 Abrir a pasta dos dados</button>
+    <button data-a="import">⬆ Trazer jogos do Catalogame antigo</button>
+    <div class="info">Seus jogos e capas ficam em<br><b>${esc(DADOS)}</b></div>`;
+  const r = anchor.getBoundingClientRect();
+  m.style.top = (r.bottom + 6) + 'px';
+  m.style.right = Math.max(8, innerWidth - r.right) + 'px';
+  m.classList.add('open');
+}
+async function menuAction(a){
+  $('#menu').classList.remove('open');
+  if (a === 'folder') return api.openDataFolder();
+  if (a === 'import') return openImport();
+}
+
+/* ---------------- trazer dados do Catalogame antigo ---------------- */
+async function unpackCover(c, old){
+  const cd = c.capaData; delete c.capaData;
+  if (!c.capa || c.capa === 'idb') c.capa = old ? old.capa : '';
+  if (cd) { try { await storeCover(c, await (await fetch(cd)).blob()); } catch (e) { console.warn(e); } }
+  c.capaV = Date.now();
+  return c;
+}
+async function openImport(){
+  const kind = await showMsg('Trazer jogos do Catalogame antigo',
+    `<p>De onde vêm seus jogos?</p>
+     <ol>
+       <li><b>Pasta</b>: se você usava o Catalogame salvando numa pasta do PC (a que tem o arquivo <code>biblioteca.json</code> e a pasta <code>capas</code>).</li>
+       <li><b>Arquivo de backup</b>: se você tinha exportado um backup <code>.json</code>.</li>
+     </ol>
+     <p style="color:var(--mut);font-size:13px">Se os jogos estavam guardados <b>só no navegador</b>, abra o <code>catalogame.html</code> antigo nesse navegador, use <b>⋯ → Exportar backup</b> e depois escolha “Arquivo de backup” aqui.</p>
+     <p style="color:var(--mut);font-size:13px">Nada que você já tem aqui é apagado: os jogos são somados.</p>`,
+    [{ label: 'Cancelar', value: null }, { label: '📄 Arquivo de backup', value: 'file' }, { label: '📁 Pasta', primary: true, value: 'folder' }]);
+  if (!kind) return;
+  const r = await api.importPick(kind);
+  if (!r) return;
+  if (r.erro) return showMsg('Não deu pra importar', `<p>${esc(r.erro)}</p>`);
+  await importData(r.data);
+}
+async function importData(data){
+  const jogos = Array.isArray(data) ? data : (data && data.jogos) || [];
+  const listas = Array.isArray(data) ? [] : (data && data.listas) || [];
+  if (!jogos.length && !listas.length) return showMsg('Nada pra importar', '<p>Não encontrei jogos nem listas nesse arquivo.</p>');
+  toast('Importando…', 15000);
+  let nj = 0, nl = 0;
+  for (const raw of jogos) {
+    if (!raw || !raw.titulo) continue;
+    const c = migrateGame({ ...raw }); c.id = c.id || uid();
+    const old = games.find(x => x.id === c.id);
+    await unpackCover(c, old);
+    if (old) Object.assign(old, c); else games.push(c);
+    nj++;
+  }
+  for (const raw of listas) {
+    if (!raw || !raw.nome) continue;
+    const l = { ...raw, id: raw.id || uid(), itens: [] };
+    const old = lists.find(x => x.id === l.id);
+    for (const ri of raw.itens || []) {
+      const it = { ...ri, id: ri.id || uid() };
+      const oldIt = old && old.itens.find(x => x.id === it.id);
+      l.itens.push(await unpackCover(it, oldIt));
+    }
+    if (old) Object.assign(old, l); else lists.push(l);
+    nl++;
+  }
+  await persist(); clearUrlCache(); view.tab === 'lists' ? renderLists() : render();
+  toast(`✓ Importado: ${plural(nj, 'jogo')} e ${plural(nl, 'lista')}`, 4000);
+}
+
+/* ---------------- eventos ---------------- */
+$('#addBtn').onclick = () => view.tab === 'cat' ? openForm(null) : openListEditor(null);
+$('#tabBtn').onclick = () => setTab(view.tab === 'cat' ? 'lists' : 'cat');
+$('#main').addEventListener('click', e => { const c = e.target.closest('.card'); if (c) openDetail(c.dataset.id); });
+$('#listsMain').addEventListener('click', e => { const c = e.target.closest('.lcard'); if (c) openListView(c.dataset.id); });
+$('#q').addEventListener('input', e => { view.q = e.target.value; render(); });
+$('#lq').addEventListener('input', renderLists);
+const bindSel = (sel, key) => $(sel).addEventListener('change', e => { view[key] = e.target.value; saveView(); render(); e.target.blur(); });
+bindSel('#fiPlat', 'plat'); bindSel('#fiGen', 'gen'); bindSel('#fiStatus', 'status'); bindSel('#fiAno', 'ano'); bindSel('#fiNota', 'nota'); bindSel('#sort', 'sort');
+$('#tFav').onclick = () => { view.fav = !view.fav; render(); };
+$('#tGroup').onclick = () => { view.group = !view.group; saveView(); render(); };
+$('#clearF').onclick = clearFilters;
+$('#cardSize').addEventListener('input', e => { view.card = +e.target.value; document.documentElement.style.setProperty('--card', view.card + 'px'); saveView(); });
+$('#menuBtn').onclick = e => { e.stopPropagation(); $('#menu').classList.contains('open') ? $('#menu').classList.remove('open') : openMenu(e.currentTarget); };
+$('#menu').addEventListener('click', e => { const b = e.target.closest('button[data-a]'); if (b) menuAction(b.dataset.a); });
+document.addEventListener('click', e => { if (!e.target.closest('#menu')) $('#menu').classList.remove('open'); });
+
+document.querySelectorAll('.modal-bg:not(.msgbg)').forEach(bg => bg.addEventListener('mousedown', e => { if (e.target === bg) closeModals(); }));
+document.addEventListener('click', e => { if (e.target.closest('[data-close]')) closeModals(); });
+// janela de mensagem: fecha só ela (não mexe nos outros modais)
+$('#msgBg').addEventListener('mousedown', e => { if (e.target === $('#msgBg')) closeMsg(null); });
+$('#msg').addEventListener('click', async e => {
+  if (e.target.closest('[data-mclose]')) return closeMsg(null);
+  const b = e.target.closest('[data-mb]'); if (!b) return;
+  const vals = JSON.parse($('#msg').dataset.buttons || '[]');
+  closeMsg(vals[+b.dataset.mb]);
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && $('#msgBg').classList.contains('open')) { e.preventDefault(); closeMsg(null); return; }
+  if (e.key === 'Escape') { if (anyModalOpen()) closeModals(); else $('#menu').classList.remove('open'); return; }
+  const typing = /INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName);
+  if (typing || anyModalOpen() || $('#app').classList.contains('hidden')) return;
+  if (e.key === '/') { e.preventDefault(); (view.tab === 'cat' ? $('#q') : $('#lq')).focus(); }
+  if (e.key.toLowerCase() === 'n' && !e.ctrlKey && !e.metaKey) { e.preventDefault(); $('#addBtn').click(); }
+});
+
+// formulário do jogo
+$('#form').addEventListener('submit', saveForm);
+$('#fTitulo').addEventListener('input', () => gp.links());
+$('#fNota').addEventListener('input', e => setNota(+e.target.value));
+$('#notaClear').onclick = () => setNota(null);
+$('#fDelete').onclick = () => deleteGame(form.id);
+$('#fStatus').addEventListener('change', e => {
+  if (e.target.value === 'quero' && +$('#fAno').value === ANO_ATUAL) $('#fAno').value = '';
+  else if (e.target.value !== 'quero' && !$('#fAno').value) $('#fAno').value = ANO_ATUAL;
+});
+$('#genChips').addEventListener('click', e => {
+  const c = e.target.closest('.chip'); if (!c) return;
+  const t = c.dataset.g; form.gens.has(t) ? form.gens.delete(t) : form.gens.add(t);
+  c.classList.toggle('on', form.gens.has(t));
+});
+$('#genChips').addEventListener('keydown', e => {
+  if (e.target.id !== 'genNew' || (e.key !== 'Enter' && e.key !== ',')) return;
+  e.preventDefault();
+  const t = e.target.value.trim().replace(/,$/, ''); if (!t) return;
+  form.gens.add(t); renderGenChips(); $('#genNew').focus();
+});
+
+// editor de lista
+$('#liAdd').onclick = () => submitItem(false);
+$('#liCancel').onclick = resetItemPanel;
+$('#liTitulo').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); submitItem(false); } });
+$('#liTitulo').addEventListener('input', () => lp.links());
+$('#leNome').addEventListener('input', () => { LE.dirty = true; });
+$('#leNome').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); $('#liTitulo').focus(); } });
+$('#leRank').addEventListener('change', () => { LE.dirty = true; renderTiles(); });
+$('#leSave').onclick = saveList;
+$('#leDelete').onclick = () => deleteList(LE.list.id);
+
+// arrastar imagem em qualquer lugar do modal
+for (const [bg, picker] of [['#formBg', gp], ['#leBg', lp]]) {
+  $(bg).addEventListener('dragover', e => { if (!draggingTile) e.preventDefault(); });
+  $(bg).addEventListener('drop', async e => { if (draggingTile) return; e.preventDefault(); await picker.take(e.dataTransfer); });
+}
+// colar imagem (Ctrl+V)
+document.addEventListener('paste', async e => {
+  const picker = $('#formBg').classList.contains('open') ? gp : $('#leBg').classList.contains('open') ? lp : null;
+  if (!picker) return;
+  const dt = e.clipboardData; if (!dt) return;
+  const hasImg = [...dt.items].some(it => it.kind === 'file' && it.type.startsWith('image/'));
+  if (hasImg) { e.preventDefault(); await picker.take(dt); return; }
+  const ae = document.activeElement;
+  const inText = ae && /INPUT|TEXTAREA/.test(ae.tagName);
+  if (!inText) {
+    const txt = (dt.getData('text/plain') || '').trim();
+    if (/^https?:\/\//.test(txt)) { e.preventDefault(); await picker.setUrl(txt); }
+  }
+});
+
+boot().catch(e => reportError('O Catalogame não conseguiu iniciar.', e));
+</script>
+</body>
+</html>
