@@ -9,7 +9,6 @@ const fsp = fs.promises;
 const { pathToFileURL } = require('url');
 
 app.setAppUserModelId('com.leandro.catalogame');
-nativeTheme.themeSource = 'dark';
 
 if (!app.requestSingleInstanceLock()) { app.quit(); process.exit(0); }
 
@@ -35,6 +34,7 @@ function resolveDataDir(){
   return alt;
 }
 const LIB = () => path.join(DATA_DIR, 'biblioteca.json');
+const CONF = () => path.join(DATA_DIR, 'config.json');
 const CAPAS = () => path.join(DATA_DIR, 'capas');
 const safeName = n => path.basename(String(n || '')).replace(/[^\w.\-]/g, '');
 
@@ -44,12 +44,19 @@ async function writeAtomic(file, data){
   await fsp.rename(tmp, file);
 }
 
+/* ---------- configurações (tema, cor, visualização) ---------- */
+let config = {};
+function readConfig(){ try { config = JSON.parse(fs.readFileSync(CONF(), 'utf8')) || {}; } catch { config = {}; } }
+function applyTheme(){
+  nativeTheme.themeSource = config.tema === 'claro' ? 'light' : config.tema === 'auto' ? 'system' : 'dark';
+}
+
 /* ---------- janela ---------- */
 let win;
 function createWindow(){
   win = new BrowserWindow({
     width: 1440, height: 920, minWidth: 900, minHeight: 600,
-    backgroundColor: '#0d1016',
+    backgroundColor: nativeTheme.shouldUseDarkColors ? '#0d1016' : '#f3f5f9',
     title: 'Catalogame',
     icon: path.join(__dirname, 'build', 'icon.png'),
     autoHideMenuBar: true,
@@ -109,6 +116,17 @@ ipcMain.handle('cover:write', async (_e, name, bytes) => {
   await writeAtomic(path.join(CAPAS(), name), Buffer.from(bytes));
   return name;
 });
+ipcMain.handle('cover:read', async (_e, name) => {
+  name = safeName(name); if (!name) return null;
+  try { return new Uint8Array(await fsp.readFile(path.join(CAPAS(), name))); } catch { return null; }
+});
+ipcMain.on('config:get', e => { e.returnValue = config; });
+ipcMain.handle('config:set', async (_e, c) => {
+  config = c && typeof c === 'object' ? c : {};
+  applyTheme();
+  await writeAtomic(CONF(), JSON.stringify(config, null, 2));
+  return true;
+});
 ipcMain.handle('cover:remove', async (_e, name) => {
   name = safeName(name); if (!name) return;
   try { await fsp.unlink(path.join(CAPAS(), name)); } catch {}
@@ -164,5 +182,6 @@ ipcMain.handle('import:pick', async (_e, kind) => {
 
 app.whenReady().then(() => {
   DATA_DIR = resolveDataDir();
+  readConfig(); applyTheme();
   createWindow();
 });

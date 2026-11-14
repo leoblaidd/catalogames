@@ -8,11 +8,25 @@
 <style>
 :root{
   color-scheme:dark;
-  --bg:#0d1016; --bg2:#141922; --bg3:#1b212d; --bg4:#242b3a; --line:#283041;
-  --txt:#e8edf5; --mut:#8791a7; --dim:#5b6479;
-  --acc:#3b82f6; --acch:#2f6fe0; --acc2:#7cb6ff; --accbg:rgba(59,130,246,.15); --accsolid:#132541;
+  --bg:#0d1016; --bg2:#141922; --bg3:#1b212d; --bg4:#242b3a; --line:#283041; --line2:#3a4458;
+  --txt:#e8edf5; --txt2:#d0d6e1; --mut:#8791a7; --dim:#5b6479;
+  --hdr:rgba(13,16,22,.93); --ovl:rgba(4,6,10,.74); --sh:rgba(0,0,0,.35); --sh2:rgba(0,0,0,.55);
+  --acc:#3b82f6; --acctxt:#fff;
+  --acch:color-mix(in srgb, var(--acc) 84%, #000);
+  --acc2:color-mix(in srgb, var(--acc) 62%, #fff);
+  --accbg:color-mix(in srgb, var(--acc) 16%, transparent);
+  --accsolid:color-mix(in srgb, var(--acc) 20%, var(--bg2));
   --ok:#3ecf8e; --warn:#f5b942; --bad:#ef5a5a;
   --card:170px; --r:10px;
+}
+:root[data-theme=light]{
+  color-scheme:light;
+  --bg:#eef1f6; --bg2:#ffffff; --bg3:#f2f4f8; --bg4:#e2e7ef; --line:#d5dbe5; --line2:#b9c2d0;
+  --txt:#151a24; --txt2:#2b3242; --mut:#5a6578; --dim:#8b95a7;
+  --hdr:rgba(238,241,246,.92); --ovl:rgba(25,32,45,.45); --sh:rgba(20,30,50,.16); --sh2:rgba(20,30,50,.28);
+  --acc2:color-mix(in srgb, var(--acc) 78%, #000);
+  --accsolid:color-mix(in srgb, var(--acc) 13%, var(--bg2));
+  --warn:#d39410;
 }
 *{box-sizing:border-box}
 html,body{margin:0;background:var(--bg);color:var(--txt);font:14px/1.45 "Segoe UI",system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif}
@@ -20,15 +34,15 @@ button,input,select,textarea{font:inherit;color:inherit}
 option,optgroup{background:var(--bg2);color:var(--txt)}
 a{color:var(--acc2)}
 kbd{background:var(--bg4);border:1px solid var(--line);border-bottom-width:2px;border-radius:4px;padding:0 5px;font-size:12px}
-::selection{background:var(--acc);color:#fff}
+::selection{background:var(--acc);color:var(--acctxt)}
 ::-webkit-scrollbar{width:10px;height:10px}::-webkit-scrollbar-thumb{background:var(--bg4);border-radius:10px}::-webkit-scrollbar-track{background:transparent}
 .hidden{display:none!important}
 
 /* ---------- botões e campos ---------- */
 .btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--bg3);padding:8px 14px;border-radius:8px;cursor:pointer;white-space:nowrap;transition:.15s}
-.btn:hover{background:var(--bg4);border-color:#3a4458}
-.btn.primary{background:var(--acc);border-color:var(--acc);color:#fff;font-weight:600}
-.btn.primary:hover{background:var(--acch)}
+.btn:hover{background:var(--bg4);border-color:var(--line2)}
+.btn.primary{background:var(--acc);border-color:var(--acc);color:var(--acctxt);font-weight:600}
+.btn.primary:hover{background:var(--acch);border-color:var(--acch)}
 .btn.ghost{background:transparent}
 .btn.danger{color:var(--bad)}
 .btn.sm{padding:5px 10px;font-size:13px}
@@ -41,15 +55,17 @@ select{cursor:pointer}
 textarea{resize:vertical}
 
 /* ---------- topo ---------- */
-header.top{position:sticky;top:0;z-index:20;background:rgba(13,16,22,.93);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+header.top{position:sticky;top:0;z-index:20;background:var(--hdr);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
 .bar{display:flex;align-items:center;gap:12px;padding:12px 22px}
 .logo{font-weight:800;letter-spacing:.12em;font-size:18px;display:flex;align-items:center;gap:8px;color:var(--txt)}
 .logo b{color:var(--acc2)}
 .logo svg{width:24px;height:24px;color:var(--acc2)}
 .stats{color:var(--mut);font-size:13px;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .stats strong{color:var(--txt);font-weight:600}
-.where{font-size:12px;color:var(--mut);border:1px solid var(--line);border-radius:20px;padding:4px 10px;cursor:pointer;max-width:220px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;background:none}
-.where:hover{color:var(--txt)}
+.icobtn{position:relative;width:36px;height:36px;padding:0;justify-content:center;font-size:16px}
+.icobtn svg{width:17px;height:17px}
+.icobtn.on{color:var(--acc2);border-color:var(--acc);background:var(--accsolid)}
+.icobtn .dot{position:absolute;top:5px;right:5px;width:8px;height:8px;border-radius:50%;background:var(--acc);box-shadow:0 0 0 2px var(--bg)}
 .tools{display:flex;flex-wrap:wrap;gap:8px;padding:0 22px 12px;align-items:center}
 .search{flex:1 1 220px;max-width:320px;position:relative}
 .search input{padding-left:32px}
@@ -58,8 +74,6 @@ header.top{position:sticky;top:0;z-index:20;background:rgba(13,16,22,.93);backdr
 .tools select.on{border-color:var(--acc);background:var(--accsolid)}
 .toggle{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--mut);border:1px solid var(--line);border-radius:8px;padding:6px 10px;cursor:pointer;user-select:none;background:var(--bg2)}
 .toggle.on{color:var(--txt);border-color:var(--acc);background:var(--accsolid)}
-.size{display:inline-flex;align-items:center;gap:6px;color:var(--dim);font-size:12px;margin-left:auto}
-.size input{width:90px;accent-color:var(--acc)}
 
 /* ---------- grade de jogos ---------- */
 main{padding:18px 22px 60px}
@@ -68,8 +82,18 @@ main{padding:18px 22px 60px}
 .group h2 span{font-weight:400;color:var(--mut);font-size:13px}
 .group h2::after{content:"";flex:1;height:1px;background:var(--line);transform:translateY(-4px)}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(var(--card),1fr));gap:16px}
-.card{position:relative;aspect-ratio:2/3;border-radius:var(--r);overflow:hidden;cursor:pointer;background:var(--bg3);box-shadow:0 4px 14px rgba(0,0,0,.35);transition:transform .18s,box-shadow .18s}
-.card:hover{transform:translateY(-4px);box-shadow:0 12px 28px rgba(0,0,0,.55),0 0 0 2px var(--acc)}
+.card{position:relative;aspect-ratio:2/3;border-radius:var(--r);overflow:hidden;cursor:pointer;background:var(--bg3);box-shadow:0 4px 14px var(--sh);transition:transform .18s,box-shadow .18s}
+.card:hover{transform:translateY(-4px);box-shadow:0 12px 28px var(--sh2),0 0 0 2px var(--acc)}
+.card .ck{position:absolute;top:7px;right:7px;width:26px;height:26px;border-radius:50%;border:2px solid #fff;background:rgba(0,0,0,.35);opacity:0;transition:.12s;display:flex;align-items:center;justify-content:center;color:var(--acctxt);font-size:14px;font-weight:900;box-shadow:0 2px 8px rgba(0,0,0,.5)}
+body.ctrl .card:hover .ck,body.selecting .card .ck{opacity:1}
+.card.sel{box-shadow:0 0 0 3px var(--acc),0 10px 24px var(--sh2);transform:translateY(-2px)}
+.card.sel .ck{opacity:1;background:var(--acc);border-color:var(--acc)}
+.card.sel .ck::after{content:"✓"}
+body.ctrl #main .card,body.selecting #main .card{cursor:copy}
+.selbar{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(30px);opacity:0;pointer-events:none;z-index:30;display:flex;align-items:center;gap:8px;background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:8px 8px 8px 16px;box-shadow:0 18px 44px var(--sh2);transition:.2s}
+.selbar.open{opacity:1;transform:translateX(-50%);pointer-events:auto}
+.selbar .c{font-weight:600;margin-right:6px;white-space:nowrap}
+.fromsearch{margin-left:auto}
 .card img,.cv img{width:100%;height:100%;object-fit:cover;display:block}
 .ph{width:100%;height:100%;display:flex;align-items:center;justify-content:center;text-align:center;padding:12%;font-weight:800;line-height:1.15;
   background:linear-gradient(160deg,hsl(var(--h) 42% 30%),hsl(calc(var(--h) + 50) 48% 12%));font-size:calc(var(--card) * .105);text-shadow:0 2px 8px rgba(0,0,0,.5);word-break:break-word}
@@ -87,7 +111,7 @@ main{padding:18px 22px 60px}
 /* ---------- listas ---------- */
 .lgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:18px}
 .lcard{background:var(--bg2);border:1px solid var(--line);border-radius:14px;overflow:hidden;cursor:pointer;transition:.18s}
-.lcard:hover{border-color:var(--acc);transform:translateY(-3px);box-shadow:0 14px 30px rgba(0,0,0,.45)}
+.lcard:hover{border-color:var(--acc);transform:translateY(-3px);box-shadow:0 14px 30px var(--sh2)}
 .lstack{--card:90px;display:flex;justify-content:center;align-items:flex-end;padding:20px 18px 16px;background:linear-gradient(180deg,var(--bg3),var(--bg2));min-height:170px}
 .lstack .cv{width:30%;aspect-ratio:2/3;margin-left:-9%;border-radius:7px;overflow:hidden;box-shadow:-4px 4px 12px rgba(0,0,0,.55);transition:margin .2s,transform .2s;flex:none}
 .lstack .cv:first-child{margin-left:0}
@@ -101,9 +125,9 @@ main{padding:18px 22px 60px}
 /* tiles (dentro do editor e da visualização) */
 .tgrid{--card:120px;display:grid;grid-template-columns:repeat(auto-fill,minmax(var(--card),1fr));gap:14px}
 .tile{position:relative;user-select:none}
-.tile .cv{position:relative;aspect-ratio:2/3;border-radius:8px;overflow:hidden;background:var(--bg3);box-shadow:0 4px 12px rgba(0,0,0,.35)}
-.tile .tt{font-size:12px;margin-top:6px;line-height:1.25;color:#cfd5e1;text-align:center;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
-.rank{position:absolute;top:6px;left:6px;min-width:26px;height:26px;padding:0 6px;border-radius:7px;background:var(--acc);color:#fff;font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.5)}
+.tile .cv{position:relative;aspect-ratio:2/3;border-radius:8px;overflow:hidden;background:var(--bg3);box-shadow:0 4px 12px var(--sh)}
+.tile .tt{font-size:12px;margin-top:6px;line-height:1.25;color:var(--txt2);text-align:center;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.rank{position:absolute;top:6px;left:6px;min-width:26px;height:26px;padding:0 6px;border-radius:7px;background:var(--acc);color:var(--acctxt);font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.5)}
 .tile:nth-child(1) .rank.top{background:#e8b923;color:#1a1300}
 .tile:nth-child(2) .rank.top{background:#c3cbd6;color:#15181d}
 .tile:nth-child(3) .rank.top{background:#cd8a4f;color:#1b0f04}
@@ -119,9 +143,9 @@ main{padding:18px 22px 60px}
 .le-empty{grid-column:1/-1;text-align:center;color:var(--dim);padding:36px 10px;border:2px dashed var(--line);border-radius:12px}
 
 /* ---------- modais ---------- */
-.modal-bg{position:fixed;inset:0;background:rgba(4,6,10,.74);backdrop-filter:blur(3px);display:none;align-items:flex-start;justify-content:center;z-index:50;padding:36px 16px;overflow:auto}
+.modal-bg{position:fixed;inset:0;background:var(--ovl);backdrop-filter:blur(3px);display:none;align-items:flex-start;justify-content:center;z-index:50;padding:36px 16px;overflow:auto}
 .modal-bg.open{display:flex}
-.modal{background:var(--bg2);border:1px solid var(--line);border-radius:14px;width:100%;max-width:860px;box-shadow:0 30px 80px rgba(0,0,0,.6)}
+.modal{background:var(--bg2);border:1px solid var(--line);border-radius:14px;width:100%;max-width:860px;box-shadow:0 30px 80px var(--sh2)}
 .modal.wide{max-width:1120px}
 .modal>header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 20px;border-bottom:1px solid var(--line)}
 .modal>header h2{margin:0;font-size:17px}
@@ -161,7 +185,7 @@ main{padding:18px 22px 60px}
 .nota-row.unset output{color:var(--dim)}
 .chips{display:flex;flex-wrap:wrap;gap:6px}
 .chip{font-size:12.5px;padding:4px 10px;border-radius:20px;border:1px solid var(--line);background:var(--bg);cursor:pointer;user-select:none;transition:.12s}
-.chip:hover{border-color:#3d475c}
+.chip:hover{border-color:var(--line2)}
 .chip.on{background:var(--accbg);border-color:var(--acc);color:var(--acc2)}
 .chip-add{width:130px!important;padding:4px 10px!important;border-radius:20px!important;font-size:12.5px}
 
@@ -187,7 +211,7 @@ main{padding:18px 22px 60px}
 
 /* detalhe */
 .detail{display:grid;grid-template-columns:260px 1fr;gap:24px;padding:22px}
-.detail .dc{aspect-ratio:2/3;border-radius:var(--r);overflow:hidden;--card:260px;box-shadow:0 10px 30px rgba(0,0,0,.5)}
+.detail .dc{aspect-ratio:2/3;border-radius:var(--r);overflow:hidden;--card:260px;box-shadow:0 10px 30px var(--sh2)}
 .detail .dc img{width:100%;height:100%;object-fit:cover}
 .detail h1{margin:0 0 8px;font-size:26px;line-height:1.15}
 .detail .big{margin:14px 0 18px}
@@ -196,26 +220,62 @@ main{padding:18px 22px 60px}
 .meta{display:grid;grid-template-columns:auto 1fr;gap:6px 16px;font-size:13.5px}
 .meta dt{color:var(--mut)}
 .meta dd{margin:0}
-.review{margin-top:18px;padding:14px 16px;background:var(--bg);border:1px solid var(--line);border-radius:10px;white-space:pre-wrap;line-height:1.6;color:#d3d8e2}
+.review{margin-top:18px;padding:14px 16px;background:var(--bg);border:1px solid var(--line);border-radius:10px;white-space:pre-wrap;line-height:1.6;color:var(--txt2)}
 .tagrow{display:flex;flex-wrap:wrap;gap:5px}
-.tag{font-size:12px;padding:2px 9px;border-radius:20px;background:var(--bg4);color:#cdd3de}
+.tag{font-size:12px;padding:2px 9px;border-radius:20px;background:var(--bg4);color:var(--txt2)}
 .lv-body{padding:20px}
 .lv-body .tgrid{--card:150px}
 
 
-/* menu e toast */
-.menu{position:fixed;z-index:40;background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:6px;min-width:270px;box-shadow:0 18px 40px rgba(0,0,0,.6);display:none}
-.menu.open{display:block}
-.menu button{display:block;width:100%;text-align:left;background:none;border:0;padding:9px 12px;border-radius:7px;cursor:pointer}
-.menu button:hover{background:var(--bg4)}
-.menu .info{font-size:12px;color:var(--mut);padding:8px 12px 6px;border-top:1px solid var(--line);margin-top:4px;line-height:1.5}
+/* sugestões do catálogo (editor de lista) */
+.ac{position:relative;flex:1;min-width:180px}
+.sugg{position:absolute;left:0;right:0;top:calc(100% + 4px);z-index:5;background:var(--bg2);border:1px solid var(--line);border-radius:10px;box-shadow:0 16px 36px var(--sh2);padding:5px;display:none;max-height:360px;overflow:auto}
+.sugg.open{display:block}
+.sugg .sh{font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:.05em;padding:4px 8px 6px}
+.sg{display:flex;align-items:center;gap:10px;padding:5px 8px;border-radius:7px;cursor:pointer}
+.sg:hover,.sg.hi{background:var(--accbg)}
+.sg .cv{--card:40px;width:34px;flex:none;aspect-ratio:2/3;border-radius:4px;overflow:hidden;background:var(--bg3)}
+.sg .cv img{width:100%;height:100%;object-fit:cover;display:block}
+.sg .cv .ph{font-size:7px;padding:2px}
+.sg .t{font-weight:600;font-size:13.5px;line-height:1.2}
+.sg .m{font-size:12px;color:var(--mut)}
+.sg .k{margin-left:auto;font-size:11.5px;color:var(--dim);white-space:nowrap}
+
+/* configurações */
+.cfg{max-width:600px}
+.cfg-body{padding:6px 22px 18px}
+.cfg-body section{padding:16px 0;border-bottom:1px solid var(--line)}
+.cfg-body section:last-child{border-bottom:0}
+.cfg-body h3{margin:0 0 10px;font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--mut)}
+.seg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.seg button{border:1px solid var(--line);background:var(--bg);border-radius:10px;padding:10px 8px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;font-weight:600}
+.seg button small{font-weight:400;color:var(--mut);font-size:11.5px}
+.seg button:hover{border-color:var(--line2)}
+.seg button.on{border-color:var(--acc);background:var(--accbg);color:var(--acc2)}
+.swatches{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.sw{width:34px;height:34px;border-radius:50%;border:0;cursor:pointer;position:relative;box-shadow:inset 0 0 0 1px rgba(0,0,0,.15);transition:transform .12s}
+.sw:hover{transform:scale(1.1)}
+.sw.on{box-shadow:0 0 0 3px var(--bg2),0 0 0 5px var(--txt)}
+.sw.custom{background:conic-gradient(#ef4444,#f59e0b,#22c55e,#06b6d4,#3b82f6,#8b5cf6,#ec4899,#ef4444);overflow:hidden}
+.sw.custom input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;padding:0;border:0}
+.sw.custom.on span{position:absolute;inset:6px;border-radius:50%;background:var(--acc);box-shadow:0 0 0 2px #fff}
+.swatches .lbl{font-size:12.5px;color:var(--mut);margin-left:4px}
+.range{display:flex;align-items:center;gap:12px}
+.range input{flex:1;accent-color:var(--acc)}
+.range output{min-width:54px;text-align:right;color:var(--mut);font-size:13px}
+.cfg-path{font-size:12.5px;color:var(--mut);margin:0 0 10px;word-break:break-all;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-family:Consolas,monospace}
+.cfg-row{display:flex;gap:8px;flex-wrap:wrap}
+.ver{font-size:12px;color:var(--dim)}
+
+/* toast */
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--bg4);border:1px solid var(--line);padding:10px 18px;border-radius:10px;opacity:0;transition:.25s;z-index:95;pointer-events:none;box-shadow:0 10px 30px rgba(0,0,0,.5);max-width:90vw}
 .toast.show{opacity:1;transform:translateX(-50%)}
+body.selecting .toast{bottom:86px}
 
 /* mensagens (avisos e ajuda) */
 .modal-bg.msgbg{z-index:85;padding-top:12vh}
 .modal.msg{max-width:560px}
-.msg-body{padding:18px 20px;line-height:1.6;color:#d3d8e2}
+.msg-body{padding:18px 20px;line-height:1.6;color:var(--txt2)}
 .msg-body p{margin:0 0 10px}
 .msg-body ol{padding-left:20px;margin:6px 0 0}
 .msg-body li{margin:0 0 10px}
@@ -227,7 +287,6 @@ main{padding:18px 22px 60px}
   .form-body,.detail{grid-template-columns:1fr}
   .form-body .drop,.detail .dc{max-width:220px;margin:0 auto}
   .stats{display:none}
-  .size{margin-left:0}
   .le-top{flex-direction:column;align-items:stretch}
 }
 </style>
@@ -245,7 +304,8 @@ main{padding:18px 22px 60px}
   <div class="bar">
     <div class="logo"><svg><use href="#ico"/></svg><span>CATALO<b>GAME</b></span></div>
     <div class="stats" id="stats"></div>
-    <button class="btn ghost sm" id="menuBtn" title="Mais opções">⋯</button>
+    <button class="btn ghost icobtn" id="filtBtn" title="Mostrar / ocultar busca e filtros"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5h18l-7 8.5V19l-4 2v-7.5z"/></svg></button>
+    <button class="btn ghost icobtn" id="cfgBtn" title="Configurações">⋯</button>
     <button class="btn" id="tabBtn"></button>
     <button class="btn primary" id="addBtn"></button>
   </div>
@@ -256,11 +316,7 @@ main{padding:18px 22px 60px}
     <select id="fiGen"></select>
     <select id="fiStatus"></select>
     <select id="fiAno"></select>
-    <select id="fiNota">
-      <option value="">Qualquer nota</option>
-      <option value="9">Nota 9+</option><option value="8">Nota 8+</option><option value="7">Nota 7+</option>
-      <option value="6">Nota 6+</option><option value="5">Nota 5+</option><option value="-1">Sem nota</option>
-    </select>
+    <select id="fiNota"></select>
     <select id="sort" title="Ordenar">
       <option value="ano-desc">↓ Terminado recentemente</option>
       <option value="ano-asc">↑ Terminado há mais tempo</option>
@@ -275,7 +331,7 @@ main{padding:18px 22px 60px}
     <span class="toggle" id="tFav">★ Favoritos</span>
     <span class="toggle" id="tGroup">Agrupar por ano</span>
     <button class="link hidden" id="clearF">limpar filtros</button>
-    <label class="size" title="Tamanho das capas">▫<input type="range" id="cardSize" min="110" max="280" step="10">▣</label>
+    <button class="btn sm fromsearch hidden" id="fromSearch" title="Cria uma lista nova com os jogos que estão aparecendo agora">📚 Criar lista com esses jogos</button>
   </div>
 
   <div class="tools hidden" id="toolsList">
@@ -286,7 +342,37 @@ main{padding:18px 22px 60px}
 <main id="listsMain" class="hidden"></main>
 </div>
 
-<div class="menu" id="menu"></div>
+<div class="selbar" id="selbar">
+  <span class="c" id="selCount"></span>
+  <button class="btn sm ghost" id="selAll">Marcar todos visíveis</button>
+  <button class="btn sm primary" id="selList">📚 Criar lista com eles</button>
+  <button class="btn sm ghost" id="selClear" title="Desmarcar (Esc)">✕</button>
+</div>
+
+<!-- ===== Modal: configurações ===== -->
+<div class="modal-bg" id="cfgBg">
+  <div class="modal cfg">
+    <header><h2>Configurações</h2><button type="button" class="x" data-close>✕</button></header>
+    <div class="cfg-body">
+      <section><h3>Tema</h3>
+        <div class="seg" id="cfgTema">
+          <button type="button" data-v="auto">🖥 Automático<small>segue o Windows</small></button>
+          <button type="button" data-v="escuro">🌙 Escuro<small>&nbsp;</small></button>
+          <button type="button" data-v="claro">☀ Claro<small>&nbsp;</small></button>
+        </div>
+      </section>
+      <section><h3>Cor de destaque</h3><div class="swatches" id="cfgCores"></div></section>
+      <section><h3>Tamanho das capas</h3>
+        <div class="range"><span style="color:var(--dim)">▫</span><input type="range" id="cardSize" min="110" max="280" step="10"><span style="color:var(--dim)">▣</span><output id="cardSizeOut"></output></div>
+      </section>
+      <section><h3>Seus dados</h3>
+        <p class="cfg-path" id="cfgPath"></p>
+        <div class="cfg-row"><button type="button" class="btn sm" id="cfgOpen">📂 Abrir a pasta dos dados</button><button type="button" class="btn sm" id="cfgImport">⬆ Trazer jogos do Catalogame antigo</button></div>
+      </section>
+    </div>
+    <footer><span class="ver" id="cfgVer"></span><span class="sp"></span><button type="button" class="btn primary" data-close>Pronto</button></footer>
+  </div>
+</div>
 
 <!-- ===== Modal: jogo do catálogo ===== -->
 <div class="modal-bg" id="formBg">
@@ -353,7 +439,7 @@ main{padding:18px 22px 60px}
         </div>
         <div class="right">
           <div class="row">
-            <input id="liTitulo" placeholder="Nome do jogo (Enter adiciona)">
+            <div class="ac"><input id="liTitulo" placeholder="Nome do jogo: digite pra puxar do seu catálogo (Enter adiciona)" autocomplete="off"><div class="sugg" id="liSugg"></div></div>
             <button type="button" class="btn primary" id="liAdd">＋ Adicionar à lista</button>
             <button type="button" class="btn ghost hidden" id="liCancel">Cancelar edição</button>
           </div>
@@ -415,12 +501,43 @@ const api = window.catalogame;
 let DADOS = '';
 const urlCache = new Map();
 
+/* ---------------- configurações (ficam em dados\config.json) ---------------- */
+const CORES = [
+  ['#3b82f6', 'Azul'], ['#6366f1', 'Índigo'], ['#8b5cf6', 'Roxo'], ['#ec4899', 'Rosa'], ['#ef4444', 'Vermelho'],
+  ['#f97316', 'Laranja'], ['#eab308', 'Amarelo'], ['#22c55e', 'Verde'], ['#14b8a6', 'Turquesa'], ['#06b6d4', 'Ciano'],
+];
+const CFG = (() => {
+  let c = {}; try { c = (api && api.getConfig()) || {}; } catch {}
+  let oldView = {}; try { oldView = JSON.parse(localStorage.getItem('catalogame.view') || '{}'); } catch {}
+  return { tema: 'escuro', cor: '#3b82f6', ...c, view: { ...oldView, ...(c.view || {}) } };
+})();
+let cfgT;
+function saveConfig(){ clearTimeout(cfgT); cfgT = setTimeout(() => api.setConfig(CFG).catch(e => console.warn(e)), 350); }
+
+const mqDark = matchMedia('(prefers-color-scheme: dark)');
+function applyTheme(){
+  const t = CFG.tema === 'auto' ? (mqDark.matches ? 'escuro' : 'claro') : CFG.tema;
+  document.documentElement.dataset.theme = t === 'claro' ? 'light' : 'dark';
+}
+mqDark.addEventListener('change', applyTheme);
+function applyAccent(){
+  const hex = /^#[0-9a-f]{6}$/i.test(CFG.cor) ? CFG.cor : '#3b82f6';
+  const lin = v => (v /= 255) <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4;
+  const [r, g, b] = [1, 3, 5].map(i => lin(parseInt(hex.slice(i, i + 2), 16)));
+  const L = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+  const st = document.documentElement.style;
+  st.setProperty('--acc', hex);
+  st.setProperty('--acctxt', L > 0.42 ? '#10131a' : '#fff');
+}
+applyTheme(); applyAccent();
+
 const view = Object.assign(
-  { q:'', plat:'', gen:'', status:'', ano:'', nota:'', sort:'ano-desc', group:true, fav:false, card:170, tab:'cat' },
-  (() => { try { return JSON.parse(localStorage.getItem('catalogame.view') || '{}'); } catch { return {}; } })()
+  { q:'', plat:'', gen:'', status:'', ano:'', nota:'', sort:'ano-desc', group:true, fav:false, card:170, tab:'cat', filtrosOcultos:false },
+  CFG.view
 );
+Object.assign(view, { q:'', plat:'', gen:'', status:'', ano:'', nota:'', fav:false });
 if (!['ano-desc','ano-asc','nota-desc','nota-asc','titulo','horas-desc','lanc-desc','lanc-asc','criado-desc'].includes(view.sort)) view.sort = 'ano-desc';
-function saveView(){ try { const { sort, group, card, tab } = view; localStorage.setItem('catalogame.view', JSON.stringify({ sort, group, card, tab })); } catch {} }
+function saveView(){ const { sort, group, card, tab, filtrosOcultos } = view; CFG.view = { sort, group, card, tab, filtrosOcultos }; saveConfig(); }
 
 /* ---------------- erros visíveis ---------------- */
 function reportError(msg, e){
@@ -523,6 +640,14 @@ function steamInfo(url){
   };
 }
 
+const MIME = { jpg: 'image/jpeg', jpeg: 'image/jpeg', png: 'image/png', webp: 'image/webp', gif: 'image/gif', svg: 'image/svg+xml', avif: 'image/avif', bmp: 'image/bmp' };
+async function gameCoverBlob(g){
+  if (!g || !g.capa || g.capa === 'idb') return null;
+  const bytes = await api.readCover(g.capa);
+  if (!bytes) return null;
+  return new Blob([bytes], { type: MIME[g.capa.split('.').pop().toLowerCase()] || 'image/jpeg' });
+}
+
 /* ---------------- utilidades ---------------- */
 const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
@@ -599,14 +724,14 @@ function makePicker(root, { getTitle, setTitle }){
   return {
     get pending(){ return P.pending; },
     reset(src = null, isLink = false){ P.pending = null; urlIn.value = ''; show(src, isLink); links(); },
-    show, take, setUrl, links,
+    show, take, setUrl, links, setBlob,
   };
 }
 
 /* ---------------- inicialização ---------------- */
 async function boot(){
   const info = await api.info();
-  DADOS = info.dados;
+  DADOS = info.dados; APPVER = info.versao || '';
   let data = null, falhou = false;
   try { data = await api.load(); }
   catch (e) { falhou = true; reportError('Não consegui abrir sua biblioteca. Nada foi apagado — me chama que a gente resolve.', e); }
@@ -626,12 +751,13 @@ function startApp(){
 function setTab(t){
   view.tab = t; saveView();
   const cat = t === 'cat';
-  $('#toolsCat').classList.toggle('hidden', !cat); $('#main').classList.toggle('hidden', !cat);
+  $('#main').classList.toggle('hidden', !cat); $('#filtBtn').classList.toggle('hidden', !cat);
   $('#toolsList').classList.toggle('hidden', cat); $('#listsMain').classList.toggle('hidden', cat);
   $('#tabBtn').innerHTML = cat ? '📚 Listas' : '🎮 Catalogar';
   $('#tabBtn').title = cat ? 'Ir para as listas' : 'Voltar para o catálogo';
   $('#addBtn').innerHTML = cat ? '＋ Adicionar jogo' : '＋ Criar lista';
   cat ? render() : renderLists();
+  renderFiltBtn(); renderSel();
   window.scrollTo(0, 0);
 }
 
@@ -644,7 +770,7 @@ function filtered(){
     if (view.gen && !(g.generos || []).includes(view.gen)) return false;
     if (view.status && g.status !== view.status) return false;
     if (view.ano && (yearOf(g) || 'sem') !== view.ano) return false;
-    if (view.nota) { const n = +view.nota; if (n === -1 ? g.nota != null : (g.nota == null || g.nota < n)) return false; }
+    if (view.nota !== '') { const n = +view.nota; if (n === -1 ? g.nota != null : (g.nota == null || Math.floor(g.nota) !== n)) return false; }
     if (view.fav && !g.favorito) return false;
     return true;
   });
@@ -659,7 +785,9 @@ function filtered(){
     'lanc-asc':    (a, b) => (a.lancamento ?? 9999) - (b.lancamento ?? 9999),
     'criado-desc': (a, b) => (b.criadoEm || '').localeCompare(a.criadoEm || ''),
   }[view.sort];
-  return list.sort((a, b) => by(a, b) || a.titulo.localeCompare(b.titulo, 'pt-BR'));
+  // filtrando por uma nota (ex.: 5), os ,5 vêm primeiro (5,5 antes do 5)
+  const meia = view.nota !== '' && +view.nota >= 0 ? (a, b) => (b.nota ?? 0) - (a.nota ?? 0) : () => 0;
+  return list.sort((a, b) => meia(a, b) || by(a, b) || a.titulo.localeCompare(b.titulo, 'pt-BR'));
 }
 function fillSelect(sel, label, values, current, fmt = v => v){
   sel.innerHTML = `<option value="">${label}</option>` + values.map(v => `<option value="${esc(v)}">${esc(fmt(v))}</option>`).join('');
@@ -676,13 +804,19 @@ function renderFilters(){
   view.gen = fillSelect($('#fiGen'), 'Todos os gêneros', gens, view.gen);
   view.status = fillSelect($('#fiStatus'), 'Todos os status', sts, view.status, k => STATUS[k].n);
   view.ano = fillSelect($('#fiAno'), 'Todos os anos', anos, view.ano, a => a === 'sem' ? 'Sem ano' : 'Terminados em ' + a);
-  $('#fiNota').value = view.nota; $('#fiNota').classList.toggle('on', !!view.nota);
+  const notas = [...new Set(games.filter(g => g.nota != null).map(g => Math.floor(g.nota)))].sort((a, b) => b - a);
+  const semNota = games.some(g => g.nota == null);
+  const ops = notas.map(n => [String(n), n === 10 ? 'Nota 10' : `Nota ${n}  (${n} e ${n},5)`]);
+  if (semNota) ops.push(['-1', 'Sem nota']);
+  $('#fiNota').innerHTML = `<option value="">Qualquer nota</option>` + ops.map(([v, t]) => `<option value="${v}">${t}</option>`).join('');
+  if (!ops.some(o => o[0] === view.nota)) view.nota = '';
+  $('#fiNota').value = view.nota; $('#fiNota').classList.toggle('on', view.nota !== '');
   $('#sort').value = view.sort;
   $('#tFav').classList.toggle('on', view.fav);
   $('#tGroup').classList.toggle('on', view.group);
-  $('#cardSize').value = view.card;
   document.documentElement.style.setProperty('--card', view.card + 'px');
-  $('#clearF').classList.toggle('hidden', !(view.q || view.plat || view.gen || view.status || view.ano || view.nota || view.fav));
+  $('#clearF').classList.toggle('hidden', !filtersActive());
+  renderFiltBtn();
   $('#dlPlat').innerHTML = [...new Set([...plats, ...PLAT_DEF])].map(p => `<option value="${esc(p)}">`).join('');
 }
 function renderStats(list){
@@ -695,8 +829,9 @@ function renderStats(list){
 function cardHTML(g){
   const st = STATUS[g.status];
   const sub = [g.plataforma, g.ano].filter(Boolean).join(' · ');
-  return `<div class="card" data-id="${g.id}" title="${esc(g.titulo)}">
+  return `<div class="card${sel.has(g.id) ? ' sel' : ''}" data-id="${g.id}" title="${esc(g.titulo)}">
     ${placeholder(g.titulo)}
+    <div class="ck"></div>
     <div class="flags">
       ${g.favorito ? '<div class="fav">★</div>' : ''}
       ${st && g.status !== 'terminado' ? `<div class="pill" style="color:${st.c};border-color:${st.c}">${st.n}</div>` : ''}
@@ -710,9 +845,17 @@ function render(){
   const list = filtered();
   renderStats(list);
   const main = $('#main');
+  const fs = $('#fromSearch');
+  fs.classList.toggle('hidden', !(filtersActive() && list.length));
+  fs.textContent = `📚 Criar lista com ${list.length === 1 ? 'esse jogo' : `esses ${list.length} jogos`}`;
   if (!games.length) { main.innerHTML = `<div class="empty"><h3>Seu catálogo está vazio</h3><p>Clique em <b>＋ Adicionar jogo</b> pra cadastrar o primeiro.</p><p style="margin-top:22px;font-size:13px">Já usava o Catalogame antes? <button class="link" onclick="openImport()">Trazer sua biblioteca antiga</button></p></div>`; return; }
   if (!list.length) { main.innerHTML = `<div class="empty"><h3>Nenhum jogo com esses filtros</h3><p><button class="link" onclick="clearFilters()">Limpar filtros</button></p></div>`; return; }
-  if (view.group) {
+  if (view.group && view.nota !== '' && +view.nota >= 0) {
+    // filtrando por nota: um bloco pra cada nota exata (ex.: 5,5 em cima, 5 embaixo)
+    const groups = new Map();
+    for (const g of list) { const k = fmtNum(g.nota); if (!groups.has(k)) groups.set(k, []); groups.get(k).push(g); }
+    main.innerHTML = [...groups.keys()].map(k => { const arr = groups.get(k); return `<section class="group"><h2>Nota ${k}<span>${plural(arr.length, 'jogo')}</span></h2><div class="grid">${arr.map(cardHTML).join('')}</div></section>`; }).join('');
+  } else if (view.group) {
     const groups = new Map();
     for (const g of list) { const y = yearOf(g) || 'Sem ano'; if (!groups.has(y)) groups.set(y, []); groups.get(y).push(g); }
     let keys = [...groups.keys()];
@@ -723,8 +866,41 @@ function render(){
     const g = games.find(x => x.id === el.dataset.id);
     coverURL(g).then(u => putImg(el, u, g.titulo));
   }
+  renderSel();
 }
 function clearFilters(){ Object.assign(view, { q:'', plat:'', gen:'', status:'', ano:'', nota:'', fav:false }); $('#q').value = ''; render(); }
+const filtersActive = () => !!(view.q.trim() || view.plat || view.gen || view.status || view.ano || view.nota !== '' || view.fav);
+
+/* ocultar / mostrar busca e filtros */
+function renderFiltBtn(){
+  const b = $('#filtBtn'), hid = !!view.filtrosOcultos;
+  b.classList.toggle('on', !hid);
+  b.innerHTML = b.innerHTML.replace(/<span class="dot"><\/span>/, '') + (hid && filtersActive() ? '<span class="dot"></span>' : '');
+  b.title = hid ? 'Mostrar busca e filtros' + (filtersActive() ? ' (tem filtro ativo)' : '') : 'Ocultar busca e filtros';
+  $('#toolsCat').classList.toggle('hidden', view.tab !== 'cat' || hid);
+}
+function toggleFilters(force){
+  view.filtrosOcultos = force != null ? !force : !view.filtrosOcultos;
+  saveView(); renderFiltBtn();
+}
+
+/* ---------------- seleção com Ctrl ---------------- */
+const sel = new Set();
+function renderSel(){
+  for (const id of [...sel]) if (!games.some(g => g.id === id)) sel.delete(id);
+  document.querySelectorAll('#main .card').forEach(c => c.classList.toggle('sel', sel.has(c.dataset.id)));
+  $('#selCount').textContent = `${plural(sel.size, 'jogo selecionado', 'jogos selecionados')}`;
+  $('#selbar').classList.toggle('open', sel.size > 0 && view.tab === 'cat');
+  document.body.classList.toggle('selecting', sel.size > 0 && view.tab === 'cat');
+}
+function toggleSel(id){ sel.has(id) ? sel.delete(id) : sel.add(id); renderSel(); }
+function clearSel(){ sel.clear(); renderSel(); }
+function selectAllVisible(){ for (const g of filtered()) sel.add(g.id); renderSel(); }
+function selectedGames(){
+  const order = filtered().map(g => g.id);
+  const pos = id => { const i = order.indexOf(id); return i < 0 ? 1e9 : i; };
+  return games.filter(g => sel.has(g.id)).sort((a, b) => pos(a.id) - pos(b.id));
+}
 
 /* ---------------- detalhes do jogo ---------------- */
 function openDetail(id){
@@ -900,12 +1076,12 @@ const lp = makePicker($('#lPicker'), {
   getTitle: () => $('#liTitulo').value,
   setTitle: t => { $('#liTitulo').value = t; lp.links(); },
 });
-function openListEditor(id){
+function openListEditor(id, preset){
   const src = id ? lists.find(l => l.id === id) : null;
   LE.list = src
     ? { id: src.id, nome: src.nome, ranqueada: !!src.ranqueada, criadoEm: src.criadoEm, itens: src.itens.map(i => ({ ...i })) }
-    : { id: uid(), nome: '', ranqueada: true, criadoEm: new Date().toISOString(), itens: [] };
-  LE.removed = []; LE.dirty = false;
+    : { id: uid(), nome: '', ranqueada: true, criadoEm: new Date().toISOString(), itens: [], ...(preset || {}) };
+  LE.removed = []; LE.dirty = !!(preset && preset.itens && preset.itens.length); LE.origem = preset && preset.origem || null;
   $('#leTitle').textContent = src ? 'Editar lista' : 'Nova lista';
   $('#leNome').value = LE.list.nome;
   $('#leRank').checked = LE.list.ranqueada;
@@ -913,9 +1089,70 @@ function openListEditor(id){
   resetItemPanel(); renderTiles();
   openModal('#leBg');
   (src ? $('#liTitulo') : $('#leNome')).focus();
+  if (preset && preset.nome) $('#leNome').select();
+}
+/* item de lista a partir de um jogo do catálogo (copia a capa) */
+async function itemFromGame(g){
+  const it = { id: uid(), titulo: g.titulo, jogoId: g.id, capa: '', capaUrl: '' };
+  const b = await gameCoverBlob(g);
+  if (b) { it._blob = b; it._v = 1; }
+  else if (g.capaUrl) { it._url = g.capaUrl; it._v = 1; }
+  return it;
+}
+async function createListFromGames(arr, nome, origem){
+  if (!arr.length) return;
+  const itens = await Promise.all(arr.map(itemFromGame));
+  openListEditor(null, { nome: nome || '', ranqueada: false, itens, origem });
+  if (!nome) $('#leNome').focus();
+}
+
+/* sugestões do catálogo enquanto digita o nome do jogo */
+const SG = { items: [], hi: -1 };
+function inListAlready(g){
+  const t = norm(g.titulo).trim();
+  return LE.list.itens.some(i => i.jogoId === g.id || norm(i.titulo).trim() === t);
+}
+function renderSugg(){
+  const box = $('#liSugg');
+  const q = norm($('#liTitulo').value).trim();
+  if (!q || !games.length) { SG.items = []; box.classList.remove('open'); return; }
+  const hits = games.filter(g => norm(g.titulo).includes(q))
+    .sort((a, b) => (norm(b.titulo).startsWith(q) - norm(a.titulo).startsWith(q)) || a.titulo.localeCompare(b.titulo, 'pt-BR'))
+    .slice(0, 8);
+  SG.items = hits; SG.hi = hits.length ? Math.min(Math.max(SG.hi, -1), hits.length - 1) : -1;
+  if (!hits.length) { box.classList.remove('open'); return; }
+  const editing = !!LE.editingItemId;
+  box.innerHTML = `<div class="sh">Do seu catálogo · ${editing ? 'clique pra usar' : 'clique ou ↓ Enter pra adicionar com a capa'}</div>` + hits.map((g, i) => {
+    const ja = inListAlready(g);
+    return `<div class="sg${i === SG.hi ? ' hi' : ''}" data-i="${i}"><div class="cv">${placeholder(g.titulo)}</div>
+      <div><div class="t">${esc(g.titulo)}</div><div class="m">${esc([g.plataforma, g.ano].filter(Boolean).join(' · '))}</div></div>
+      ${ja ? '<span class="k">já está na lista</span>' : ''}</div>`;
+  }).join('');
+  box.classList.add('open');
+  box.querySelectorAll('.sg').forEach(el => { const g = hits[+el.dataset.i]; coverURL(g).then(u => putImg(el.querySelector('.cv'), u, g.titulo)); });
+}
+function closeSugg(){ SG.items = []; SG.hi = -1; $('#liSugg').classList.remove('open'); }
+async function chooseSugg(i){
+  const g = SG.items[i]; if (!g) return;
+  closeSugg();
+  if (LE.editingItemId) {
+    // editando um jogo da lista: só preenche nome + capa
+    $('#liTitulo').value = g.titulo; lp.links();
+    LE.pickJogoId = g.id;
+    const b = await gameCoverBlob(g);
+    if (b) lp.setBlob(b); else if (g.capaUrl) lp.setUrl(g.capaUrl);
+    return;
+  }
+  if (inListAlready(g) && !confirm(`“${g.titulo}” já está na lista. Adicionar de novo?`)) return;
+  const it = await itemFromGame(g);
+  LE.list.itens.push(it); LE.dirty = true;
+  resetItemPanel(); renderTiles();
+  const last = $('#leGrid .tile:last-child'); last && last.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+  $('#liTitulo').focus();
+  toast(`“${g.titulo}” adicionado com a capa do catálogo`);
 }
 function resetItemPanel(){
-  LE.editingItemId = null;
+  LE.editingItemId = null; LE.pickJogoId = null; closeSugg();
   $('#liTitulo').value = '';
   lp.reset();
   $('#liAdd').textContent = '＋ Adicionar à lista';
@@ -952,12 +1189,23 @@ function submitItem(silent){
   const p = lp.pending;
   if (LE.editingItemId) {
     const it = LE.list.itens.find(x => x.id === LE.editingItemId);
-    if (it) { it.titulo = titulo; applyPending(it, p); }
+    if (it) { it.titulo = titulo; if (LE.pickJogoId) it.jogoId = LE.pickJogoId; applyPending(it, p); }
   } else {
     if (!titulo && !(p && (p.blob || p.url))) { if (!silent) toast('Coloque o nome do jogo ou uma capa'); return false; }
     const it = { id: uid(), titulo, capa: '', capaUrl: '' };
     applyPending(it, p);
     LE.list.itens.push(it);
+    // nome igual a um jogo do catálogo e sem capa nova: usa a capa do catálogo
+    const g = !(p && (p.blob || p.url)) && games.find(x => norm(x.titulo).trim() === norm(titulo).trim());
+    if (g) {
+      it.jogoId = g.id;
+      gameCoverBlob(g).then(b => {
+        if (b) { it._blob = b; it._v = (it._v || 0) + 1; }
+        else if (g.capaUrl) { it._url = g.capaUrl; it._v = (it._v || 0) + 1; }
+        else return;
+        if ($('#leBg').classList.contains('open')) renderTiles();
+      });
+    }
   }
   LE.dirty = true;
   const wasAdd = !LE.editingItemId;
@@ -1005,8 +1253,11 @@ async function saveList(){
     const isNew = idx < 0;
     if (isNew) lists.push(l); else lists[idx] = l;
     await persist();
-    LE.dirty = false; closeModals(true); renderLists();
-    toast(isNew ? `Lista “${nome}” criada` : 'Lista salva');
+    const origem = LE.origem;
+    LE.dirty = false; closeModals(true);
+    if (origem === 'sel') clearSel();
+    if (view.tab === 'lists') { renderLists(); toast(isNew ? `Lista “${nome}” criada` : 'Lista salva'); }
+    else { render(); toast(isNew ? `Lista “${nome}” criada · veja em 📚 Listas` : 'Lista salva', 3500); }
   } catch (e) { console.error(e); }
   finally { btn.disabled = false; }
 }
@@ -1068,21 +1319,20 @@ function closeModals(force){
 }
 const anyModalOpen = () => !!document.querySelector('.modal-bg.open');
 
-function openMenu(anchor){
-  const m = $('#menu');
-  m.innerHTML = `<button data-a="folder">📂 Abrir a pasta dos dados</button>
-    <button data-a="import">⬆ Trazer jogos do Catalogame antigo</button>
-    <div class="info">Seus jogos e capas ficam em<br><b>${esc(DADOS)}</b></div>`;
-  const r = anchor.getBoundingClientRect();
-  m.style.top = (r.bottom + 6) + 'px';
-  m.style.right = Math.max(8, innerWidth - r.right) + 'px';
-  m.classList.add('open');
+let APPVER = '';
+function renderCfg(){
+  $('#cfgTema').querySelectorAll('button').forEach(b => b.classList.toggle('on', b.dataset.v === CFG.tema));
+  const preset = CORES.some(([c]) => c.toLowerCase() === CFG.cor.toLowerCase());
+  $('#cfgCores').innerHTML = CORES.map(([c, n]) => `<button type="button" class="sw${c.toLowerCase() === CFG.cor.toLowerCase() ? ' on' : ''}" data-c="${c}" title="${n}" style="background:${c}"></button>`).join('')
+    + `<label class="sw custom${preset ? '' : ' on'}" title="Escolher outra cor"><span></span><input type="color" id="cfgCor" value="${esc(CFG.cor)}"></label>`
+    + `<span class="lbl">${preset ? esc(CORES.find(([c]) => c.toLowerCase() === CFG.cor.toLowerCase())[1]) : 'Personalizada · ' + esc(CFG.cor.toUpperCase())}</span>`;
+  $('#cardSize').value = view.card; $('#cardSizeOut').textContent = view.card + ' px';
+  $('#cfgPath').textContent = DADOS;
+  $('#cfgVer').textContent = APPVER ? 'Catalogame ' + APPVER : '';
 }
-async function menuAction(a){
-  $('#menu').classList.remove('open');
-  if (a === 'folder') return api.openDataFolder();
-  if (a === 'import') return openImport();
-}
+function openCfg(){ renderCfg(); openModal('#cfgBg'); }
+function setTema(t){ CFG.tema = t; applyTheme(); saveConfig(); renderCfg(); }
+function setCor(c, rerender = true){ CFG.cor = c; applyAccent(); saveConfig(); if (rerender) renderCfg(); }
 
 /* ---------------- trazer dados do Catalogame antigo ---------------- */
 async function unpackCover(c, old){
@@ -1141,7 +1391,23 @@ async function importData(data){
 /* ---------------- eventos ---------------- */
 $('#addBtn').onclick = () => view.tab === 'cat' ? openForm(null) : openListEditor(null);
 $('#tabBtn').onclick = () => setTab(view.tab === 'cat' ? 'lists' : 'cat');
-$('#main').addEventListener('click', e => { const c = e.target.closest('.card'); if (c) openDetail(c.dataset.id); });
+$('#main').addEventListener('click', e => {
+  const c = e.target.closest('.card'); if (!c) return;
+  if (e.ctrlKey || e.metaKey || sel.size) { e.preventDefault(); toggleSel(c.dataset.id); return; }
+  openDetail(c.dataset.id);
+});
+$('#main').addEventListener('mousedown', e => { if ((e.ctrlKey || e.metaKey) && e.target.closest('.card')) e.preventDefault(); });
+$('#selClear').onclick = clearSel;
+$('#selAll').onclick = selectAllVisible;
+$('#selList').onclick = () => createListFromGames(selectedGames(), '', 'sel');
+$('#fromSearch').onclick = () => {
+  const q = view.q.trim();
+  createListFromGames(filtered(), q ? q.charAt(0).toUpperCase() + q.slice(1) : '', 'busca');
+};
+$('#filtBtn').onclick = () => toggleFilters();
+addEventListener('keydown', e => { if (e.key === 'Control' || e.key === 'Meta') document.body.classList.add('ctrl'); });
+addEventListener('keyup', e => { if (e.key === 'Control' || e.key === 'Meta') document.body.classList.remove('ctrl'); });
+addEventListener('blur', () => document.body.classList.remove('ctrl'));
 $('#listsMain').addEventListener('click', e => { const c = e.target.closest('.lcard'); if (c) openListView(c.dataset.id); });
 $('#q').addEventListener('input', e => { view.q = e.target.value; render(); });
 $('#lq').addEventListener('input', renderLists);
@@ -1150,10 +1416,14 @@ bindSel('#fiPlat', 'plat'); bindSel('#fiGen', 'gen'); bindSel('#fiStatus', 'stat
 $('#tFav').onclick = () => { view.fav = !view.fav; render(); };
 $('#tGroup').onclick = () => { view.group = !view.group; saveView(); render(); };
 $('#clearF').onclick = clearFilters;
-$('#cardSize').addEventListener('input', e => { view.card = +e.target.value; document.documentElement.style.setProperty('--card', view.card + 'px'); saveView(); });
-$('#menuBtn').onclick = e => { e.stopPropagation(); $('#menu').classList.contains('open') ? $('#menu').classList.remove('open') : openMenu(e.currentTarget); };
-$('#menu').addEventListener('click', e => { const b = e.target.closest('button[data-a]'); if (b) menuAction(b.dataset.a); });
-document.addEventListener('click', e => { if (!e.target.closest('#menu')) $('#menu').classList.remove('open'); });
+$('#cardSize').addEventListener('input', e => { view.card = +e.target.value; document.documentElement.style.setProperty('--card', view.card + 'px'); $('#cardSizeOut').textContent = view.card + ' px'; saveView(); });
+$('#cfgBtn').onclick = openCfg;
+$('#cfgTema').addEventListener('click', e => { const b = e.target.closest('button[data-v]'); if (b) setTema(b.dataset.v); });
+$('#cfgCores').addEventListener('click', e => { const b = e.target.closest('button[data-c]'); if (b) setCor(b.dataset.c); });
+$('#cfgCores').addEventListener('input', e => { if (e.target.id === 'cfgCor') { setCor(e.target.value, false); $('#cfgCores .lbl').textContent = 'Personalizada · ' + e.target.value.toUpperCase(); $('#cfgCores .sw.on')?.classList.remove('on'); e.target.closest('.sw').classList.add('on'); } });
+$('#cfgCores').addEventListener('change', e => { if (e.target.id === 'cfgCor') renderCfg(); });
+$('#cfgOpen').onclick = () => api.openDataFolder();
+$('#cfgImport').onclick = () => { closeModals(true); openImport(); };
 
 document.querySelectorAll('.modal-bg:not(.msgbg)').forEach(bg => bg.addEventListener('mousedown', e => { if (e.target === bg) closeModals(); }));
 document.addEventListener('click', e => { if (e.target.closest('[data-close]')) closeModals(); });
@@ -1167,10 +1437,12 @@ $('#msg').addEventListener('click', async e => {
 });
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape' && $('#msgBg').classList.contains('open')) { e.preventDefault(); closeMsg(null); return; }
-  if (e.key === 'Escape') { if (anyModalOpen()) closeModals(); else $('#menu').classList.remove('open'); return; }
+  if (e.key === 'Escape' && $('#liSugg').classList.contains('open')) { e.preventDefault(); closeSugg(); return; }
+  if (e.key === 'Escape') { if (anyModalOpen()) closeModals(); else if (sel.size) clearSel(); return; }
   const typing = /INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName);
-  if (typing || anyModalOpen() || $('#app').classList.contains('hidden')) return;
-  if (e.key === '/') { e.preventDefault(); (view.tab === 'cat' ? $('#q') : $('#lq')).focus(); }
+  if (typing || anyModalOpen()) return;
+  if (e.key === '/') { e.preventDefault(); if (view.tab === 'cat' && view.filtrosOcultos) toggleFilters(true); (view.tab === 'cat' ? $('#q') : $('#lq')).focus(); }
+  if (view.tab === 'cat' && (e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'a') { e.preventDefault(); selectAllVisible(); }
   if (e.key.toLowerCase() === 'n' && !e.ctrlKey && !e.metaKey) { e.preventDefault(); $('#addBtn').click(); }
 });
 
@@ -1199,8 +1471,20 @@ $('#genChips').addEventListener('keydown', e => {
 // editor de lista
 $('#liAdd').onclick = () => submitItem(false);
 $('#liCancel').onclick = resetItemPanel;
-$('#liTitulo').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); submitItem(false); } });
-$('#liTitulo').addEventListener('input', () => lp.links());
+$('#liTitulo').addEventListener('keydown', e => {
+  const open = $('#liSugg').classList.contains('open') && SG.items.length;
+  if (open && (e.key === 'ArrowDown' || e.key === 'ArrowUp')) {
+    e.preventDefault();
+    SG.hi = e.key === 'ArrowDown' ? (SG.hi + 1) % SG.items.length : (SG.hi <= 0 ? SG.items.length - 1 : SG.hi - 1);
+    $('#liSugg').querySelectorAll('.sg').forEach((el, i) => { el.classList.toggle('hi', i === SG.hi); if (i === SG.hi) el.scrollIntoView({ block: 'nearest' }); });
+    return;
+  }
+  if (e.key === 'Enter') { e.preventDefault(); if (open && SG.hi >= 0) chooseSugg(SG.hi); else { closeSugg(); submitItem(false); } }
+});
+$('#liTitulo').addEventListener('input', () => { lp.links(); SG.hi = -1; LE.pickJogoId = null; renderSugg(); });
+$('#liTitulo').addEventListener('focus', renderSugg);
+$('#liTitulo').addEventListener('blur', () => setTimeout(closeSugg, 150));
+$('#liSugg').addEventListener('mousedown', e => { const el = e.target.closest('.sg'); if (!el) return; e.preventDefault(); chooseSugg(+el.dataset.i); });
 $('#leNome').addEventListener('input', () => { LE.dirty = true; });
 $('#leNome').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); $('#liTitulo').focus(); } });
 $('#leRank').addEventListener('change', () => { LE.dirty = true; renderTiles(); });
