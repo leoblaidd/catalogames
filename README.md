@@ -14,12 +14,17 @@ O Catalogames é um app para Windows que organiza os jogos que você já zerou, 
 ## ✨ Funções
 
 ### Catálogo
-- Grade de capas com tamanho ajustável, agrupada por ano em que você terminou o jogo.
+- Grade de capas com tamanho ajustável, agrupada pelo ano em que você terminou, pelo ano de lançamento ou sem agrupar.
 - Para cada jogo: título, plataforma, status (**Terminado**, **Jogado** ou **Quero jogar**), ano em que terminou, ano de lançamento, horas jogadas, nota de 0 a 10 (com meio ponto), gêneros, favorito e um comentário ou review.
 - Busca instantânea (atalho <kbd>/</kbd>) e filtros por plataforma, gênero, status, ano e nota.
 - **Filtro de nota exato:** "Nota 5" mostra os jogos com 5 e 5,5, com os 5,5 primeiro.
 - Ordenação por data, nota, nome, horas ou lançamento.
 - Botão para esconder a barra de busca e filtros e deixar só as capas.
+- **Jogou de novo?** Jogos com o mesmo título contam como o mesmo jogo jogado em anos diferentes:
+  - Ao cadastrar, o app sugere o jogo e puxa nota, lançamento, gêneros e capa. Você só ajusta o ano.
+  - Nota, lançamento, gêneros e capa ficam sempre iguais em todas as jogadas.
+  - Fora do agrupamento por ano terminado, as jogadas viram uma pilha de capas. Passando o mouse, elas se abrem para o lado.
+- Gêneros em ordem alfabética, com lista editável nas configurações.
 
 ### Listas e rankings
 - Crie listas como "Top 10 RPGs" ou "Musous favoritos", com ou sem numeração. O top 3 aparece em ouro, prata e bronze.
@@ -91,6 +96,16 @@ npm run dist       # gera o instalador do Windows em dist/
 ---
 
 ## 📜 Versões
+
+### 1.4.0
+- Agrupar por ano de lançamento, além de ano terminado ou sem agrupar.
+- Jogos repetidos (o mesmo jogo jogado em anos diferentes):
+  - O cadastro sugere o jogo e puxa os dados para uma nova jogada.
+  - As jogadas aparecem empilhadas quando você busca, filtra ou ordena.
+  - A tela do jogo lista todas as jogadas.
+  - Nota, lançamento, gêneros e capa ficam sincronizados entre elas.
+- Gêneros em ordem alfabética.
+- Adicionar e excluir gêneros nas configurações.
 
 ### 1.3.0
 - As listas abrem em tela cheia, com voltar, busca, tamanho das capas e editar/excluir.
