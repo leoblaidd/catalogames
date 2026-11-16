@@ -2,8 +2,10 @@
 
 *Catálogo de jogos com forma de backlog local.*
 
-> [!WARNING]
-> **Projeto 100% vibecodado.** Todo o código foi escrito por IA (Claude, da Anthropic) a partir das ideias, pedidos e testes de **[@leoblaidd](https://github.com/leoblaidd)**. Funciona e foi testado, mas não passou por revisão de um programador humano. Use, estude e modifique à vontade, sabendo disso.
+> [!NOTE]
+> **Oi! Um aviso antes de tudo: este projeto é vibecodado.** 🤖
+> Todo o código foi escrito com IA (Claude, da Anthropic), a partir das ideias, pedidos e testes de **[@leoblaidd](https://github.com/leoblaidd)**.
+> Sei que muita gente não curte trabalho feito por IA, e tudo bem. Por isso o aviso vem logo aqui no começo, pra você decidir com calma se quer seguir. Se quiser, seja bem-vindo! 🎮
 
 **Autor:** [@leoblaidd](https://github.com/leoblaidd)
 
@@ -12,6 +14,8 @@ O Catalogames é um app para Windows que organiza os jogos que você já zerou, 
 ---
 
 ## ✨ Funções
+
+O app tem três abas lado a lado: **🎮 Catálogo**, **📚 Listas** e **👤 Perfil**.
 
 ### Catálogo
 - Grade de capas com tamanho ajustável, agrupada pelo ano em que você terminou, pelo ano de lançamento ou sem agrupar.
@@ -150,5 +154,5 @@ npm run dist       # gera o instalador do Windows em dist/
 ## 🙏 Créditos
 
 - Ideia, direção e testes: **[@leoblaidd](https://github.com/leoblaidd)**
-- Código: gerado por IA (Claude, da Anthropic)
+- Código: escrito com IA (Claude, da Anthropic)
 - Capas da comunidade: [SteamGridDB](https://www.steamgriddb.com)
