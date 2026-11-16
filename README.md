@@ -25,6 +25,13 @@ O Catalogames é um app para Windows que organiza os jogos que você já zerou, 
   - Nota, lançamento, gêneros e capa ficam sempre iguais em todas as jogadas.
   - Fora do agrupamento por ano terminado, as jogadas viram uma pilha de capas. Passando o mouse, elas se abrem para o lado.
 - Gêneros em ordem alfabética, com lista editável nas configurações.
+- **Importar uma lista de jogos** de um arquivo `.txt` ou `.md`, um por linha: `Nome - ano que jogou - ano do jogo - plataforma - nota`. O que não estiver no padrão é pulado, e o app mostra uma prévia antes de importar. Os jogos importados aparecem com borda colorida até você completar capa, horas e gêneros.
+
+### Perfil
+- Foto de perfil, nome e uma imagem de topo larga, que expande quando você rola para cima.
+- Números: jogos catalogados, listas e horas jogadas.
+- **Top 5 favoritos**, com coroa no 1º. Clique para escolher e arraste para reordenar.
+- Painéis com plataformas mais jogadas, jogos terminados por ano, o mais rejogado, nota média e gênero favorito.
 
 ### Listas e rankings
 - Crie listas como "Top 10 RPGs" ou "Musous favoritos", com ou sem numeração. O top 3 aparece em ouro, prata e bronze.
@@ -96,6 +103,13 @@ npm run dist       # gera o instalador do Windows em dist/
 ---
 
 ## 📜 Versões
+
+### 1.5.0
+- Abas lado a lado: Catálogo, Listas e **Perfil**.
+- Aba Perfil com foto, nome, imagem de topo, números, Top 5 favoritos e painéis de estatísticas.
+- Importar lista de jogos por arquivo `.txt`/`.md`, com prévia. Os jogos ficam marcados "para completar".
+- Filtro "Para completar".
+- O selo de vezes jogadas saiu. A pilha de capas continua.
 
 ### 1.4.0
 - Agrupar por ano de lançamento, além de ano terminado ou sem agrupar.

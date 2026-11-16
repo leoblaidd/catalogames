@@ -315,6 +315,106 @@ body.ctrl #main .card,body.selecting #main .card{cursor:copy}
 .gchip button{width:20px;height:20px;border-radius:50%;border:0;background:transparent;color:var(--mut);cursor:pointer;font-size:11px;display:flex;align-items:center;justify-content:center}
 .gchip button:hover{background:var(--bad);color:#fff}
 
+/* jogos importados esperando completar */
+.card.pend{border:2px solid var(--acc);background:var(--bg2);box-shadow:0 4px 14px var(--sh)}
+.card.pend .ph{background:var(--bg2);color:var(--txt);font-size:14px;font-weight:700}
+.card.pend .pendtag{position:absolute;left:0;right:0;bottom:10px;text-align:center;font-size:11.5px;font-weight:700;color:var(--acc2)}
+.card.pend:hover .pendtag{opacity:0}
+.ex{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px 12px;font:12.5px/1.6 Consolas,monospace;margin:8px 0;white-space:pre-wrap;color:var(--txt2)}
+.imp-tab{width:100%;border-collapse:collapse;font-size:13px;margin:10px 0}
+.imp-tab th{text-align:left;color:var(--mut);font-weight:600;font-size:12px;padding:5px 8px;border-bottom:1px solid var(--line)}
+.imp-tab td{padding:5px 8px;border-bottom:1px solid var(--line)}
+.imp-tab td.vz{color:var(--dim)}
+.imp-tab tr.dup td{color:var(--dim);text-decoration:line-through}
+.imp-scroll{max-height:300px;overflow:auto;border:1px solid var(--line);border-radius:8px}
+.imp-scroll .imp-tab{margin:0}
+
+/* abas */
+.tabs{display:flex;background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:3px;gap:2px}
+.tabs button{border:0;background:transparent;color:var(--mut);padding:7px 14px;border-radius:7px;cursor:pointer;font-weight:600;font-size:13.5px;white-space:nowrap;font-family:inherit}
+.tabs button:hover{color:var(--txt);background:var(--bg3)}
+.tabs button.on{background:var(--accsolid);color:var(--acc2);box-shadow:inset 0 0 0 1px var(--acc)}
+
+/* perfil */
+#perfilMain{padding:0 0 70px}
+.pf-hero{position:relative;height:210px;background:linear-gradient(120deg,var(--acc),color-mix(in srgb,var(--acc) 30%,#000));overflow:hidden;transition:height .5s cubic-bezier(.2,.8,.2,1)}
+.pf-hero.big{height:380px}
+.pf-hero img{width:100%;height:100%;object-fit:cover;display:block}
+.pf-hero::after{content:"";position:absolute;inset:auto 0 0 0;height:110px;background:linear-gradient(transparent,var(--bg))}
+.pf-hero .hint{position:absolute;right:16px;top:12px;z-index:1;font-size:11.5px;color:#fff;background:rgba(0,0,0,.35);padding:3px 9px;border-radius:12px;opacity:0;transition:.3s}
+.pf-hero:hover .hint{opacity:1}
+.pf-wrap{max-width:1200px;margin:0 auto;padding:0 28px;position:relative}
+.pf-head{display:flex;align-items:flex-end;gap:24px;margin-top:-74px;position:relative;z-index:2;flex-wrap:wrap}
+.pf-av{width:152px;height:152px;border-radius:50%;border:5px solid var(--bg);background:var(--bg3);overflow:hidden;flex:none;box-shadow:0 12px 30px var(--sh2);display:flex;align-items:center;justify-content:center;font-size:60px;font-weight:800;color:var(--acc2)}
+.pf-av img{width:100%;height:100%;object-fit:cover;display:block}
+.pf-name{padding-bottom:12px;flex:1;min-width:220px}
+.pf-name h1{margin:0;font-size:30px;line-height:1.15}
+.pf-name h1.vazio{color:var(--dim);font-weight:600}
+.pf-nums{display:flex;gap:22px;margin-top:8px;color:var(--mut);font-size:13.5px;flex-wrap:wrap}
+.pf-nums b{color:var(--txt);font-size:18px;margin-right:4px}
+.pf-head .btn{margin-bottom:14px}
+.pf-sec{margin-top:38px}
+.pf-sec > h2{font-size:13px;margin:0 0 6px;color:var(--mut);text-transform:uppercase;letter-spacing:.08em;display:flex;align-items:baseline;gap:10px}
+.pf-sec > h2 small{text-transform:none;letter-spacing:0;font-weight:400;color:var(--dim)}
+.top5{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:20px;padding-top:34px;max-width:1000px}
+.top5 .tile{cursor:pointer}
+.top5 .tile .cv{border-radius:var(--r);transition:transform .18s,box-shadow .18s}
+.top5 .tile:hover .cv{transform:translateY(-4px);box-shadow:0 14px 28px var(--sh2),0 0 0 2px var(--acc)}
+.top5 .tile .tt{font-size:13px;font-weight:600}
+.top5 .pos{position:absolute;left:8px;bottom:8px;width:28px;height:28px;border-radius:8px;background:#fff;color:#111;font-weight:800;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 2px 8px rgba(0,0,0,.5);z-index:2}
+.top5 .tile:first-child .pos{background:#e8b923;color:#1a1300}
+.top5 .tile:first-child .cv{box-shadow:0 0 0 3px #e8b923,0 10px 26px var(--sh2)}
+.crown{position:absolute;top:-38px;left:50%;transform:translateX(-50%);font-size:34px;line-height:1;filter:drop-shadow(0 4px 8px rgba(0,0,0,.45));z-index:3;pointer-events:none}
+.top5 .slot .cv{border:2px dashed var(--line2);background:transparent;box-shadow:none;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:6px;color:var(--dim);font-size:13px}
+.top5 .slot .cv b{font-size:30px;font-weight:300;color:var(--mut)}
+.top5 .slot:hover .cv{border-color:var(--acc);color:var(--acc2);transform:none;box-shadow:none}
+.top5 .rm{position:absolute;top:6px;right:6px;width:26px;height:26px;border-radius:50%;border:0;background:rgba(0,0,0,.65);color:#fff;cursor:pointer;opacity:0;transition:.15s;z-index:3}
+.top5 .tile:hover .rm{opacity:1}
+.top5 .rm:hover{background:var(--bad)}
+.bento{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.bx{background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:18px 20px;min-width:0}
+.bx.w2{grid-column:span 2}
+.bx h3{margin:0 0 14px;font-size:12.5px;color:var(--mut);font-weight:600;text-transform:uppercase;letter-spacing:.06em}
+.bx .vazio{color:var(--dim);font-size:13px}
+.hbar{display:grid;grid-template-columns:minmax(70px,130px) 1fr 30px;gap:12px;align-items:center;margin:9px 0;font-size:13px}
+.hbar .nm{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hbar .tr{height:10px;border-radius:5px;background:var(--bg4);overflow:hidden}
+.hbar .tr i{display:block;height:100%;background:var(--acc);border-radius:5px}
+.hbar .v{text-align:right;color:var(--mut);font-variant-numeric:tabular-nums}
+.vbars{display:flex;align-items:flex-end;gap:8px;height:140px;padding-top:18px}
+.vbars .c{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;height:100%;justify-content:flex-end;min-width:0}
+.vbars .b{width:100%;max-width:40px;background:var(--bg4);border-radius:6px 6px 2px 2px;position:relative;min-height:4px}
+.vbars .b.max{background:var(--acc)}
+.vbars .b span{position:absolute;top:-17px;left:0;right:0;text-align:center;font-size:11px;color:var(--mut)}
+.vbars .y{font-size:11px;color:var(--dim)}
+.bx .destaque{margin-top:12px;font-size:13px;color:var(--mut)}
+.bx .destaque b{color:var(--txt)}
+.rejog{display:flex;gap:14px;align-items:center}
+.rejog .cv{width:74px;flex:none;aspect-ratio:2/3;border-radius:8px;overflow:hidden;background:var(--bg3);box-shadow:0 6px 16px var(--sh2)}
+.rejog .cv img{width:100%;height:100%;object-fit:cover;display:block}
+.rejog .cv .ph{font-size:9px}
+.rejog .t{font-weight:700;font-size:15px;line-height:1.25}
+.rejog .m{color:var(--mut);font-size:13px;margin-top:4px}
+.mini{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.mini div{background:var(--bg3);border-radius:10px;padding:12px 14px}
+.mini b{display:block;font-size:24px;font-weight:800;line-height:1.1}
+.mini span{font-size:12px;color:var(--mut)}
+@media (max-width:900px){ .bento{grid-template-columns:1fr} .bx.w2{grid-column:auto} .top5{gap:10px} }
+/* editar perfil / escolher jogo */
+.pfm{max-width:620px}
+.pfm-body{padding:18px 22px;display:flex;flex-direction:column;gap:18px}
+.pfm-row{display:flex;gap:18px;align-items:center}
+.pfm-av{width:96px;height:96px;border-radius:50%;background:var(--bg3);overflow:hidden;flex:none;display:flex;align-items:center;justify-content:center;font-size:38px;font-weight:800;color:var(--acc2);border:1px solid var(--line)}
+.pfm-av img,.pfm-hero img{width:100%;height:100%;object-fit:cover;display:block}
+.pfm-hero{height:110px;border-radius:10px;overflow:hidden;background:linear-gradient(120deg,var(--acc),color-mix(in srgb,var(--acc) 30%,#000));margin:8px 0;border:1px solid var(--line)}
+.pfm p{margin:3px 0 8px;font-size:12.5px;color:var(--mut)}
+.pkm{max-width:1000px}
+.pk-body{padding:16px 20px;max-height:calc(100vh - 230px);overflow:auto}
+.pk-body .tgrid{--card:120px}
+.pk-body .tile{cursor:pointer}
+.pk-body .tile:hover .cv{box-shadow:0 0 0 2px var(--acc),0 10px 22px var(--sh2)}
+.pk-body .tile.ja{opacity:.45}
+
 /* configurações */
 .cfg{max-width:600px}
 .cfg-body{padding:6px 22px 18px}
@@ -383,7 +483,11 @@ body.selecting .toast{bottom:86px}
     <div class="stats" id="stats"></div>
     <button class="btn ghost icobtn" id="filtBtn" title="Ocultar busca e filtros"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 6h9M17 6h3M4 12h3M11 12h9M4 18h11M19 18h1"/><circle cx="15" cy="6" r="2"/><circle cx="9" cy="12" r="2"/><circle cx="17" cy="18" r="2"/></svg></button>
     <button class="btn ghost icobtn" id="cfgBtn" title="Configurações">⋯</button>
-    <button class="btn" id="tabBtn"></button>
+    <nav class="tabs" id="tabs">
+      <button type="button" data-t="cat">🎮 Catálogo</button>
+      <button type="button" data-t="lists">📚 Listas</button>
+      <button type="button" data-t="perfil">👤 Perfil</button>
+    </nav>
     <button class="btn primary" id="addBtn"></button>
   </div>
 
@@ -406,6 +510,7 @@ body.selecting .toast{bottom:86px}
       <option value="criado-desc">↓ Adicionado recentemente</option>
     </select>
     <span class="toggle" id="tFav">★ Favoritos</span>
+    <span class="toggle hidden" id="tPend" title="Jogos importados que ainda faltam capa e outras infos">⏳ Para completar</span>
     <select id="fiGroup" title="Como agrupar os jogos">
       <option value="ano">Agrupar: ano que terminei</option>
       <option value="lanc">Agrupar: ano de lançamento</option>
@@ -432,6 +537,7 @@ body.selecting .toast{bottom:86px}
 </header>
 <main id="main"></main>
 <main id="listsMain" class="hidden"></main>
+<main id="perfilMain" class="hidden"></main>
 </div>
 
 <div class="selbar" id="selbar">
@@ -461,6 +567,14 @@ body.selecting .toast{bottom:86px}
       <section><h3>Gêneros</h3>
         <div class="gen-edit" id="cfgGens"></div>
         <div class="cfg-row"><input id="cfgGenNew" placeholder="Novo gênero (Enter adiciona)" autocomplete="off" style="flex:1;min-width:200px"><button type="button" class="btn sm" id="cfgGenAdd">＋ Adicionar</button></div>
+      </section>
+      <section><h3>Importar lista de jogos</h3>
+        <p style="margin:0 0 6px;font-size:13px;color:var(--mut)">Um arquivo <b>.txt</b> ou <b>.md</b> com um jogo por linha, separando as informações com <code>&nbsp;-&nbsp;</code> (espaço, traço, espaço), nesta ordem: <b>nome</b> - <b>ano que jogou</b> - <b>ano do jogo</b> - <b>plataforma</b> - <b>nota</b>.</p>
+        <div class="ex">Elden Ring - 2024 - 2022 - PC - 10
+Shinobi - 2025 - 2002 - PS2 - 8</div>
+        <p style="margin:0 0 10px;font-size:12.5px;color:var(--dim)">O que não estiver no padrão é pulado. Capa, horas e gêneros ficam em branco: esses jogos aparecem com uma borda colorida no catálogo, esperando você clicar e completar.</p>
+        <div class="cfg-row"><button type="button" class="btn sm" id="cfgImpList">📄 Escolher arquivo .txt ou .md</button></div>
+        <input type="file" id="impListIn" accept=".txt,.md,.markdown,text/plain,text/markdown" hidden>
       </section>
       <section><h3>Seus dados</h3>
         <p class="cfg-path" id="cfgPath"></p>
@@ -571,6 +685,35 @@ body.selecting .toast{bottom:86px}
 </div>
 
 <!-- ===== Modal: ver lista ===== -->
+
+<!-- ===== Modal: editar perfil ===== -->
+<div class="modal-bg" id="pfBg">
+  <div class="modal pfm">
+    <header><h2>Editar perfil</h2><button type="button" class="x" data-close>✕</button></header>
+    <div class="pfm-body">
+      <label class="f"><span>Seu nome</span><input id="pfNome" placeholder="Como você quer aparecer" maxlength="60" autocomplete="off"></label>
+      <div class="pfm-row">
+        <div class="pfm-av" id="pfAvPrev"></div>
+        <div><b>Foto de perfil</b><p>Fica num círculo. Imagem quadrada fica melhor.</p>
+          <button type="button" class="btn sm" id="pfAvPick">🖼 Escolher imagem</button> <button type="button" class="link" id="pfAvDel">remover</button></div>
+      </div>
+      <div><b>Imagem do topo</b><p>Uma faixa larga no alto do perfil. Imagens horizontais (wallpaper) ficam melhores.</p>
+        <div class="pfm-hero" id="pfHeroPrev"></div>
+        <button type="button" class="btn sm" id="pfHeroPick">🖼 Escolher imagem</button> <button type="button" class="link" id="pfHeroDel">remover</button></div>
+    </div>
+    <footer><span class="sp"></span><button type="button" class="btn ghost" data-close>Cancelar</button><button type="button" class="btn primary" id="pfSave">Salvar</button></footer>
+  </div>
+</div>
+<input type="file" id="pfFile" accept="image/*" hidden>
+
+<!-- ===== Modal: escolher jogo pro top 5 ===== -->
+<div class="modal-bg" id="pkBg">
+  <div class="modal wide pkm">
+    <header><div><h2 id="pkTitle">Escolher jogo</h2><div class="sub">Clique num jogo do seu catálogo</div></div><button type="button" class="x" data-close>✕</button></header>
+    <div class="sg-bar"><div class="search"><svg><use href="#lupa"/></svg><input id="pkQ" type="search" placeholder="Buscar no catálogo…" autocomplete="off"></div></div>
+    <div class="pk-body" id="pkBody"></div>
+  </div>
+</div>
 
 <!-- ===== Modal: capas do SteamGridDB (abre por cima) ===== -->
 <div class="modal-bg subbg" id="sgBg">
@@ -693,9 +836,17 @@ function migrateGame(g){
   delete g.zeradoEm;
   return g;
 }
+let perfil = null;
 function loadData(data){
   games = ((data && data.jogos) || []).map(migrateGame);
   lists = (data && data.listas) || [];
+  const p = (data && data.perfil) || {};
+  perfil = {
+    nome: p.nome || '',
+    avatar: { id: 'perfil-foto', capa: '', capaUrl: '', capaV: 0, ...(p.avatar || {}) },
+    hero: { id: 'perfil-topo', capa: '', capaUrl: '', capaV: 0, ...(p.hero || {}) },
+    top5: Array.isArray(p.top5) ? p.top5.slice(0, 5) : [],
+  };
 }
 /* mesmo jogo jogado mais de uma vez = mesmo título (exato, ignorando maiúsculas/acentos) */
 const keyT = t => norm(t || '').trim().replace(/\s+/g, ' ');
@@ -731,7 +882,7 @@ async function syncSiblings(g, { capa = false } = {}){
 }
 function genList(){ return sortGens(CFG.generos || GEN_DEF); }
 
-function libraryJSON(){ return JSON.stringify({ app: 'Catalogames', versao: 2, atualizadoEm: new Date().toISOString(), jogos: games, listas: lists }, null, 2); }
+function libraryJSON(){ return JSON.stringify({ app: 'Catalogames', versao: 2, atualizadoEm: new Date().toISOString(), jogos: games, listas: lists, perfil }, null, 2); }
 
 /* ---------------- salvar ---------------- */
 let saving = Promise.resolve();
@@ -753,10 +904,9 @@ async function coverURL(o){
   return o.capaUrl || null;
 }
 function clearUrlCache(){ urlCache.clear(); }
-async function normalizeImage(blob){
+async function normalizeImage(blob, max = 700){
   try {
     const bmp = await createImageBitmap(blob);
-    const max = 700;
     if (bmp.width <= max && blob.size < 600_000) { bmp.close && bmp.close(); return blob; }
     const s = Math.min(1, max / bmp.width);
     const c = document.createElement('canvas');
@@ -999,21 +1149,168 @@ async function boot(){
 
 /* ---------------- app / abas ---------------- */
 function startApp(){
-  setTab(view.tab === 'lists' ? 'lists' : 'cat');
+  setTab(view.tab);
 }
 function setTab(t){
+  if (!['cat', 'lists', 'perfil'].includes(t)) t = 'cat';
   view.tab = t; saveView();
-  const cat = t === 'cat';
+  const cat = t === 'cat', lst = t === 'lists', pf = t === 'perfil';
   $('#main').classList.toggle('hidden', !cat); $('#filtBtn').classList.toggle('hidden', !cat);
-  $('#listsMain').classList.toggle('hidden', cat);
-  if (cat) { $('#toolsList').classList.add('hidden'); $('#toolsListView').classList.add('hidden'); }
-  else openListId = null;
-  $('#tabBtn').innerHTML = cat ? '📚 Listas' : '🎮 Catalogar';
-  $('#tabBtn').title = cat ? 'Ir para as listas' : 'Voltar para o catálogo';
+  $('#listsMain').classList.toggle('hidden', !lst);
+  $('#perfilMain').classList.toggle('hidden', !pf);
+  if (!lst) { $('#toolsList').classList.add('hidden'); $('#toolsListView').classList.add('hidden'); }
+  openListId = null;
+  $('#tabs').querySelectorAll('button').forEach(b => b.classList.toggle('on', b.dataset.t === t));
+  $('#addBtn').classList.toggle('hidden', pf);
   $('#addBtn').innerHTML = cat ? '＋ Adicionar jogo' : '＋ Criar lista';
-  cat ? render() : renderLists();
+  if (cat) render(); else if (lst) renderLists(); else renderPerfil();
   renderFiltBtn(); renderSel();
   window.scrollTo(0, 0);
+}
+
+/* ---------------- perfil ---------------- */
+function perfilStats(){
+  const porTitulo = new Map();
+  for (const g of games) { const k = keyT(g.titulo); if (!porTitulo.has(k)) porTitulo.set(k, []); porTitulo.get(k).push(g); }
+  const reps = [...porTitulo.values()].map(arr => arr.sort((a, b) => (b.ano ?? 0) - (a.ano ?? 0))[0]);
+  const horas = games.reduce((s, g) => s + (Number(g.horas) || 0), 0);
+  const conta = arr => { const m = new Map(); for (const x of arr) if (x) m.set(x, (m.get(x) || 0) + 1); return [...m.entries()].sort((a, b) => b[1] - a[1] || cmpTxt(String(a[0]), String(b[0]))); };
+  const plats = conta(games.map(g => g.plataforma));
+  const anos = conta(games.filter(g => g.status === 'terminado').map(g => g.ano));
+  const gens = conta(reps.flatMap(g => g.generos || []));
+  const notas = reps.filter(g => g.nota != null).map(g => g.nota);
+  const media = notas.length ? notas.reduce((a, b) => a + b, 0) / notas.length : null;
+  const maisRejogado = [...porTitulo.values()].filter(a => a.length > 1).sort((a, b) => b.length - a.length || cmpTxt(a[0].titulo, b[0].titulo))[0] || null;
+  return { nJogos: porTitulo.size, nJogadas: games.length, horas, plats, anos, gens, media, maisRejogado, reps };
+}
+function renderPerfil(){
+  const P = perfil, S = perfilStats();
+  $('#stats').innerHTML = '';
+  const inicial = (P.nome || 'G').trim().charAt(0).toUpperCase();
+  const top = P.top5.map(id => games.find(g => g.id === id)).filter(Boolean);
+  if (top.length !== P.top5.length) P.top5 = top.map(g => g.id);
+  const slots = [];
+  for (let i = 0; i < 5; i++) {
+    const g = top[i];
+    slots.push(g
+      ? `<div class="tile" data-id="${g.id}" data-slot="${i}" draggable="true" title="${esc(g.titulo)}">${i === 0 ? '<div class="crown">👑</div>' : ''}<div class="cv">${placeholder(g.titulo)}<div class="pos">${i + 1}</div><button type="button" class="rm" data-rm="${g.id}" title="Tirar do top 5">✕</button></div><div class="tt">${esc(g.titulo)}</div></div>`
+      : `<div class="tile slot" data-slot="${i}">${i === 0 && !top.length ? '<div class="crown" style="opacity:.35">👑</div>' : ''}<div class="cv"><b>＋</b>${i === 0 ? 'Seu jogo nº 1' : 'Escolher'}</div><div class="tt">&nbsp;</div></div>`);
+  }
+  // plataformas
+  const pMax = S.plats[0] ? S.plats[0][1] : 1;
+  const platHTML = S.plats.length ? S.plats.slice(0, 6).map(([p, n]) => `<div class="hbar"><span class="nm">${esc(p)}</span><span class="tr"><i style="width:${Math.max(4, n / pMax * 100)}%"></i></span><span class="v">${n}</span></div>`).join('') : '<div class="vazio">Coloque a plataforma nos seus jogos pra ver aqui.</div>';
+  // jogos por ano (terminados)
+  const anosOrd = S.anos.map(([a, n]) => [+a, n]).sort((a, b) => a[0] - b[0]).slice(-10);
+  const aMax = Math.max(1, ...anosOrd.map(x => x[1]));
+  const recorde = S.anos[0];
+  const anoHTML = anosOrd.length ? `<div class="vbars">${anosOrd.map(([a, n]) => `<div class="c"><div class="b${recorde && +recorde[0] === a ? ' max' : ''}" style="height:${Math.max(4, n / aMax * 100)}%"><span>${n}</span></div><div class="y">${a}</div></div>`).join('')}</div>
+    <div class="destaque">Seu ano recorde: <b>${recorde[0]}</b>, com <b>${plural(recorde[1], 'jogo terminado', 'jogos terminados')}</b></div>` : '<div class="vazio">Marque o ano em que terminou os jogos pra ver aqui.</div>';
+  // mais rejogado
+  const mr = S.maisRejogado;
+  const rejHTML = mr ? `<div class="rejog" data-open="${mr[0].id}" style="cursor:pointer"><div class="cv" id="pfRejCv">${placeholder(mr[0].titulo)}</div><div><div class="t">${esc(mr[0].titulo)}</div><div class="m">Jogado <b>${mr.length} vezes</b></div><div class="m">${[...new Set(mr.map(p => p.ano).filter(Boolean))].sort((a, b) => a - b).join(' · ')}</div></div></div>`
+    : '<div class="vazio">Nenhum jogo rejogado ainda. Quando jogar um de novo, use “🔁 Joguei de novo”.</div>';
+  const gen = S.gens[0];
+  $('#perfilMain').innerHTML = `
+    <div class="pf-hero" id="pfHero">${P.hero.capa || P.hero.capaUrl ? '' : ''}<span class="hint">role pra cima pra expandir</span></div>
+    <div class="pf-wrap">
+      <div class="pf-head">
+        <div class="pf-av" id="pfAv">${esc(inicial)}</div>
+        <div class="pf-name">
+          <h1 class="${P.nome ? '' : 'vazio'}">${esc(P.nome || 'Seu nome aqui')}</h1>
+          <div class="pf-nums">
+            <span><b>${S.nJogos}</b>${S.nJogos === 1 ? 'jogo catalogado' : 'jogos catalogados'}${S.nJogadas > S.nJogos ? ` <small>(${S.nJogadas} jogadas)</small>` : ''}</span>
+            <span><b>${lists.length}</b>${lists.length === 1 ? 'lista' : 'listas'}</span>
+            <span><b>${fmtNum(Math.round(S.horas * 10) / 10)}</b>horas jogadas</span>
+          </div>
+        </div>
+        <button type="button" class="btn" id="pfEdit">✎ Editar perfil</button>
+      </div>
+
+      <section class="pf-sec"><h2>Top 5 favoritos <small>clique pra escolher · arraste pra mudar a ordem</small></h2>
+        <div class="top5" id="top5">${slots.join('')}</div>
+      </section>
+
+      <section class="pf-sec"><h2>Seus números</h2>
+        <div class="bento">
+          <div class="bx w2"><h3>🎮 Plataformas mais jogadas</h3>${platHTML}</div>
+          <div class="bx"><h3>🔁 Mais rejogado</h3>${rejHTML}</div>
+          <div class="bx w2"><h3>📅 Jogos terminados por ano</h3>${anoHTML}</div>
+          <div class="bx"><h3>⭐ Resumo</h3><div class="mini">
+            <div><b>${S.media != null ? fmtNum(Math.round(S.media * 10) / 10) : '–'}</b><span>nota média</span></div>
+            <div><b>${games.filter(g => g.status === 'terminado' && g.ano === ANO_ATUAL).length}</b><span>terminados em ${ANO_ATUAL}</span></div>
+            <div style="grid-column:span 2"><b style="font-size:18px">${gen ? esc(gen[0]) : '–'}</b><span>${gen ? `gênero que mais aparece (${plural(gen[1], 'jogo')})` : 'gênero favorito'}</span></div>
+          </div></div>
+        </div>
+      </section>
+    </div>`;
+  coverURL(P.hero).then(u => { if (u) $('#pfHero').insertAdjacentHTML('afterbegin', `<img src="${esc(u)}" alt="">`); });
+  coverURL(P.avatar).then(u => { if (u) $('#pfAv').innerHTML = `<img src="${esc(u)}" alt="">`; });
+  $('#top5').querySelectorAll('.tile[data-id]').forEach(t => { const g = games.find(x => x.id === t.dataset.id); coverURL(g).then(u => putImg(t.querySelector('.cv'), u, g.titulo)); });
+  if (mr) coverURL(mr[0]).then(u => putImg($('#pfRejCv'), u, mr[0].titulo));
+}
+/* capa do topo: rolar pra cima (no topo da página) expande, rolar pra baixo recolhe */
+addEventListener('wheel', e => {
+  if (view.tab !== 'perfil' || anyModalOpen()) return;
+  const h = $('#pfHero'); if (!h) return;
+  if (window.scrollY <= 0 && e.deltaY < 0) h.classList.add('big');
+  else if (e.deltaY > 0 && h.classList.contains('big')) { h.classList.remove('big'); e.preventDefault(); }
+}, { passive: false });
+
+/* top 5 */
+let pkSlot = 0;
+function openPick(slot){
+  pkSlot = slot;
+  $('#pkTitle').textContent = slot === 0 ? '👑 Escolher seu jogo nº 1' : `Escolher o ${slot + 1}º do top 5`;
+  $('#pkQ').value = '';
+  renderPick(); openModal('#pkBg'); setTimeout(() => $('#pkQ').focus(), 50);
+}
+function renderPick(){
+  const q = norm($('#pkQ').value).trim();
+  const reps = perfilStats().reps.filter(g => !q || norm(g.titulo).includes(q)).sort((a, b) => (b.nota ?? -1) - (a.nota ?? -1) || cmpTxt(a.titulo, b.titulo));
+  const noTop = new Set(perfil.top5.map(id => { const g = games.find(x => x.id === id); return g ? keyT(g.titulo) : ''; }));
+  $('#pkBody').innerHTML = reps.length ? `<div class="tgrid">${reps.map(g => `<div class="tile${noTop.has(keyT(g.titulo)) ? ' ja' : ''}" data-id="${g.id}" title="${esc(g.titulo)}${noTop.has(keyT(g.titulo)) ? ' (já está no top 5)' : ''}"><div class="cv">${placeholder(g.titulo)}${g.nota != null ? `<div class="pos" style="position:absolute;left:6px;bottom:6px;width:auto;padding:0 6px;height:22px;border-radius:6px;background:${notaColor(g.nota)};color:#fff;font-size:12px;font-weight:800;display:flex;align-items:center">${fmtNum(g.nota)}</div>` : ''}</div><div class="tt">${esc(g.titulo)}</div></div>`).join('')}</div>`
+    : `<div class="empty" style="padding:40px">${games.length ? 'Nenhum jogo com esse nome.' : 'Seu catálogo está vazio. Cadastre jogos primeiro.'}</div>`;
+  $('#pkBody').querySelectorAll('.tile').forEach(t => { const g = games.find(x => x.id === t.dataset.id); coverURL(g).then(u => putImg(t.querySelector('.cv'), u, g.titulo)); });
+}
+async function pickTop(id){
+  const g = games.find(x => x.id === id); if (!g) return;
+  let arr = perfil.top5.filter(x => { const o = games.find(y => y.id === x); return o && keyT(o.titulo) !== keyT(g.titulo); });
+  const pos = Math.min(pkSlot, arr.length);
+  if (pkSlot < perfil.top5.length && perfil.top5[pkSlot] && keyT((games.find(y => y.id === perfil.top5[pkSlot]) || {}).titulo) !== keyT(g.titulo)) arr.splice(pos, 1, g.id);
+  else arr.splice(pos, 0, g.id);
+  perfil.top5 = arr.slice(0, 5);
+  await persist(); closeModals(true); renderPerfil();
+}
+
+/* editar perfil */
+const PF = { avatar: null, hero: null, alvo: null, urls: [] };
+function pfPreview(){
+  const ini = ($('#pfNome').value || perfil.nome || 'G').trim().charAt(0).toUpperCase();
+  const show = async (el, pend, obj, fallback) => {
+    let u = null;
+    if (pend instanceof Blob) { u = URL.createObjectURL(pend); PF.urls.push(u); }
+    else if (pend !== 'del') u = await coverURL(obj);
+    el.innerHTML = u ? `<img src="${esc(u)}" alt="">` : fallback;
+  };
+  show($('#pfAvPrev'), PF.avatar, perfil.avatar, esc(ini));
+  show($('#pfHeroPrev'), PF.hero, perfil.hero, '');
+}
+function openPerfilEdit(){
+  PF.avatar = PF.hero = null;
+  $('#pfNome').value = perfil.nome || '';
+  pfPreview(); openModal('#pfBg'); setTimeout(() => $('#pfNome').focus(), 50);
+}
+async function savePerfil(){
+  perfil.nome = $('#pfNome').value.trim();
+  const aplica = async (obj, pend, max) => {
+    if (pend === 'del') await removeCover(obj);
+    else if (pend instanceof Blob) await storeCover(obj, await normalizeImage(pend, max));
+  };
+  await aplica(perfil.avatar, PF.avatar, 500);
+  await aplica(perfil.hero, PF.hero, 2200);
+  PF.urls.forEach(u => URL.revokeObjectURL(u)); PF.urls = [];
+  await persist(); clearUrlCache(); closeModals(true); renderPerfil();
+  toast('✓ Perfil salvo');
 }
 
 /* ---------------- catálogo ---------------- */
@@ -1027,6 +1324,7 @@ function filtered(){
     if (view.ano && (yearOf(g) || 'sem') !== view.ano) return false;
     if (view.nota !== '') { const n = +view.nota; if (n === -1 ? g.nota != null : (g.nota == null || Math.floor(g.nota) !== n)) return false; }
     if (view.fav && !g.favorito) return false;
+    if (view.pend && !g.pendente) return false;
     return true;
   });
   const by = {
@@ -1068,6 +1366,10 @@ function renderFilters(){
   $('#fiNota').value = view.nota; $('#fiNota').classList.toggle('on', view.nota !== '');
   $('#sort').value = view.sort;
   $('#tFav').classList.toggle('on', view.fav);
+  const nPend = games.filter(g => g.pendente).length;
+  if (!nPend) view.pend = false;
+  $('#tPend').classList.toggle('hidden', !nPend); $('#tPend').classList.toggle('on', !!view.pend);
+  $('#tPend').textContent = `⏳ Para completar (${nPend})`;
   $('#fiGroup').value = view.group;
   $('#cardSize').value = view.card;
   document.documentElement.style.setProperty('--card', view.card + 'px');
@@ -1091,11 +1393,11 @@ function cardHTML(g, plays){
     const plats = [...new Set(plays.map(p => p.plataforma).filter(Boolean))];
     sub = [plats.length === 1 ? plats[0] : '', anos.join(', ')].filter(Boolean).join(' · ');
   } else sub = [g.plataforma, g.ano].filter(Boolean).join(' · ');
-  const card = `<div class="card${sel.has(g.id) ? ' sel' : ''}" data-id="${g.id}" title="${esc(g.titulo)}${multi ? ` · jogado ${plays.length} vezes` : ''}">
+  const card = `<div class="card${sel.has(g.id) ? ' sel' : ''}${g.pendente ? ' pend' : ''}" data-id="${g.id}" title="${esc(g.titulo)}${multi ? ` · jogado ${plays.length} vezes` : ''}">
     ${placeholder(g.titulo)}
     <div class="ck"></div>
+    ${g.pendente ? '<div class="pendtag">✎ Clique pra completar</div>' : ''}
     <div class="flags">
-      ${multi ? `<div class="plays" title="Jogado ${plays.length} vezes">${plays.length}×</div>` : ''}
       ${g.favorito ? '<div class="fav">★</div>' : ''}
       ${st && g.status !== 'terminado' ? `<div class="pill" style="color:${st.c};border-color:${st.c}">${st.n}</div>` : ''}
     </div>
@@ -1150,8 +1452,8 @@ function render(){
   }
   renderSel();
 }
-function clearFilters(){ Object.assign(view, { q:'', plat:'', gen:'', status:'', ano:'', nota:'', fav:false }); $('#q').value = ''; render(); }
-const filtersActive = () => !!(view.q.trim() || view.plat || view.gen || view.status || view.ano || view.nota !== '' || view.fav);
+function clearFilters(){ Object.assign(view, { q:'', plat:'', gen:'', status:'', ano:'', nota:'', fav:false, pend:false }); $('#q').value = ''; render(); }
+const filtersActive = () => !!(view.q.trim() || view.plat || view.gen || view.status || view.ano || view.nota !== '' || view.fav || view.pend);
 
 /* ocultar / mostrar busca e filtros */
 function renderFiltBtn(){
@@ -1313,6 +1615,7 @@ async function saveForm(e){
       nota: form.nota,
       generos: sortGens([...form.gens]),
       review: $('#fReview').value.trim(),
+      pendente: false,
     });
     const p = gp.pending;
     if (p) {
@@ -1768,6 +2071,86 @@ function openCfg(){ renderCfg(); renderCfgGens(); openModal('#cfgBg'); }
 function setTema(t){ CFG.tema = t; applyTheme(); saveConfig(); renderCfg(); }
 function setCor(c, rerender = true){ CFG.cor = c; applyAccent(); saveConfig(); if (rerender) renderCfg(); }
 
+/* ---------------- importar lista de jogos (.txt / .md) ---------------- */
+/* formato: Nome - ano que jogou - ano do jogo - plataforma - nota
+   cada pedaço vai pro primeiro campo (nessa ordem) em que se encaixa; o que não se encaixa é pulado */
+function parseGameList(text){
+  const plats = [...new Set([...PLAT_DEF, ...games.map(g => g.plataforma).filter(Boolean)])];
+  const platOf = t => plats.find(p => norm(p) === norm(t)) || null;
+  const isYear = t => /^(19[5-9]\d|20\d\d)$/.test(t) ? +t : null;
+  const isNota = t => { const m = t.replace(',', '.').replace(/\s*\/\s*10$/, '').trim(); if (!/^\d{1,2}(\.\d+)?$/.test(m)) return null; const n = +m; return n >= 0 && n <= 10 ? Math.round(n * 2) / 2 : null; };
+  const out = []; let ignoradas = 0;
+  text.replace(/^﻿/, '').split(/\r?\n/).forEach((raw, n) => {
+    let line = raw.trim();
+    if (!line || /^#{1,6}\s/.test(line) || /^(```|---+$|\*\*\*+$|\|)/.test(line)) return;
+    line = line.replace(/^>\s*/, '').replace(/^([-*+•]\s+)?(\[[ xX]\]\s+)?/, '').replace(/^\d+[.)]\s+/, '').replace(/\*\*|__|`/g, '').trim();
+    if (!line) return;
+    const parts = line.split(/\s+[-–—]\s+/).map(x => x.trim()).filter(Boolean);
+    const r = { titulo: parts.shift(), ano: null, lancamento: null, plataforma: '', nota: null, linha: n + 1, pulados: [] };
+    let slot = 0, casou = false;
+    const tenta = (k, p, resto) => {
+      if (k === 0) { const y = isYear(p); if (y) { r.ano = y; return true; } }
+      if (k === 1) { const y = isYear(p); if (y) { r.lancamento = y; return true; } }
+      // plataforma: uma conhecida, ou um texto curto desde que mais pra frente não venha outra plataforma ou um ano
+      if (k === 2 && !/^\d+([.,]\d+)?(\s*\/\s*10)?$/.test(p) && (platOf(p) || (casou && p.length <= 24 && !resto.some(x => platOf(x) || isYear(x))))) { r.plataforma = platOf(p) || p; return true; }
+      if (k === 3) { const v = isNota(p); if (v != null) { r.nota = v; return true; } }
+      return false;
+    };
+    for (const [i, p] of parts.entries()) {
+      let achou = -1;
+      for (let k = slot; k < 4; k++) if (tenta(k, p, parts.slice(i + 1))) { achou = k; break; }
+      if (achou >= 0) { slot = achou + 1; casou = true; }
+      else if (!casou) r.titulo += ' - ' + p;      // ainda é parte do nome (ex.: "Shin Megami Tensei - Nocturne")
+      else r.pulados.push(p);                       // fora do padrão: pula
+    }
+    r.titulo = (r.titulo || '').replace(/[:;,.]+$/, '').trim();
+    if (!r.titulo || r.titulo.length > 150) { ignoradas++; return; }
+    r.dup = games.some(g => keyT(g.titulo) === keyT(r.titulo) && (g.ano ?? null) === r.ano);
+    out.push(r);
+  });
+  return { itens: out, ignoradas };
+}
+async function importGameListFile(file){
+  let text;
+  try { text = await file.text(); } catch (e) { return reportError('Não consegui ler esse arquivo.', e); }
+  const { itens, ignoradas } = parseGameList(text);
+  if (!itens.length) return showMsg('Nenhum jogo encontrado', `<p>Não achei nenhuma linha com jogo nesse arquivo.</p><p>Lembre do formato, um jogo por linha:</p><div class="ex">Elden Ring - 2024 - 2022 - PC - 10</div>`);
+  const novos = itens.filter(r => !r.dup), dups = itens.length - novos.length;
+  const cel = v => v == null || v === '' ? '<td class="vz">—</td>' : `<td>${esc(String(v))}</td>`;
+  const ok = await showMsg(`Importar ${plural(novos.length, 'jogo')}`,
+    `<p>Confira como o arquivo foi lido:</p>
+     <div class="imp-scroll"><table class="imp-tab"><tr><th>Jogo</th><th>Jogou em</th><th>Lançamento</th><th>Plataforma</th><th>Nota</th></tr>
+     ${itens.map(r => `<tr class="${r.dup ? 'dup' : ''}" title="${r.dup ? 'Já está no catálogo com esse ano. Vai ser pulado.' : r.pulados.length ? 'Pulado: ' + esc(r.pulados.join(', ')) : ''}"><td>${esc(r.titulo)}</td>${cel(r.ano)}${cel(r.lancamento)}${cel(r.plataforma)}${cel(r.nota != null ? fmtNum(r.nota) : null)}</tr>`).join('')}
+     </table></div>
+     ${dups ? `<p style="font-size:12.5px;color:var(--mut);margin-top:10px">${plural(dups, 'jogo riscado já está', 'jogos riscados já estão')} no catálogo com o mesmo ano e ${dups === 1 ? 'vai' : 'vão'} ser pulado${dups === 1 ? '' : 's'}.</p>` : ''}
+     ${ignoradas ? `<p style="font-size:12.5px;color:var(--mut)">${plural(ignoradas, 'linha ignorada', 'linhas ignoradas')} por não parecer um jogo.</p>` : ''}
+     <p style="font-size:12.5px;color:var(--mut)">Capa, horas e gêneros ficam pra você completar depois. Os jogos aparecem com borda colorida no catálogo.</p>`,
+    [{ label: 'Cancelar', value: false }, ...(novos.length ? [{ label: `Importar ${plural(novos.length, 'jogo')}`, primary: true, value: true }] : [])]);
+  if (!ok || !novos.length) return;
+  toast('Importando…', 20000);
+  const agora = Date.now();
+  for (const [i, r] of novos.entries()) {
+    const g = { id: uid(), criadoEm: new Date(agora + i).toISOString(), titulo: r.titulo, plataforma: r.plataforma, status: 'terminado',
+      ano: r.ano, lancamento: r.lancamento, nota: r.nota, horas: null, generos: [], review: '', favorito: false, capa: '', capaUrl: '', pendente: true };
+    // jogo que você já tinha catalogado (outra jogada): aproveita capa, gêneros e o que faltar
+    const irmao = games.find(x => keyT(x.titulo) === keyT(g.titulo));
+    if (irmao) {
+      g.titulo = irmao.titulo;
+      if (g.lancamento == null) g.lancamento = irmao.lancamento ?? null;
+      if (g.nota == null) g.nota = irmao.nota ?? null;
+      g.generos = [...(irmao.generos || [])];
+      const b = await gameCoverBlob(irmao);
+      if (b) await storeCover(g, b); else if (irmao.capaUrl) g.capaUrl = irmao.capaUrl;
+      g.pendente = !hasCover(g);
+    }
+    games.push(g);
+  }
+  await persist(); closeModals(true); clearUrlCache();
+  if (view.tab !== 'cat') setTab('cat'); else render();
+  const pend = games.filter(g => g.pendente).length;
+  toast(`✓ ${plural(novos.length, 'jogo importado', 'jogos importados')}${pend ? ` · ${pend} esperando você completar (borda colorida)` : ''}`, 5000);
+}
+
 /* ---------------- trazer dados do Catalogame antigo ---------------- */
 async function unpackCover(c, old){
   const cd = c.capaData; delete c.capaData;
@@ -1824,10 +2207,12 @@ async function importData(data){
 
 /* ---------------- eventos ---------------- */
 $('#addBtn').onclick = () => view.tab === 'cat' ? openForm(null) : openListEditor(null);
-$('#tabBtn').onclick = () => setTab(view.tab === 'cat' ? 'lists' : 'cat');
+$('#tabs').addEventListener('click', e => { const b = e.target.closest('button[data-t]'); if (b && b.dataset.t !== view.tab) setTab(b.dataset.t); });
 $('#main').addEventListener('click', e => {
   const c = e.target.closest('.card'); if (!c) return;
   if (e.ctrlKey || e.metaKey || sel.size) { e.preventDefault(); toggleSel(c.dataset.id); return; }
+  const g = games.find(x => x.id === c.dataset.id);
+  if (g && g.pendente) return openForm(g.id);
   openDetail(c.dataset.id);
 });
 $('#main').addEventListener('mousedown', e => { if ((e.ctrlKey || e.metaKey) && e.target.closest('.card')) e.preventDefault(); });
@@ -1853,10 +2238,34 @@ $('#lq').addEventListener('input', renderLists);
 const bindSel = (sel, key) => $(sel).addEventListener('change', e => { view[key] = e.target.value; saveView(); render(); e.target.blur(); });
 bindSel('#fiPlat', 'plat'); bindSel('#fiGen', 'gen'); bindSel('#fiStatus', 'status'); bindSel('#fiAno', 'ano'); bindSel('#fiNota', 'nota'); bindSel('#sort', 'sort');
 $('#tFav').onclick = () => { view.fav = !view.fav; render(); };
+$('#tPend').onclick = () => { view.pend = !view.pend; render(); };
 $('#fiGroup').addEventListener('change', e => { view.group = e.target.value; saveView(); render(); e.target.blur(); });
 $('#clearF').onclick = clearFilters;
 $('#cardSize').addEventListener('input', e => { view.card = +e.target.value; document.documentElement.style.setProperty('--card', view.card + 'px'); saveView(); });
 $('#cfgBtn').onclick = openCfg;
+$('#perfilMain').addEventListener('click', e => {
+  if (e.target.closest('#pfEdit')) return openPerfilEdit();
+  const rm = e.target.closest('[data-rm]');
+  if (rm) { e.stopPropagation(); perfil.top5 = perfil.top5.filter(id => id !== rm.dataset.rm); persist().then(renderPerfil); return; }
+  const t = e.target.closest('#top5 .tile'); if (t) return openPick(+t.dataset.slot);
+  const r = e.target.closest('[data-open]'); if (r) openDetail(r.dataset.open);
+});
+makeSortable($('#perfilMain'), async order => {
+  const novo = order.filter(id => perfil.top5.includes(id));
+  if (novo.join() === perfil.top5.join()) return;
+  perfil.top5 = novo; await persist(); renderPerfil();
+});
+$('#pkQ').addEventListener('input', renderPick);
+$('#pkBody').addEventListener('click', e => { const t = e.target.closest('.tile[data-id]'); if (t) pickTop(t.dataset.id); });
+$('#pfAvPick').onclick = () => { PF.alvo = 'avatar'; $('#pfFile').click(); };
+$('#pfHeroPick').onclick = () => { PF.alvo = 'hero'; $('#pfFile').click(); };
+$('#pfAvDel').onclick = () => { PF.avatar = 'del'; pfPreview(); };
+$('#pfHeroDel').onclick = () => { PF.hero = 'del'; pfPreview(); };
+$('#pfFile').addEventListener('change', e => { const f = e.target.files[0]; e.target.value = ''; if (!f || !f.type.startsWith('image/')) return; PF[PF.alvo] = f; pfPreview(); });
+$('#pfNome').addEventListener('input', () => { if (!(PF.avatar instanceof Blob) && !perfil.avatar.capa) pfPreview(); });
+$('#pfSave').onclick = () => savePerfil().catch(err => reportError('Não consegui salvar o perfil.', err));
+$('#cfgImpList').onclick = () => $('#impListIn').click();
+$('#impListIn').addEventListener('change', e => { const f = e.target.files[0]; e.target.value = ''; if (f) importGameListFile(f); });
 $('#cfgGenAdd').onclick = addGenre;
 $('#cfgGenNew').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); addGenre(); } });
 $('#cfgGens').addEventListener('click', e => { const b = e.target.closest('button[data-del]'); if (b) delGenre(b.dataset.del); });
@@ -1903,6 +2312,7 @@ document.addEventListener('keydown', e => {
   }
   const typing = /INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName);
   if (typing || anyModalOpen()) return;
+  if (e.key === '/' && view.tab === 'perfil') return;
   if (e.key === '/') { e.preventDefault(); if (view.tab === 'cat' && view.filtrosOcultos) toggleFilters(true); (view.tab === 'cat' ? $('#q') : openListId ? $('#lvq') : $('#lq')).focus(); }
   if (view.tab === 'cat' && (e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'a') { e.preventDefault(); selectAllVisible(); }
   if (e.key.toLowerCase() === 'n' && !e.ctrlKey && !e.metaKey) { e.preventDefault(); $('#addBtn').click(); }
