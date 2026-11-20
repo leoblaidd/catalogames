@@ -7,6 +7,9 @@ const path = require('path');
 const fs = require('fs');
 const fsp = fs.promises;
 const { pathToFileURL } = require('url');
+const { spawn } = require('child_process');
+
+const REPO = 'leoblaidd/catalogames';   // onde as versões são publicadas (Releases do GitHub)
 
 app.setAppUserModelId('com.leandro.catalogame');
 
@@ -179,6 +182,70 @@ ipcMain.handle('sgdb:grids', (_e, gameId, page, estilo) => {
   if (/^[a-z_]+$/.test(estilo || '')) q.set('styles', estilo);
   return sgdb(`/grids/game/${id}?${q}`);
 });
+
+/* ---------- atualizações (Releases do GitHub) ---------- */
+const cmpVer = (a, b) => {
+  const pa = String(a).split(/[.-]/).map(n => parseInt(n, 10) || 0), pb = String(b).split(/[.-]/).map(n => parseInt(n, 10) || 0);
+  for (let i = 0; i < Math.max(pa.length, pb.length); i++) { const d = (pa[i] || 0) - (pb[i] || 0); if (d) return d; }
+  return 0;
+};
+let ultimoAsset = null;
+ipcMain.handle('update:check', async () => {
+  try {
+    const r = await net.fetch(`https://api.github.com/repos/${REPO}/releases/latest`, {
+      headers: { 'User-Agent': 'Catalogames', Accept: 'application/vnd.github+json' },
+    });
+    if (r.status === 404) return { erro: 'sem-release', atual: app.getVersion() };
+    if (!r.ok) return { erro: 'falha', detalhe: 'HTTP ' + r.status, atual: app.getVersion() };
+    const j = await r.json();
+    const versao = String(j.tag_name || j.name || '').replace(/^[^\d]*/, '');
+    const a = (j.assets || []).find(x => /\.exe$/i.test(x.name));
+    ultimoAsset = a ? { nome: a.name, url: a.browser_download_url, tamanho: a.size } : null;
+    return { atual: app.getVersion(), versao, nova: !!versao && cmpVer(versao, app.getVersion()) > 0,
+      titulo: j.name || j.tag_name, notas: j.body || '', pagina: j.html_url, temInstalador: !!ultimoAsset, tamanho: ultimoAsset && ultimoAsset.tamanho };
+  } catch (e) { return { erro: 'rede', detalhe: e.message, atual: app.getVersion() }; }
+});
+ipcMain.handle('update:install', async e => {
+  const a = ultimoAsset;
+  if (!a || !/^https:\/\/github\.com\//.test(a.url)) return { erro: 'Nenhum instalador encontrado nessa versão.' };
+  try {
+    const r = await net.fetch(a.url, { headers: { 'User-Agent': 'Catalogames' } });
+    if (!r.ok || !r.body) return { erro: 'Download falhou (HTTP ' + r.status + ').' };
+    const total = Number(r.headers.get('content-length')) || a.tamanho || 0;
+    const destino = path.join(app.getPath('temp'), safeName(a.nome) || 'Catalogames-Instalador.exe');
+    const out = fs.createWriteStream(destino);
+    const reader = r.body.getReader();
+    let recebido = 0, ultimo = 0;
+    for (;;) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      recebido += value.length;
+      if (!out.write(Buffer.from(value))) await new Promise(res => out.once('drain', res));
+      if (Date.now() - ultimo > 150) { ultimo = Date.now(); e.sender.send('update:progress', { recebido, total }); }
+    }
+    await new Promise((res, rej) => out.end(err => err ? rej(err) : res()));
+    e.sender.send('update:progress', { recebido, total: total || recebido });
+    // abre o instalador e fecha o app pra ele poder atualizar os arquivos
+    const proc = spawn(destino, [], { detached: true, stdio: 'ignore' });
+    proc.on('error', () => {}); proc.unref();
+    setTimeout(() => app.quit(), 1200);
+    return { ok: true };
+  } catch (err) { return { erro: err.message }; }
+});
+ipcMain.handle('open-external', (_e, url) => { if (/^https:\/\//.test(url)) shell.openExternal(url); });
+
+/* ---------- salvar imagem exportada ---------- */
+ipcMain.handle('save-png', async (_e, nome, bytes) => {
+  const sugerido = (String(nome || 'Catalogames').replace(/[\\/:*?"<>|]+/g, ' ').trim() || 'Catalogames') + '.png';
+  const r = await dialog.showSaveDialog(win, {
+    title: 'Salvar imagem', defaultPath: path.join(app.getPath('downloads'), sugerido),
+    filters: [{ name: 'Imagem PNG', extensions: ['png'] }],
+  });
+  if (r.canceled || !r.filePath) return null;
+  await fsp.writeFile(r.filePath, Buffer.from(bytes));
+  return r.filePath;
+});
+ipcMain.handle('show-in-folder', (_e, f) => { if (f) shell.showItemInFolder(f); });
 
 ipcMain.handle('open-data-folder', () => shell.openPath(DATA_DIR));
 

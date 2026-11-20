@@ -339,11 +339,11 @@ body.ctrl #main .card,body.selecting #main .card{cursor:copy}
 #perfilMain{padding:0 0 70px}
 .pf-hero{position:relative;height:210px;background:linear-gradient(120deg,var(--acc),color-mix(in srgb,var(--acc) 30%,#000));overflow:hidden;transition:height .5s cubic-bezier(.2,.8,.2,1)}
 .pf-hero.big{height:380px}
-.pf-hero img{width:100%;height:100%;object-fit:cover;display:block}
+.pf-hero img{width:100%;height:100%;object-fit:cover;display:block;object-position:50% var(--hp,50%)}
 .pf-hero::after{content:"";position:absolute;inset:auto 0 0 0;height:110px;background:linear-gradient(transparent,var(--bg))}
 .pf-hero .hint{position:absolute;right:16px;top:12px;z-index:1;font-size:11.5px;color:#fff;background:rgba(0,0,0,.35);padding:3px 9px;border-radius:12px;opacity:0;transition:.3s}
 .pf-hero:hover .hint{opacity:1}
-.pf-wrap{max-width:1200px;margin:0 auto;padding:0 28px;position:relative}
+.pf-wrap{max-width:1560px;margin:0 auto;padding:0 32px;position:relative}
 .pf-head{display:flex;align-items:flex-end;gap:24px;margin-top:-74px;position:relative;z-index:2;flex-wrap:wrap}
 .pf-av{width:152px;height:152px;border-radius:50%;border:5px solid var(--bg);background:var(--bg3);overflow:hidden;flex:none;box-shadow:0 12px 30px var(--sh2);display:flex;align-items:center;justify-content:center;font-size:60px;font-weight:800;color:var(--acc2)}
 .pf-av img{width:100%;height:100%;object-fit:cover;display:block}
@@ -356,15 +356,15 @@ body.ctrl #main .card,body.selecting #main .card{cursor:copy}
 .pf-sec{margin-top:38px}
 .pf-sec > h2{font-size:13px;margin:0 0 6px;color:var(--mut);text-transform:uppercase;letter-spacing:.08em;display:flex;align-items:baseline;gap:10px}
 .pf-sec > h2 small{text-transform:none;letter-spacing:0;font-weight:400;color:var(--dim)}
-.top5{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:20px;padding-top:34px;max-width:1000px}
+.top5{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:clamp(12px,2vw,30px);padding-top:40px}
 .top5 .tile{cursor:pointer}
 .top5 .tile .cv{border-radius:var(--r);transition:transform .18s,box-shadow .18s}
 .top5 .tile:hover .cv{transform:translateY(-4px);box-shadow:0 14px 28px var(--sh2),0 0 0 2px var(--acc)}
-.top5 .tile .tt{font-size:13px;font-weight:600}
+.top5 .tile .tt{font-size:clamp(13px,1.1vw,16px);font-weight:600;margin-top:10px}
 .top5 .pos{position:absolute;left:8px;bottom:8px;width:28px;height:28px;border-radius:8px;background:#fff;color:#111;font-weight:800;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 2px 8px rgba(0,0,0,.5);z-index:2}
 .top5 .tile:first-child .pos{background:#e8b923;color:#1a1300}
 .top5 .tile:first-child .cv{box-shadow:0 0 0 3px #e8b923,0 10px 26px var(--sh2)}
-.crown{position:absolute;top:-38px;left:50%;transform:translateX(-50%);font-size:34px;line-height:1;filter:drop-shadow(0 4px 8px rgba(0,0,0,.45));z-index:3;pointer-events:none}
+.crown{position:absolute;top:-42px;left:50%;transform:translateX(-50%);font-size:34px;line-height:1;filter:drop-shadow(0 4px 8px rgba(0,0,0,.45));z-index:3;pointer-events:none}
 .top5 .slot .cv{border:2px dashed var(--line2);background:transparent;box-shadow:none;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:6px;color:var(--dim);font-size:13px}
 .top5 .slot .cv b{font-size:30px;font-weight:300;color:var(--mut)}
 .top5 .slot:hover .cv{border-color:var(--acc);color:var(--acc2);transform:none;box-shadow:none}
@@ -406,6 +406,9 @@ body.ctrl #main .card,body.selecting #main .card{cursor:copy}
 .pfm-row{display:flex;gap:18px;align-items:center}
 .pfm-av{width:96px;height:96px;border-radius:50%;background:var(--bg3);overflow:hidden;flex:none;display:flex;align-items:center;justify-content:center;font-size:38px;font-weight:800;color:var(--acc2);border:1px solid var(--line)}
 .pfm-av img,.pfm-hero img{width:100%;height:100%;object-fit:cover;display:block}
+.pfm-hero img{object-position:50% var(--hp,50%);cursor:ns-resize;user-select:none;-webkit-user-drag:none}
+.pfm-pos{display:flex;align-items:center;gap:10px;font-size:12.5px;color:var(--mut);margin:2px 0 8px}
+.pfm-pos input{flex:1;accent-color:var(--acc)}
 .pfm-hero{height:110px;border-radius:10px;overflow:hidden;background:linear-gradient(120deg,var(--acc),color-mix(in srgb,var(--acc) 30%,#000));margin:8px 0;border:1px solid var(--line)}
 .pfm p{margin:3px 0 8px;font-size:12.5px;color:var(--mut)}
 .pkm{max-width:1000px}
@@ -414,6 +417,44 @@ body.ctrl #main .card,body.selecting #main .card{cursor:copy}
 .pk-body .tile{cursor:pointer}
 .pk-body .tile:hover .cv{box-shadow:0 0 0 2px var(--acc),0 10px 22px var(--sh2)}
 .pk-body .tile.ja{opacity:.45}
+
+/* gêneros: busca */
+.gen-search{margin-bottom:8px}
+.chip.hid{display:none}
+.chip.newg{border-style:dashed;color:var(--acc2);border-color:var(--acc)}
+
+/* atualizações */
+.upd{display:flex;align-items:center;gap:12px;flex-wrap:wrap;font-size:13.5px}
+.upd-res{margin-top:12px;font-size:13px;color:var(--mut)}
+.upd-res .card-upd{border:1px solid var(--acc);background:var(--accsolid);border-radius:10px;padding:12px 14px;color:var(--txt)}
+.upd-res .card-upd h4{margin:0 0 6px;font-size:15px}
+.upd-notes{max-height:200px;overflow:auto;font-size:12.5px;color:var(--txt2);margin:8px 0 10px;line-height:1.55}
+.upd-notes ul{margin:4px 0;padding-left:18px}
+.upd-notes h5{margin:8px 0 2px;font-size:12.5px}
+.upd-notes blockquote{margin:4px 0;color:var(--mut)}
+.prog{height:8px;border-radius:4px;background:var(--bg4);overflow:hidden;margin-top:10px}
+.prog i{display:block;height:100%;width:0;background:var(--acc);transition:width .2s}
+#cfgBtn .dot{position:absolute;top:4px;right:4px;width:9px;height:9px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 2px var(--bg)}
+
+/* exportar imagem */
+.exm{max-width:1180px}
+.ex-body{display:grid;grid-template-columns:330px 1fr;min-height:0}
+.ex-opts{padding:18px 20px;border-right:1px solid var(--line);display:flex;flex-direction:column;gap:16px;max-height:calc(100vh - 210px);overflow:auto}
+.ex-opts h4{margin:0 0 8px;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--mut)}
+.ex-opts label.chk{display:flex;align-items:center;gap:9px;padding:5px 0;cursor:pointer;font-size:14px}
+.ex-opts label.chk input{width:17px;height:17px;accent-color:var(--acc)}
+.ex-opts select{width:100%}
+.ex-seg{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.ex-seg button{border:1px solid var(--line);background:var(--bg);border-radius:8px;padding:8px 0;cursor:pointer;font-weight:700;color:var(--txt);font-family:inherit}
+.ex-seg button.on{border-color:var(--acc);background:var(--accbg);color:var(--acc2)}
+.ex-radio{display:flex;flex-direction:column;gap:8px}
+.ex-radio label{display:flex;align-items:center;gap:9px;cursor:pointer;font-size:14px}
+.ex-radio input[type=radio]{accent-color:var(--acc);width:16px;height:16px}
+.ex-prev{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:18px;background:repeating-conic-gradient(var(--bg3) 0 25%,var(--bg2) 0 50%) 0 0/22px 22px;max-height:calc(100vh - 210px);overflow:auto;position:relative}
+.ex-prev canvas{max-width:100%;max-height:calc(100vh - 270px);width:auto;height:auto;box-shadow:0 14px 40px rgba(0,0,0,.55);border-radius:4px;background:#000}
+.ex-prev.loading canvas{opacity:.5}
+.ex-size{margin-top:10px;font-size:12px;color:var(--mut)}
+@media (max-width:900px){ .ex-body{grid-template-columns:1fr} .ex-opts{border-right:0;border-bottom:1px solid var(--line)} }
 
 /* configurações */
 .cfg{max-width:600px}
@@ -517,6 +558,7 @@ body.selecting .toast{bottom:86px}
       <option value="">Sem agrupar</option>
     </select>
     <button class="link hidden" id="clearF">limpar filtros</button>
+    <button class="btn sm" id="catExport" title="Gerar uma imagem PNG com os jogos de um ano, plataforma ou gênero">📤 Exportar</button>
     <button class="btn sm fromsearch hidden" id="fromSearch" title="Cria uma lista nova com os jogos que estão aparecendo agora">📚 Criar lista com esses jogos</button>
     <label class="size" title="Tamanho das capas">▫<input type="range" id="cardSize" min="110" max="280" step="10">▣</label>
   </div>
@@ -530,6 +572,7 @@ body.selecting .toast{bottom:86px}
     <div class="search"><svg><use href="#lupa"/></svg><input id="lvq" type="search" placeholder="Buscar nesta lista…" autocomplete="off"></div>
     <label class="size" title="Tamanho das capas">▫<input type="range" id="lvSize" min="110" max="280" step="10">▣</label>
     <div class="lv-actions">
+      <button class="btn" id="lvExport" title="Gerar uma imagem PNG da lista">📤 Exportar</button>
       <button class="btn" id="lvEdit">✎ Editar lista</button>
       <button class="btn ghost danger" id="lvDel">🗑 Excluir</button>
     </div>
@@ -576,6 +619,11 @@ Shinobi - 2025 - 2002 - PS2 - 8</div>
         <div class="cfg-row"><button type="button" class="btn sm" id="cfgImpList">📄 Escolher arquivo .txt ou .md</button></div>
         <input type="file" id="impListIn" accept=".txt,.md,.markdown,text/plain,text/markdown" hidden>
       </section>
+      <section><h3>Atualizações</h3>
+        <div class="upd"><span>Versão instalada: <b id="updCur"></b></span><button type="button" class="btn sm" id="updCheck">🔄 Verificar atualização</button></div>
+        <div class="upd-res" id="updRes"></div>
+        <label class="switch" style="margin-top:12px;display:inline-flex"><input type="checkbox" id="updAuto"> Verificar sozinho quando abrir o app</label>
+      </section>
       <section><h3>Seus dados</h3>
         <p class="cfg-path" id="cfgPath"></p>
         <div class="cfg-row"><button type="button" class="btn sm" id="cfgOpen">📂 Abrir a pasta dos dados</button><button type="button" class="btn sm" id="cfgImport">⬆ Trazer jogos do Catalogame antigo</button></div>
@@ -617,7 +665,7 @@ Shinobi - 2025 - 2002 - PS2 - 8</div>
         <div class="f full"><span>Nota</span>
           <div class="nota-row" id="notaRow"><input type="range" id="fNota" min="0" max="10" step="0.5"><output id="notaOut">–</output><button type="button" class="link" id="notaClear">sem nota</button></div>
         </div>
-        <div class="f full"><span>Gêneros <small>(clique pra marcar)</small></span><div class="chips" id="genChips"></div></div>
+        <div class="f full"><span>Gêneros <small>(clique pra marcar)</small></span><input id="genNew" class="gen-search" placeholder="Buscar ou criar gênero… (Enter)" autocomplete="off"><div class="chips" id="genChips"></div></div>
         <label class="f full"><span>Comentário / review</span><textarea id="fReview" rows="4" placeholder="O que achou? Momentos marcantes, se jogaria de novo…"></textarea></label>
       </div>
     </div>
@@ -699,12 +747,25 @@ Shinobi - 2025 - 2002 - PS2 - 8</div>
       </div>
       <div><b>Imagem do topo</b><p>Uma faixa larga no alto do perfil. Imagens horizontais (wallpaper) ficam melhores.</p>
         <div class="pfm-hero" id="pfHeroPrev"></div>
+        <div class="pfm-pos" id="pfPosRow">↕ Posição <input type="range" id="pfHeroPos" min="0" max="100" step="1"><span>ou arraste a imagem</span></div>
         <button type="button" class="btn sm" id="pfHeroPick">🖼 Escolher imagem</button> <button type="button" class="link" id="pfHeroDel">remover</button></div>
     </div>
     <footer><span class="sp"></span><button type="button" class="btn ghost" data-close>Cancelar</button><button type="button" class="btn primary" id="pfSave">Salvar</button></footer>
   </div>
 </div>
 <input type="file" id="pfFile" accept="image/*" hidden>
+
+<!-- ===== Modal: exportar imagem ===== -->
+<div class="modal-bg" id="exBg">
+  <div class="modal wide exm">
+    <header><div><h2 id="exTitle">Exportar imagem</h2><div class="sub" id="exSub">Escolha o que vai na imagem e veja a prévia</div></div><button type="button" class="x" data-close>✕</button></header>
+    <div class="ex-body">
+      <div class="ex-opts" id="exOpts"></div>
+      <div class="ex-prev" id="exPrev"><canvas id="exCanvas" width="800" height="1200"></canvas><div class="ex-size" id="exSize"></div></div>
+    </div>
+    <footer><span class="sp"></span><button type="button" class="btn ghost" data-close>Cancelar</button><button type="button" class="btn primary" id="exGo">📥 Exportar PNG</button></footer>
+  </div>
+</div>
 
 <!-- ===== Modal: escolher jogo pro top 5 ===== -->
 <div class="modal-bg" id="pkBg">
@@ -846,6 +907,7 @@ function loadData(data){
     avatar: { id: 'perfil-foto', capa: '', capaUrl: '', capaV: 0, ...(p.avatar || {}) },
     hero: { id: 'perfil-topo', capa: '', capaUrl: '', capaV: 0, ...(p.hero || {}) },
     top5: Array.isArray(p.top5) ? p.top5.slice(0, 5) : [],
+    heroPos: Number.isFinite(p.heroPos) ? p.heroPos : 50,
   };
 }
 /* mesmo jogo jogado mais de uma vez = mesmo título (exato, ignorando maiúsculas/acentos) */
@@ -1141,6 +1203,7 @@ async function boot(){
   if (!Array.isArray(CFG.generos)) { CFG.generos = sortGens([...GEN_DEF, ...games.flatMap(g => g.generos || [])]); saveConfig(); }
   if (!data && !falhou) { try { await persist(); } catch {} }   // cria a biblioteca.json vazia
   startApp();
+  if (CFG.autoUpdate !== false) setTimeout(() => checkUpdate(true).catch(() => {}), 4000);
   if (info.fallback) showMsg('Aviso sobre onde os dados ficam',
     `<p>A pasta onde o Catalogames foi instalado não permite gravar arquivos (isso acontece em <b>Arquivos de Programas</b>).</p>
      <p>Por isso seus jogos estão sendo salvos em:<br><code>${esc(DADOS)}</code></p>
@@ -1211,7 +1274,7 @@ function renderPerfil(){
     : '<div class="vazio">Nenhum jogo rejogado ainda. Quando jogar um de novo, use “🔁 Joguei de novo”.</div>';
   const gen = S.gens[0];
   $('#perfilMain').innerHTML = `
-    <div class="pf-hero" id="pfHero">${P.hero.capa || P.hero.capaUrl ? '' : ''}<span class="hint">role pra cima pra expandir</span></div>
+    <div class="pf-hero" id="pfHero">${P.hero.capa || P.hero.capaUrl ? '' : ''}</div>
     <div class="pf-wrap">
       <div class="pf-head">
         <div class="pf-av" id="pfAv">${esc(inicial)}</div>
@@ -1223,6 +1286,7 @@ function renderPerfil(){
             <span><b>${fmtNum(Math.round(S.horas * 10) / 10)}</b>horas jogadas</span>
           </div>
         </div>
+        <button type="button" class="btn" id="pfExport">📤 Exportar card</button>
         <button type="button" class="btn" id="pfEdit">✎ Editar perfil</button>
       </div>
 
@@ -1243,6 +1307,7 @@ function renderPerfil(){
         </div>
       </section>
     </div>`;
+  $('#pfHero').style.setProperty('--hp', (P.heroPos ?? 50) + '%');
   coverURL(P.hero).then(u => { if (u) $('#pfHero').insertAdjacentHTML('afterbegin', `<img src="${esc(u)}" alt="">`); });
   coverURL(P.avatar).then(u => { if (u) $('#pfAv').innerHTML = `<img src="${esc(u)}" alt="">`; });
   $('#top5').querySelectorAll('.tile[data-id]').forEach(t => { const g = games.find(x => x.id === t.dataset.id); coverURL(g).then(u => putImg(t.querySelector('.cv'), u, g.titulo)); });
@@ -1283,25 +1348,30 @@ async function pickTop(id){
 }
 
 /* editar perfil */
-const PF = { avatar: null, hero: null, alvo: null, urls: [] };
+const PF = { avatar: null, hero: null, alvo: null, urls: [], pos: 50 };
 function pfPreview(){
   const ini = ($('#pfNome').value || perfil.nome || 'G').trim().charAt(0).toUpperCase();
   const show = async (el, pend, obj, fallback) => {
     let u = null;
     if (pend instanceof Blob) { u = URL.createObjectURL(pend); PF.urls.push(u); }
     else if (pend !== 'del') u = await coverURL(obj);
-    el.innerHTML = u ? `<img src="${esc(u)}" alt="">` : fallback;
+    el.innerHTML = u ? `<img src="${esc(u)}" alt="" draggable="false">` : fallback;
   };
   show($('#pfAvPrev'), PF.avatar, perfil.avatar, esc(ini));
-  show($('#pfHeroPrev'), PF.hero, perfil.hero, '');
+  show($('#pfHeroPrev'), PF.hero, perfil.hero, '').then(() => {
+    const tem = !!$('#pfHeroPrev img');
+    $('#pfPosRow').style.display = tem ? '' : 'none';
+    $('#pfHeroPrev').style.setProperty('--hp', PF.pos + '%'); $('#pfHeroPos').value = PF.pos;
+  });
 }
 function openPerfilEdit(){
-  PF.avatar = PF.hero = null;
+  PF.avatar = PF.hero = null; PF.pos = perfil.heroPos ?? 50;
   $('#pfNome').value = perfil.nome || '';
   pfPreview(); openModal('#pfBg'); setTimeout(() => $('#pfNome').focus(), 50);
 }
 async function savePerfil(){
   perfil.nome = $('#pfNome').value.trim();
+  perfil.heroPos = Math.round(PF.pos);
   const aplica = async (obj, pend, max) => {
     if (pend === 'del') await removeCover(obj);
     else if (pend instanceof Blob) await storeCover(obj, await normalizeImage(pend, max));
@@ -1311,6 +1381,265 @@ async function savePerfil(){
   PF.urls.forEach(u => URL.revokeObjectURL(u)); PF.urls = [];
   await persist(); clearUrlCache(); closeModals(true); renderPerfil();
   toast('✓ Perfil salvo');
+}
+
+/* ---------------- exportar imagens (PNG) ---------------- */
+const IMGC = new Map();
+function loadImgFor(o){
+  if (!o) return Promise.resolve(null);
+  const key = (o.capa || '') + '|' + (o.capaUrl || '') + '|' + (o.capaV || 0);
+  if (!key.replace(/\|/g, '').replace(/0$/, '')) return Promise.resolve(null);
+  if (!IMGC.has(key)) IMGC.set(key, (async () => {
+    let b = await gameCoverBlob(o);
+    if (!b && o.capaUrl) b = await tryFetchImage(o.capaUrl);
+    if (!b) return null;
+    const url = URL.createObjectURL(b);
+    const img = new Image(); img.src = url;
+    try { await img.decode(); return img; } catch { return null; }
+  })());
+  return IMGC.get(key);
+}
+const FONT = '"Segoe UI", "Segoe UI Emoji", system-ui, sans-serif';
+function rr(ctx, x, y, w, h, r){ ctx.beginPath(); ctx.roundRect ? ctx.roundRect(x, y, w, h, r) : ctx.rect(x, y, w, h); }
+function drawCoverImg(ctx, img, x, y, w, h, r, titulo, posY = 50){
+  ctx.save(); rr(ctx, x, y, w, h, r); ctx.clip();
+  if (img) {
+    const s = Math.max(w / img.naturalWidth, h / img.naturalHeight);
+    const iw = img.naturalWidth * s, ih = img.naturalHeight * s;
+    ctx.drawImage(img, x + (w - iw) / 2, y + (h - ih) * (posY / 100), iw, ih);
+  } else {
+    let hsh = 0; for (const ch of String(titulo || '')) hsh = (hsh * 31 + ch.charCodeAt(0)) >>> 0;
+    const g = ctx.createLinearGradient(x, y, x + w, y + h);
+    g.addColorStop(0, `hsl(${hsh % 360} 45% 32%)`); g.addColorStop(1, `hsl(${(hsh + 60) % 360} 45% 16%)`);
+    ctx.fillStyle = g; ctx.fillRect(x, y, w, h);
+    ctx.fillStyle = '#fff'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    const fs = Math.max(11, w * 0.1); ctx.font = `700 ${fs}px ${FONT}`;
+    wrapText(ctx, titulo || '', x + w / 2, y + h / 2, w * 0.84, fs * 1.2, 4, true);
+  }
+  ctx.restore();
+}
+function wrapText(ctx, text, cx, y, maxW, lh, maxLines, centerV){
+  const words = String(text).split(/\s+/); const lines = []; let cur = '';
+  for (const w of words) { const t = cur ? cur + ' ' + w : w; if (ctx.measureText(t).width <= maxW || !cur) cur = t; else { lines.push(cur); cur = w; } }
+  if (cur) lines.push(cur);
+  let out = lines.slice(0, maxLines);
+  if (lines.length > maxLines) { let l = out[maxLines - 1]; while (l.length > 1 && ctx.measureText(l + '…').width > maxW) l = l.slice(0, -1); out[maxLines - 1] = l + '…'; }
+  const y0 = centerV ? y - (out.length - 1) * lh / 2 : y;
+  out.forEach((l, i) => ctx.fillText(l, cx, y0 + i * lh));
+  return out.length;
+}
+const ACC = () => getComputedStyle(document.documentElement).getPropertyValue('--acc').trim() || '#3b82f6';
+function rankColors(i){ return i === 0 ? ['#e8b923', '#1a1300'] : i === 1 ? ['#c3cbd6', '#15181d'] : i === 2 ? ['#cd8a4f', '#1b0f04'] : ['#ffffff', '#111111']; }
+
+/* arte em grade (listas e catálogo): fundo preto, título na cor do tema */
+async function drawGridArt(cv, { titulo, sub, itens, cols, nomes, ranked, notas }){
+  const W = 1600, pad = 70, gap = cols >= 10 ? 16 : cols >= 5 ? 26 : 36;
+  const cw = (W - pad * 2 - gap * (cols - 1)) / cols, ch = cw * 1.5;
+  const fsName = Math.max(15, Math.min(32, cw * 0.095)), lhName = fsName * 1.25;
+  const nameH = nomes ? lhName * 2 + 14 : 0;
+  const headH = sub ? 230 : 190;
+  const rows = Math.max(1, Math.ceil(itens.length / cols));
+  let H = Math.round(headH + rows * (ch + nameH) + (rows - 1) * gap + 110);
+  const MAXH = 16000, sc = H > MAXH ? MAXH / H : 1;
+  cv.width = Math.round(W * sc); cv.height = Math.round(H * sc);
+  const ctx = cv.getContext('2d'); ctx.setTransform(sc, 0, 0, sc, 0, 0);
+  ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H);
+  ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic';
+  ctx.fillStyle = ACC(); ctx.font = `800 ${titulo.length > 28 ? 58 : 72}px ${FONT}`;
+  wrapText(ctx, titulo, W / 2, 128, W - pad * 2, 76, 1);
+  if (sub) { ctx.fillStyle = '#8b93a5'; ctx.font = `500 30px ${FONT}`; ctx.fillText(sub, W / 2, 182); }
+  const imgs = await Promise.all(itens.map(it => loadImgFor(it.obj)));
+  itens.forEach((it, i) => {
+    const r = Math.floor(i / cols), c = i % cols;
+    const naLinha = Math.min(cols, itens.length - r * cols);
+    const offX = (cols - naLinha) * (cw + gap) / 2;
+    const x = pad + offX + c * (cw + gap), y = headH + r * (ch + nameH + gap);
+    const rad = Math.max(6, cw * 0.035);
+    ctx.save(); ctx.shadowColor = 'rgba(0,0,0,.6)'; ctx.shadowBlur = 24; ctx.shadowOffsetY = 8; ctx.fillStyle = '#111'; rr(ctx, x, y, cw, ch, rad); ctx.fill(); ctx.restore();
+    drawCoverImg(ctx, imgs[i], x, y, cw, ch, rad, it.titulo);
+    if (ranked) {
+      const bs = Math.max(30, cw * 0.17), [bg, fg] = rankColors(i);
+      ctx.save(); ctx.shadowColor = 'rgba(0,0,0,.55)'; ctx.shadowBlur = 10; ctx.fillStyle = bg; rr(ctx, x + bs * 0.25, y + bs * 0.25, bs, bs, bs * 0.24); ctx.fill(); ctx.restore();
+      ctx.fillStyle = fg; ctx.font = `800 ${bs * 0.52}px ${FONT}`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillText(String(i + 1), x + bs * 0.75, y + bs * 0.77);
+    }
+    if (notas && it.nota != null) {
+      const t = fmtNum(it.nota); ctx.font = `800 ${Math.max(16, cw * 0.1)}px ${FONT}`;
+      const bw = ctx.measureText(t).width + cw * 0.09, bh = Math.max(26, cw * 0.15);
+      ctx.save(); ctx.shadowColor = 'rgba(0,0,0,.55)'; ctx.shadowBlur = 10; ctx.fillStyle = notaColor(it.nota); rr(ctx, x + cw - bw - bh * 0.25, y + ch - bh - bh * 0.25, bw, bh, bh * 0.25); ctx.fill(); ctx.restore();
+      ctx.fillStyle = '#fff'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(t, x + cw - bw / 2 - bh * 0.25, y + ch - bh / 2 - bh * 0.25 + 1);
+    }
+    if (nomes) {
+      ctx.fillStyle = '#e5e7eb'; ctx.font = `600 ${fsName}px ${FONT}`; ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+      wrapText(ctx, it.titulo, x + cw / 2, y + ch + 12, cw, lhName, 2);
+    }
+  });
+  ctx.textBaseline = 'alphabetic'; ctx.textAlign = 'center'; ctx.fillStyle = '#3a4150'; ctx.font = `700 22px ${FONT}`;
+  ctx.fillText('C A T A L O G A M E S', W / 2, H - 48);
+}
+
+/* card do perfil (800 × 1200) */
+async function drawProfileCard(cv, o){
+  const W = 800, H = 1200; cv.width = W; cv.height = H;
+  const ctx = cv.getContext('2d'); ctx.setTransform(1, 0, 0, 1, 0, 0);
+  const acc = ACC(), S = perfilStats();
+  ctx.fillStyle = '#0b0d12'; ctx.fillRect(0, 0, W, H);
+  const heroH = o.capa ? 300 : 0;
+  if (o.capa) {
+    const img = await loadImgFor(perfil.hero);
+    if (img) drawCoverImg(ctx, img, 0, 0, W, heroH, 0, '', perfil.heroPos ?? 50);
+    else { const g = ctx.createLinearGradient(0, 0, W, heroH); g.addColorStop(0, acc); g.addColorStop(1, '#111'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, heroH); }
+    const fade = ctx.createLinearGradient(0, heroH - 160, 0, heroH); fade.addColorStop(0, 'rgba(11,13,18,0)'); fade.addColorStop(1, '#0b0d12');
+    ctx.fillStyle = fade; ctx.fillRect(0, heroH - 160, W, 161);
+  }
+  // blocos que vêm depois da imagem do topo (centralizados no espaço que sobra)
+  const blocos = [];
+  if (o.foto) blocos.push({ h: 168, draw: async y => {
+    const d = 160, cx = W / 2, cy = y + d / 2;
+    ctx.save(); ctx.beginPath(); ctx.arc(cx, cy, d / 2 + 7, 0, Math.PI * 2); ctx.fillStyle = '#0b0d12'; ctx.fill(); ctx.restore();
+    ctx.save(); ctx.beginPath(); ctx.arc(cx, cy, d / 2, 0, Math.PI * 2); ctx.clip();
+    const img = await loadImgFor(perfil.avatar);
+    if (img) drawCoverImg(ctx, img, cx - d / 2, cy - d / 2, d, d, 0, '');
+    else { ctx.fillStyle = '#1b212d'; ctx.fillRect(cx - d / 2, cy - d / 2, d, d); ctx.fillStyle = acc; ctx.font = `800 72px ${FONT}`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText((perfil.nome || 'G').charAt(0).toUpperCase(), cx, cy + 4); }
+    ctx.restore();
+    ctx.beginPath(); ctx.arc(cx, cy, d / 2 + 2, 0, Math.PI * 2); ctx.strokeStyle = acc; ctx.lineWidth = 4; ctx.stroke();
+  }, sobe: true });
+  if (o.nome && perfil.nome) blocos.push({ h: 56, draw: async y => { ctx.fillStyle = '#fff'; ctx.font = `800 42px ${FONT}`; ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic'; wrapText(ctx, perfil.nome, W / 2, y + 44, W - 80, 48, 1); } });
+  const top = perfil.top5.map(id => games.find(g => g.id === id)).filter(Boolean);
+  const temResto = top.length > 1;
+  if (o.top5 && top.length) blocos.push({ h: temResto ? 520 : 330, draw: async y => {
+    ctx.fillStyle = acc; ctx.font = `800 19px ${FONT}`; ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic';
+    ctx.fillText('T O P   5   F A V O R I T O S', W / 2, y + 26);
+    const imgs = await Promise.all(top.map(g => loadImgFor(g)));
+    const draw1 = (i, x, yy, w) => {
+      const h = w * 1.5, r = 12;
+      ctx.save(); ctx.shadowColor = 'rgba(0,0,0,.6)'; ctx.shadowBlur = 22; ctx.shadowOffsetY = 8; ctx.fillStyle = '#111'; rr(ctx, x, yy, w, h, r); ctx.fill(); ctx.restore();
+      drawCoverImg(ctx, imgs[i], x, yy, w, h, r, top[i].titulo);
+      const [bg, fg] = rankColors(i), bs = i === 0 ? 40 : 32;
+      ctx.fillStyle = bg; rr(ctx, x + 10, yy + h - bs - 10, bs, bs, 8); ctx.fill();
+      ctx.fillStyle = fg; ctx.font = `800 ${bs * 0.55}px ${FONT}`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(String(i + 1), x + 10 + bs / 2, yy + h - bs / 2 - 9);
+      if (i === 0) { ctx.save(); ctx.strokeStyle = '#e8b923'; ctx.lineWidth = 5; rr(ctx, x - 2, yy - 2, w + 4, h + 4, r + 2); ctx.stroke(); ctx.restore(); }
+    };
+    // 1º grande no meio, coroa em cima; os outros 4 numa fileira embaixo
+    const w1 = 170, x1 = (W - w1) / 2, y1 = y + 72;
+    ctx.font = `46px ${FONT}`; ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic'; ctx.fillText('👑', W / 2, y1 - 4);
+    draw1(0, x1, y1, w1);
+    const resto = top.slice(1), w2 = 118, g2 = 16;
+    const tot = resto.length * w2 + (resto.length - 1) * g2, x0 = (W - tot) / 2, y2 = y1 + w1 * 1.5 + 18;
+    resto.forEach((_, k) => draw1(k + 1, x0 + k * (w2 + g2), y2, w2));
+  } });
+  const stats = [];
+  if (o.ano) stats.push([String(games.filter(g => g.status === 'terminado' && g.ano === ANO_ATUAL).length), `jogos em ${ANO_ATUAL}`]);
+  if (o.total) stats.push([String(S.nJogos), 'jogos ao todo']);
+  if (o.plat && S.plats[0]) stats.push([S.plats[0][0], 'plataforma mais jogada']);
+  if (o.horas && S.horas) stats.push([fmtNum(Math.round(S.horas)), 'horas jogadas']);
+  if (o.media && S.media != null) stats.push([fmtNum(Math.round(S.media * 10) / 10), 'nota média']);
+  if (stats.length) blocos.push({ h: 104, draw: async y => {
+    const n = stats.length, gp = 14, bw = (W - 60 - gp * (n - 1)) / n;
+    stats.forEach(([v, l], i) => {
+      const x = 30 + i * (bw + gp);
+      ctx.fillStyle = '#161b25'; rr(ctx, x, y, bw, 98, 14); ctx.fill();
+      ctx.fillStyle = '#fff'; ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic';
+      let fs = v.length > 6 ? 26 : 38; ctx.font = `800 ${fs}px ${FONT}`;
+      while (ctx.measureText(v).width > bw - 20 && fs > 14) { fs -= 2; ctx.font = `800 ${fs}px ${FONT}`; }
+      ctx.fillText(v, x + bw / 2, y + 54);
+      ctx.fillStyle = '#8b93a5'; ctx.font = `600 ${n > 4 ? 13 : 15}px ${FONT}`; wrapText(ctx, l, x + bw / 2, y + 80, bw - 12, 16, 1);
+    });
+  } });
+  // posiciona: a foto "sobe" um pouco por cima da imagem do topo
+  const GAP = 14, total = blocos.reduce((s, b) => s + b.h, 0) + GAP * (blocos.length - 1);
+  let y = heroH ? heroH - (blocos[0] && blocos[0].sobe ? 105 : 0) : 70;
+  const sobra = H - 56 - y - total;
+  if (sobra > 0) y += Math.min(sobra / 2, heroH ? 24 : sobra / 2);
+  for (const b of blocos) { await b.draw(y); y += b.h + GAP; }
+  ctx.fillStyle = '#3a4150'; ctx.font = `700 16px ${FONT}`; ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic';
+  ctx.fillText('C A T A L O G A M E S', W / 2, H - 26);
+}
+
+/* modal de exportar */
+const EX = { mode: null, o: {}, nome: 'Catalogames', token: 0 };
+function exCols(n){ return n <= 3 ? 3 : n <= 15 ? 5 : 10; }
+function openExport(mode){
+  EX.mode = mode;
+  if (mode === 'perfil') {
+    EX.o = { capa: true, foto: true, nome: true, top5: true, ano: true, total: true, plat: true, horas: false, media: false };
+    $('#exTitle').textContent = '📤 Exportar card do perfil';
+    $('#exSub').textContent = 'Imagem 800 × 1200 px · desmarque o que não quiser';
+  } else if (mode === 'lista') {
+    const l = lists.find(x => x.id === openListId); if (!l) return;
+    EX.o = { listId: l.id, ranked: !!l.ranqueada, nomes: !l.semNomes, cols: exCols(l.itens.length) };
+    $('#exTitle').textContent = `📤 Exportar “${l.nome}”`;
+    $('#exSub').textContent = 'Fundo preto, título na cor do tema';
+  } else {
+    const anos = [...new Set(games.map(g => g.ano).filter(Boolean))].sort((a, b) => b - a);
+    EX.o = { tipo: 'ano', ano: String(anos[0] || ''), plat: '', gen: '', nomes: true, notas: true, cols: 5 };
+    $('#exTitle').textContent = '📤 Exportar jogos';
+    $('#exSub').textContent = 'Escolha um filtro: ano, plataforma ou gênero';
+  }
+  renderExOpts(); openModal('#exBg'); drawEx();
+}
+function exGames(){
+  const o = EX.o;
+  let arr = games.filter(g => o.tipo === 'ano' ? String(g.ano || '') === o.ano : o.tipo === 'plat' ? g.plataforma === o.plat : (g.generos || []).includes(o.gen));
+  if (o.tipo !== 'ano') arr = clusterize(arr).map(c => c.g);   // jogadas repetidas viram uma só
+  return arr.sort((a, b) => (b.nota ?? -1) - (a.nota ?? -1) || cmpTxt(a.titulo, b.titulo));
+}
+function renderExOpts(){
+  const o = EX.o, chk = (k, t) => `<label class="chk"><input type="checkbox" data-k="${k}" ${o[k] ? 'checked' : ''}> ${t}</label>`;
+  const cols = `<div><h4>Colunas</h4><div class="ex-seg">${[3, 5, 10].map(n => `<button type="button" data-cols="${n}" class="${o.cols === n ? 'on' : ''}">${n}</button>`).join('')}</div></div>`;
+  let h = '';
+  if (EX.mode === 'perfil') {
+    h = `<div><h4>Topo</h4>${chk('capa', 'Imagem do topo')}${chk('foto', 'Foto de perfil')}${chk('nome', 'Nome')}</div>
+      <div><h4>Meio</h4>${chk('top5', 'Top 5 favoritos')}</div>
+      <div><h4>Números embaixo</h4>${chk('ano', `Jogos em ${ANO_ATUAL}`)}${chk('total', 'Jogos ao todo')}${chk('plat', 'Plataforma mais jogada')}${chk('horas', 'Horas jogadas')}${chk('media', 'Nota média')}</div>`;
+  } else if (EX.mode === 'lista') {
+    h = `<div><h4>Opções</h4>${chk('ranked', '🏅 Ranqueado (números nas capas)')}${chk('nomes', '🏷️ Nome do jogo embaixo da capa')}</div>${cols}`;
+  } else {
+    const anos = [...new Set(games.map(g => g.ano).filter(Boolean))].sort((a, b) => b - a);
+    const plats = [...new Set(games.map(g => g.plataforma).filter(Boolean))].sort(cmpTxt);
+    const gens = sortGens(games.flatMap(g => g.generos || []));
+    if (!o.plat) o.plat = plats[0] || ''; if (!o.gen) o.gen = gens[0] || '';
+    const opt = (arr, v) => arr.map(x => `<option value="${esc(String(x))}" ${String(x) === String(v) ? 'selected' : ''}>${esc(String(x))}</option>`).join('');
+    const rad = (t, lbl, sel) => `<label><input type="radio" name="extipo" value="${t}" ${o.tipo === t ? 'checked' : ''}> ${lbl}</label>${o.tipo === t ? sel : ''}`;
+    h = `<div><h4>Filtro (escolha um)</h4><div class="ex-radio">
+        ${rad('ano', '📅 Jogos que joguei num ano', `<select data-sel="ano">${opt(anos, o.ano)}</select>`)}
+        ${rad('plat', '🎮 Jogos de uma plataforma', `<select data-sel="plat">${opt(plats, o.plat)}</select>`)}
+        ${rad('gen', '🏷️ Jogos de um gênero', `<select data-sel="gen">${opt(gens, o.gen)}</select>`)}
+      </div></div>
+      <div><h4>Opções</h4>${chk('nomes', 'Nome do jogo embaixo da capa')}${chk('notas', 'Mostrar a nota')}</div>${cols}`;
+  }
+  $('#exOpts').innerHTML = h;
+}
+async function drawEx(){
+  const tk = ++EX.token, cv = document.createElement('canvas'), o = EX.o;
+  $('#exPrev').classList.add('loading');
+  try {
+    if (EX.mode === 'perfil') { await drawProfileCard(cv, o); EX.nome = `Perfil ${perfil.nome || ''}`.trim(); }
+    else if (EX.mode === 'lista') {
+      const l = lists.find(x => x.id === o.listId);
+      await drawGridArt(cv, { titulo: l.nome, sub: plural(l.itens.length, 'jogo'), itens: l.itens.map(it => ({ titulo: it.titulo, obj: it })), cols: o.cols, nomes: o.nomes, ranked: o.ranked });
+      EX.nome = l.nome;
+    } else {
+      const arr = exGames();
+      const titulo = o.tipo === 'ano' ? `Jogos de ${o.ano}` : o.tipo === 'plat' ? `Jogos de ${o.plat}` : `Jogos de ${o.gen}`;
+      await drawGridArt(cv, { titulo, sub: plural(arr.length, 'jogo'), itens: arr.map(g => ({ titulo: g.titulo, obj: g, nota: g.nota })), cols: o.cols, nomes: o.nomes, notas: o.notas });
+      EX.nome = titulo;
+    }
+  } catch (e) { console.error(e); }
+  if (tk !== EX.token) return;
+  const dst = $('#exCanvas'); dst.width = cv.width; dst.height = cv.height; dst.getContext('2d').drawImage(cv, 0, 0);
+  $('#exSize').textContent = `${cv.width} × ${cv.height} px`;
+  $('#exPrev').classList.remove('loading');
+  $('#exGo').disabled = EX.mode === 'cat' && !exGames().length;
+}
+async function doExport(){
+  const blob = await new Promise(r => $('#exCanvas').toBlob(r, 'image/png'));
+  if (!blob) return toast('Não consegui gerar a imagem');
+  const f = await api.savePng(EX.nome, new Uint8Array(await blob.arrayBuffer()));
+  if (!f) return;
+  closeModals(true);
+  toast('✓ Imagem salva', 3000);
+  api.showInFolder(f);
 }
 
 /* ---------------- catálogo ---------------- */
@@ -1571,7 +1900,36 @@ function setNota(v){
 function renderGenChips(){
   const all = sortGens([...genList(), ...form.gens]);
   $('#genChips').innerHTML = all.map(t => `<span class="chip ${form.gens.has(t) ? 'on' : ''}" data-g="${esc(t)}">${esc(t)}</span>`).join('')
-    + `<input class="chip-add" id="genNew" placeholder="+ outro gênero">`;
+    + `<span class="chip newg hid" id="genCreate"></span>`;
+  filterGenChips();
+}
+/* digitar no campo de gênero filtra os chips (e oferece criar um novo) */
+function filterGenChips(){
+  const q = norm($('#genNew').value).trim();
+  let exato = false, vis = 0;
+  $('#genChips').querySelectorAll('.chip[data-g]').forEach(c => {
+    const t = norm(c.dataset.g);
+    const ok = !q || t.includes(q);
+    if (q && t === q) exato = true;
+    c.classList.toggle('hid', !ok); if (ok) vis++;
+  });
+  const cr = $('#genCreate');
+  if (cr) { cr.classList.toggle('hid', !q || exato); cr.textContent = `＋ criar “${$('#genNew').value.trim()}”`; }
+  return { vis, exato };
+}
+function genEnter(){
+  const t = $('#genNew').value.trim().replace(/,$/, ''); if (!t) return;
+  const chips = [...$('#genChips').querySelectorAll('.chip[data-g]:not(.hid)')];
+  const q = norm(t);
+  const exato = chips.find(c => cmpTxt(c.dataset.g, t) === 0);
+  // Enter escolhe o gênero que bate (o que começa com o texto primeiro); só cria se nenhum bater
+  const alvo = exato || chips.find(c => norm(c.dataset.g).startsWith(q)) || chips[0] || null;
+  if (alvo) { const g = alvo.dataset.g; form.gens.has(g) ? form.gens.delete(g) : form.gens.add(g); }
+  else {
+    form.gens.add(t);
+    if (!genList().some(x => cmpTxt(x, t) === 0)) { CFG.generos = sortGens([...genList(), t]); saveConfig(); }
+  }
+  $('#genNew').value = ''; renderGenChips(); $('#genNew').focus();
 }
 function openForm(id){
   const g = id ? games.find(x => x.id === id) : null;
@@ -2040,7 +2398,10 @@ function renderCfg(){
 }
 function renderCfgGens(){
   const uso = t => games.filter(g => (g.generos || []).some(x => cmpTxt(x, t) === 0)).length;
-  $('#cfgGens').innerHTML = genList().map(t => { const n = uso(t); return `<span class="gchip">${esc(t)}${n ? ` <small>${n}</small>` : ''}<button type="button" data-del="${esc(t)}" title="Excluir “${esc(t)}”">✕</button></span>`; }).join('')
+  const q = norm($('#cfgGenNew').value).trim();
+  const lista = genList().filter(t => !q || norm(t).includes(q));
+  if (q && !lista.length) { $('#cfgGens').innerHTML = `<span style="color:var(--dim);font-size:13px">Nenhum gênero com “${esc($('#cfgGenNew').value.trim())}”. Aperte Enter pra criar.</span>`; return; }
+  $('#cfgGens').innerHTML = lista.map(t => { const n = uso(t); return `<span class="gchip">${esc(t)}${n ? ` <small>${n}</small>` : ''}<button type="button" data-del="${esc(t)}" title="Excluir “${esc(t)}”">✕</button></span>`; }).join('')
     || '<span style="color:var(--dim);font-size:13px">Nenhum gênero. Adicione abaixo.</span>';
 }
 function addGenre(){
@@ -2067,7 +2428,71 @@ async function delGenre(t){
   renderCfgGens();
   toast(`Gênero “${t}” excluído${tirarDosJogos ? ` de ${plural(usados.length, 'jogo')}` : ''}`);
 }
-function openCfg(){ renderCfg(); renderCfgGens(); openModal('#cfgBg'); }
+function openCfg(){ renderCfg(); renderCfgGens(); renderUpd(); openModal('#cfgBg'); }
+
+/* ---------------- atualizações (GitHub) ---------------- */
+const UPD = { info: null, baixando: false };
+function miniMD(md){
+  const linhas = esc(md || '').replace(/\r/g, '').split('\n');
+  let html = '', ul = false;
+  const inline = t => t.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>').replace(/`(.+?)`/g, '<code>$1</code>').replace(/\*(.+?)\*/g, '<i>$1</i>');
+  for (const l0 of linhas) {
+    const l = l0.trim();
+    if (/^[-*]\s+/.test(l)) { if (!ul) { html += '<ul>'; ul = true; } html += `<li>${inline(l.replace(/^[-*]\s+/, ''))}</li>`; continue; }
+    if (ul) { html += '</ul>'; ul = false; }
+    if (!l) continue;
+    if (/^#{1,6}\s/.test(l)) html += `<h5>${inline(l.replace(/^#+\s*/, ''))}</h5>`;
+    else if (/^&gt;\s?/.test(l)) html += `<blockquote>${inline(l.replace(/^&gt;\s?/, ''))}</blockquote>`;
+    else if (/^\d+\.\s/.test(l)) html += `<div>${inline(l)}</div>`;
+    else html += `<div>${inline(l)}</div>`;
+  }
+  return html + (ul ? '</ul>' : '');
+}
+function renderUpd(){
+  $('#updCur').textContent = APPVER || '?';
+  $('#updAuto').checked = CFG.autoUpdate !== false;
+  const r = UPD.info, box = $('#updRes');
+  if (!r) { box.innerHTML = ''; return; }
+  if (r.carregando) { box.innerHTML = 'Procurando versão nova no GitHub…'; return; }
+  if (r.erro === 'sem-release') { box.innerHTML = 'Não encontrei nenhuma versão publicada. Se o repositório do GitHub estiver <b>privado</b>, o app não consegue ver as versões: ele precisa estar público.'; return; }
+  if (r.erro) { box.innerHTML = `Não consegui verificar agora (${esc(r.erro === 'rede' ? 'sem conexão' : r.detalhe || r.erro)}). Tente de novo mais tarde.`; return; }
+  if (!r.nova) { box.innerHTML = `✓ Você já está na versão mais nova (${esc(r.atual)}).`; return; }
+  box.innerHTML = `<div class="card-upd"><h4>🎉 Versão ${esc(r.versao)} disponível</h4>
+    <div class="upd-notes">${miniMD(r.notas) || 'Sem descrição.'}</div>
+    ${r.temInstalador
+      ? `<button type="button" class="btn primary sm" id="updGo"${UPD.baixando ? ' disabled' : ''}>⬇ Baixar e instalar${r.tamanho ? ` (${Math.round(r.tamanho / 1048576)} MB)` : ''}</button>`
+      : '<span>Essa versão ainda não tem o instalador anexado.</span>'}
+    <button type="button" class="link" id="updPage" style="margin-left:10px">Ver no GitHub</button>
+    <div class="prog" id="updProg" style="${UPD.baixando ? '' : 'display:none'}"><i></i></div>
+    <div id="updMsg" style="font-size:12px;color:var(--mut);margin-top:6px"></div></div>`;
+}
+async function checkUpdate(silencioso){
+  if (!silencioso) { UPD.info = { carregando: true }; renderUpd(); }
+  const r = await api.updateCheck();
+  UPD.info = r;
+  if (!silencioso || $('#cfgBg').classList.contains('open')) renderUpd();
+  const tem = !r.erro && r.nova;
+  $('#cfgBtn').querySelector('.dot')?.remove();
+  if (tem) $('#cfgBtn').insertAdjacentHTML('beforeend', '<span class="dot"></span>');
+  if (silencioso && tem) toast(`🎉 Versão ${r.versao} disponível! Veja em ⋯ Configurações`, 6000);
+  return r;
+}
+async function installUpdate(){
+  if (UPD.baixando) return;
+  UPD.baixando = true; renderUpd();
+  $('#updMsg').textContent = 'Baixando o instalador…';
+  const r = await api.updateInstall();
+  if (r && r.ok) { $('#updMsg').textContent = 'Pronto! Abrindo o instalador. O Catalogames vai fechar pra atualizar.'; return; }
+  UPD.baixando = false; renderUpd();
+  $('#updMsg').textContent = '⚠ ' + ((r && r.erro) || 'Não consegui baixar.');
+}
+api.onUpdateProgress(({ recebido, total }) => {
+  const b = $('#updProg i'); if (!b) return;
+  $('#updProg').style.display = '';
+  const pct = total ? Math.min(100, recebido / total * 100) : 0;
+  b.style.width = pct + '%';
+  $('#updMsg').textContent = `Baixando… ${Math.round(recebido / 1048576)} de ${Math.round(total / 1048576)} MB`;
+});
 function setTema(t){ CFG.tema = t; applyTheme(); saveConfig(); renderCfg(); }
 function setCor(c, rerender = true){ CFG.cor = c; applyAccent(); saveConfig(); if (rerender) renderCfg(); }
 
@@ -2243,8 +2668,26 @@ $('#fiGroup').addEventListener('change', e => { view.group = e.target.value; sav
 $('#clearF').onclick = clearFilters;
 $('#cardSize').addEventListener('input', e => { view.card = +e.target.value; document.documentElement.style.setProperty('--card', view.card + 'px'); saveView(); });
 $('#cfgBtn').onclick = openCfg;
+$('#catExport').onclick = () => { if (!games.length) return toast('Cadastre jogos primeiro'); openExport('cat'); };
+$('#lvExport').onclick = () => { if (openListId) openExport('lista'); };
+$('#exGo').onclick = () => doExport().catch(e => reportError('Não consegui exportar a imagem.', e));
+$('#exOpts').addEventListener('change', e => {
+  const t = e.target;
+  if (t.dataset.k) EX.o[t.dataset.k] = t.checked;
+  if (t.name === 'extipo') { EX.o.tipo = t.value; renderExOpts(); }
+  if (t.dataset.sel) EX.o[t.dataset.sel] = t.value;
+  drawEx();
+});
+$('#exOpts').addEventListener('click', e => { const b = e.target.closest('[data-cols]'); if (!b) return; EX.o.cols = +b.dataset.cols; renderExOpts(); drawEx(); });
+$('#updCheck').onclick = () => checkUpdate(false);
+$('#updAuto').addEventListener('change', e => { CFG.autoUpdate = e.target.checked; saveConfig(); });
+$('#updRes').addEventListener('click', e => {
+  if (e.target.id === 'updGo') installUpdate();
+  if (e.target.id === 'updPage' && UPD.info && UPD.info.pagina) api.openExternal(UPD.info.pagina);
+});
 $('#perfilMain').addEventListener('click', e => {
   if (e.target.closest('#pfEdit')) return openPerfilEdit();
+  if (e.target.closest('#pfExport')) return openExport('perfil');
   const rm = e.target.closest('[data-rm]');
   if (rm) { e.stopPropagation(); perfil.top5 = perfil.top5.filter(id => id !== rm.dataset.rm); persist().then(renderPerfil); return; }
   const t = e.target.closest('#top5 .tile'); if (t) return openPick(+t.dataset.slot);
@@ -2261,13 +2704,26 @@ $('#pfAvPick').onclick = () => { PF.alvo = 'avatar'; $('#pfFile').click(); };
 $('#pfHeroPick').onclick = () => { PF.alvo = 'hero'; $('#pfFile').click(); };
 $('#pfAvDel').onclick = () => { PF.avatar = 'del'; pfPreview(); };
 $('#pfHeroDel').onclick = () => { PF.hero = 'del'; pfPreview(); };
-$('#pfFile').addEventListener('change', e => { const f = e.target.files[0]; e.target.value = ''; if (!f || !f.type.startsWith('image/')) return; PF[PF.alvo] = f; pfPreview(); });
+$('#pfHeroPos').addEventListener('input', e => { PF.pos = +e.target.value; $('#pfHeroPrev').style.setProperty('--hp', PF.pos + '%'); });
+(() => { // arrastar a imagem do topo pra cima/baixo
+  let y0 = null, p0 = 50;
+  $('#pfHeroPrev').addEventListener('pointerdown', e => { if (!e.target.closest('img')) return; y0 = e.clientY; p0 = PF.pos; e.target.setPointerCapture(e.pointerId); e.preventDefault(); });
+  $('#pfHeroPrev').addEventListener('pointermove', e => {
+    if (y0 == null) return;
+    PF.pos = Math.max(0, Math.min(100, p0 - (e.clientY - y0) * 0.5));
+    $('#pfHeroPrev').style.setProperty('--hp', PF.pos + '%'); $('#pfHeroPos').value = PF.pos;
+  });
+  $('#pfHeroPrev').addEventListener('pointerup', () => { y0 = null; });
+  $('#pfHeroPrev').addEventListener('pointercancel', () => { y0 = null; });
+})();
+$('#pfFile').addEventListener('change', e => { const f = e.target.files[0]; e.target.value = ''; if (!f || !f.type.startsWith('image/')) return; PF[PF.alvo] = f; if (PF.alvo === 'hero') PF.pos = 50; pfPreview(); });
 $('#pfNome').addEventListener('input', () => { if (!(PF.avatar instanceof Blob) && !perfil.avatar.capa) pfPreview(); });
 $('#pfSave').onclick = () => savePerfil().catch(err => reportError('Não consegui salvar o perfil.', err));
 $('#cfgImpList').onclick = () => $('#impListIn').click();
 $('#impListIn').addEventListener('change', e => { const f = e.target.files[0]; e.target.value = ''; if (f) importGameListFile(f); });
 $('#cfgGenAdd').onclick = addGenre;
 $('#cfgGenNew').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); addGenre(); } });
+$('#cfgGenNew').addEventListener('input', renderCfgGens);
 $('#cfgGens').addEventListener('click', e => { const b = e.target.closest('button[data-del]'); if (b) delGenre(b.dataset.del); });
 $('#cfgSgKey').addEventListener('change', e => saveSgKey(e.target.value).then(() => toast('Chave do SteamGridDB salva')));
 $('#cfgSgShow').onclick = () => { const i = $('#cfgSgKey'); i.type = i.type === 'password' ? 'text' : 'password'; };
@@ -2341,17 +2797,15 @@ $('#fStatus').addEventListener('change', e => {
   else if (e.target.value !== 'quero' && !$('#fAno').value) $('#fAno').value = ANO_ATUAL;
 });
 $('#genChips').addEventListener('click', e => {
-  const c = e.target.closest('.chip'); if (!c) return;
+  if (e.target.closest('#genCreate')) return genEnter();
+  const c = e.target.closest('.chip[data-g]'); if (!c) return;
   const t = c.dataset.g; form.gens.has(t) ? form.gens.delete(t) : form.gens.add(t);
   c.classList.toggle('on', form.gens.has(t));
 });
-$('#genChips').addEventListener('keydown', e => {
-  if (e.target.id !== 'genNew' || (e.key !== 'Enter' && e.key !== ',')) return;
-  e.preventDefault();
-  const t = e.target.value.trim().replace(/,$/, ''); if (!t) return;
-  form.gens.add(t);
-  if (!genList().some(x => cmpTxt(x, t) === 0)) { CFG.generos = sortGens([...genList(), t]); saveConfig(); }
-  renderGenChips(); $('#genNew').focus();
+$('#genNew').addEventListener('input', filterGenChips);
+$('#genNew').addEventListener('keydown', e => {
+  if (e.key === 'Enter' || e.key === ',') { e.preventDefault(); genEnter(); }
+  else if (e.key === 'Escape' && e.target.value) { e.preventDefault(); e.stopPropagation(); e.target.value = ''; filterGenChips(); }
 });
 
 // editor de lista

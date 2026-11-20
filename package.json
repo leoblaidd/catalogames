@@ -1,11 +1,11 @@
 {
   "name": "catalogames",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "description": "Catálogo de jogos zerados, com listas e capas",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "dist": "electron-builder --win nsis --x64"
+    "dist": "node build/fazer-instalador.js"
   },
   "author": "Leandro",
   "devDependencies": {

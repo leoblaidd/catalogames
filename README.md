@@ -28,7 +28,7 @@ O app tem três abas lado a lado: **🎮 Catálogo**, **📚 Listas** e **👤 P
   - Ao cadastrar, o app sugere o jogo e puxa nota, lançamento, gêneros e capa. Você só ajusta o ano.
   - Nota, lançamento, gêneros e capa ficam sempre iguais em todas as jogadas.
   - Fora do agrupamento por ano terminado, as jogadas viram uma pilha de capas. Passando o mouse, elas se abrem para o lado.
-- Gêneros em ordem alfabética, com lista editável nas configurações.
+- Gêneros em ordem alfabética, com busca: digite pra filtrar ou criar um novo. A lista é editável nas configurações.
 - **Importar uma lista de jogos** de um arquivo `.txt` ou `.md`, um por linha: `Nome - ano que jogou - ano do jogo - plataforma - nota`. O que não estiver no padrão é pulado, e o app mostra uma prévia antes de importar. Os jogos importados aparecem com borda colorida até você completar capa, horas e gêneros.
 
 ### Perfil
@@ -36,6 +36,16 @@ O app tem três abas lado a lado: **🎮 Catálogo**, **📚 Listas** e **👤 P
 - Números: jogos catalogados, listas e horas jogadas.
 - **Top 5 favoritos**, com coroa no 1º. Clique para escolher e arraste para reordenar.
 - Painéis com plataformas mais jogadas, jogos terminados por ano, o mais rejogado, nota média e gênero favorito.
+- Dá pra ajustar a posição da imagem do topo, arrastando ou pelo controle.
+
+### Exportar imagens (PNG)
+- **Card do perfil** (800 × 1200): foto, um pouco da imagem do topo, nome, Top 5 no centro e números como jogos do ano, jogos ao todo e plataforma mais jogada. Você desmarca o que não quiser antes de exportar.
+- **Lista:** fundo preto, nome da lista na cor do tema, capas grandes em 3, 5 ou 10 colunas, com ou sem ranking e nomes.
+- **Catálogo:** os jogos de um ano, de uma plataforma ou de um gênero (um filtro por vez), com nota e nomes opcionais.
+- Sempre com prévia antes, e você escolhe onde salvar.
+
+### Atualizações
+- Em Configurações, o botão **Verificar atualização** procura uma versão nova nas Releases deste repositório. Ele baixa o instalador e abre sozinho. Também dá pra deixar ele verificar toda vez que o app abre.
 
 ### Listas e rankings
 - Crie listas como "Top 10 RPGs" ou "Musous favoritos", com ou sem numeração. O top 3 aparece em ouro, prata e bronze.
@@ -94,7 +104,7 @@ Feito com [Electron](https://www.electronjs.org/). A interface inteira está em 
 ```bash
 npm install
 npm start          # abre o app em modo desenvolvimento
-npm run dist       # gera o instalador do Windows em dist/
+npm run dist       # gera o instalador do Windows em dist/ (NSIS, sem precisar de Wine)
 ```
 
 | Arquivo | O que faz |
@@ -102,11 +112,20 @@ npm run dist       # gera o instalador do Windows em dist/
 | `app/index.html` | A interface toda: catálogo, listas, modais, temas |
 | `main.js` | Processo principal: janela, leitura e gravação em `dados\`, downloads de imagens, API do SteamGridDB |
 | `preload.js` | Ponte segura entre a interface e o disco |
-| `build/installer.nsh` | Ajustes do instalador NSIS que protegem a pasta `dados` |
+| `build/instalador.nsi` | Script do instalador (NSIS). Instala por cima mantendo a pasta `dados` |
+| `build/fazer-instalador.js` | Monta o app e compila o instalador |
 
 ---
 
 ## 📜 Versões
+
+### 1.6.0
+- Exportar PNG: card do perfil, listas e catálogo (por ano, plataforma ou gênero), com prévia.
+- Verificar atualização direto pelas Releases do GitHub, com download e instalação.
+- Ajuste da posição da imagem do topo do perfil.
+- Capas do Top 5 maiores, acompanhando a largura da tela.
+- Busca nos gêneros: digitar filtra os gêneros, e Enter marca ou cria.
+- Saiu o aviso "role pra cima" da imagem do topo.
 
 ### 1.5.0
 - Abas lado a lado: Catálogo, Listas e **Perfil**.
