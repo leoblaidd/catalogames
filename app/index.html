@@ -56,23 +56,27 @@ textarea{resize:vertical}
 
 /* ---------- topo ---------- */
 header.top{position:sticky;top:0;z-index:20;background:var(--hdr);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
-.bar{display:flex;align-items:center;gap:12px;padding:12px 22px}
+.bar{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:16px;padding:12px 22px}
+.bar-l{display:flex;align-items:center;gap:10px;min-width:0}
+.bar-l .logo{margin-right:8px}
+.bar-r{display:flex;justify-content:flex-end;min-width:0}
 .logo{font-weight:800;letter-spacing:.12em;font-size:18px;display:flex;align-items:center;gap:8px;color:var(--txt)}
 .logo b{color:var(--acc2)}
 .logo svg{width:24px;height:24px;color:var(--acc2)}
-.stats{color:var(--mut);font-size:13px;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.stats{color:var(--mut);font-size:13px;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:right}
 .stats strong{color:var(--txt);font-weight:600}
 .icobtn{position:relative;width:36px;height:36px;padding:0;justify-content:center;font-size:16px}
 .icobtn svg{width:17px;height:17px}
 .icobtn.on{color:var(--acc2);border-color:var(--acc);background:var(--accsolid)}
 .icobtn .dot{position:absolute;top:4px;right:4px;width:9px;height:9px;border-radius:50%;background:var(--warn);box-shadow:0 0 0 2px var(--bg)}
-.tools{display:flex;flex-wrap:wrap;gap:8px;padding:0 22px 12px;align-items:center}
-.search{flex:1 1 220px;max-width:320px;position:relative}
+.tools{display:flex;flex-wrap:wrap;gap:7px;padding:0 22px 12px;align-items:center}
+.tools .btn{white-space:nowrap}
+.search{flex:1 1 180px;max-width:300px;position:relative}
 .search input{padding-left:32px}
 .search svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);width:15px;height:15px;color:var(--dim)}
-.tools select{width:auto;padding:7px 10px;font-size:13px;background:var(--bg2)}
+.tools select{width:auto;max-width:168px;padding:7px 26px 7px 9px;font-size:13px;background-color:var(--bg2);text-overflow:ellipsis}
 .tools select.on{border-color:var(--acc);background:var(--accsolid)}
-.toggle{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--mut);border:1px solid var(--line);border-radius:8px;padding:6px 10px;cursor:pointer;user-select:none;background:var(--bg2)}
+.toggle{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--mut);border:1px solid var(--line);border-radius:8px;padding:6px 10px;white-space:nowrap;cursor:pointer;user-select:none;background:var(--bg2)}
 .toggle.on{color:var(--txt);border-color:var(--acc);background:var(--accsolid)}
 
 /* ---------- grade de jogos ---------- */
@@ -172,6 +176,23 @@ body.ctrl #main .card,body.selecting #main .card{cursor:copy}
 .sp{flex:1}
 
 .form-body{display:grid;grid-template-columns:230px 1fr;gap:22px;padding:20px}
+#form.modal{max-width:1080px}
+#form .form-body{grid-template-columns:250px 1fr;gap:28px;padding:22px 26px}
+#form .fields{grid-template-columns:repeat(6,minmax(0,1fr));gap:14px 16px}
+#form .fields .f{grid-column:span 2}
+#form .fields .f.full{grid-column:1/-1}
+#form .fields .f.half{grid-column:span 3}
+.sec-t{grid-column:1/-1;font-size:11.5px;font-weight:700;color:var(--dim);text-transform:uppercase;letter-spacing:.09em;border-top:1px solid var(--line);padding-top:14px;margin-top:4px}
+.sec-t:first-child{border-top:0;padding-top:0;margin-top:0}
+.bn-row{display:flex;gap:14px;align-items:stretch}
+.bn-prev{width:250px;flex:none;aspect-ratio:96/31;border-radius:10px;overflow:hidden;background:var(--bg);border:2px dashed var(--line);display:flex;align-items:center;justify-content:center;color:var(--dim);font-size:12px;position:relative}
+.bn-prev.has{border-style:solid;border-color:var(--line)}
+.bn-prev img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.bn-acts{flex:1;display:flex;flex-direction:column;gap:8px;min-width:0}
+.bn-acts .sgbtn{margin-top:0;width:100%}
+.bn-line{display:flex;gap:6px}
+.bn-line .btn{flex:1;justify-content:center}
+.bn-acts .url-row{margin-top:0}
 .drop{aspect-ratio:2/3;border:2px dashed var(--line);border-radius:var(--r);position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;background:var(--bg);outline:none;transition:.15s;cursor:pointer}
 .drop.over,.drop:focus{border-color:var(--acc);background:var(--accbg)}
 .drop .prev{position:absolute;inset:0}
@@ -232,6 +253,20 @@ body.ctrl #main .card,body.selecting #main .card{cursor:copy}
 
 /* detalhe */
 .detail{display:grid;grid-template-columns:260px 1fr;gap:24px;padding:22px}
+/* tela do jogo: banner em cima, capa subindo por cima dele */
+#detailBg{align-items:center;padding:20px}
+.modal.dt{max-width:1060px;position:relative;overflow:hidden;display:flex;flex-direction:column;max-height:calc(100vh - 40px)}
+.dt-hero{position:relative;height:270px;flex:none;background:var(--bg3);overflow:hidden}
+.dt-hero img{width:100%;height:100%;object-fit:cover;display:block}
+.dt-hero img.blur{filter:blur(26px) brightness(.6) saturate(1.25);transform:scale(1.25)}
+.dt-hero::after{content:"";position:absolute;inset:auto 0 0 0;height:150px;background:linear-gradient(transparent,var(--bg2))}
+.dt-x{position:absolute;top:14px;left:14px;z-index:4;width:38px;height:38px;padding:0;border-radius:50%;background:rgba(8,10,14,.55);color:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;backdrop-filter:blur(4px)}
+.dt-x:hover{background:rgba(8,10,14,.8);color:#fff}
+.modal.dt .detail{grid-template-columns:240px 1fr;gap:32px;padding:0 34px 8px;margin-top:-170px;position:relative;z-index:2;overflow:auto;min-height:0}
+.modal.dt .dc{box-shadow:0 22px 50px rgba(0,0,0,.6);border:3px solid var(--bg2);align-self:start}
+.modal.dt .dt-info{padding-top:118px;min-width:0}
+.modal.dt h1{font-size:30px;text-shadow:0 2px 14px rgba(0,0,0,.35)}
+.modal.dt > footer{border-top:0;padding:16px 34px 24px}
 .detail .dc{aspect-ratio:2/3;border-radius:var(--r);overflow:hidden;--card:260px;box-shadow:0 10px 30px var(--sh2)}
 .detail .dc img{width:100%;height:100%;object-fit:cover}
 .detail h1{margin:0 0 8px;font-size:26px;line-height:1.15}
@@ -278,6 +313,8 @@ body.ctrl #main .card,body.selecting #main .card{cursor:copy}
 .sg-bar select{width:auto;max-width:340px}
 .sg-body{padding:18px 20px;min-height:320px;max-height:calc(100vh - 250px);overflow:auto}
 .sg-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px}
+.sg-grid.heroes{grid-template-columns:repeat(auto-fill,minmax(320px,1fr))}
+.sg-grid.heroes .sgc{aspect-ratio:96/31}
 .sgc{position:relative;aspect-ratio:2/3;border-radius:9px;overflow:hidden;border:0;padding:0;cursor:pointer;background:var(--bg3);box-shadow:0 4px 12px var(--sh);transition:transform .15s,box-shadow .15s}
 .sgc:hover{transform:translateY(-3px);box-shadow:0 12px 26px var(--sh2),0 0 0 2px var(--acc)}
 .sgc img{width:100%;height:100%;object-fit:cover;display:block;opacity:0;transition:opacity .25s}
@@ -330,10 +367,13 @@ body.ctrl #main .card,body.selecting #main .card{cursor:copy}
 .imp-scroll .imp-tab{margin:0}
 
 /* abas */
-.tabs{display:flex;background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:3px;gap:2px}
-.tabs button{border:0;background:transparent;color:var(--mut);padding:7px 14px;border-radius:7px;cursor:pointer;font-weight:600;font-size:13.5px;white-space:nowrap;font-family:inherit}
-.tabs button:hover{color:var(--txt);background:var(--bg3)}
-.tabs button.on{background:var(--accsolid);color:var(--acc2);box-shadow:inset 0 0 0 1px var(--acc)}
+.tabs{position:relative;display:flex;background:var(--bg2);border:1px solid var(--line);border-radius:11px;padding:3px;gap:2px}
+.tabs .tab-ind{position:absolute;top:3px;bottom:3px;left:0;width:0;border-radius:8px;background:var(--accsolid);box-shadow:inset 0 0 0 1px var(--acc);
+  transition:transform .42s cubic-bezier(.34,1.32,.5,1),width .42s cubic-bezier(.34,1.32,.5,1);z-index:0;pointer-events:none}
+.tabs.noanim .tab-ind{transition:none}
+.tabs button{position:relative;z-index:1;border:0;background:transparent;color:var(--mut);padding:8px 18px;border-radius:8px;cursor:pointer;font-weight:600;font-size:13.5px;white-space:nowrap;font-family:inherit;transition:color .25s}
+.tabs button:hover{color:var(--txt)}
+.tabs button.on{color:var(--acc2)}
 
 /* perfil */
 #perfilMain{padding:0 0 70px}
@@ -504,6 +544,8 @@ body.selecting .toast{bottom:86px}
   .form-body,.detail{grid-template-columns:1fr}
   .form-body .drop,.detail .dc{max-width:220px;margin:0 auto}
   .stats{display:none}
+  .bar{grid-template-columns:auto 1fr;}
+  .bar-r{display:none}
   .le-top{flex-direction:column;align-items:stretch}
   .le-top .switches{flex-wrap:wrap}
 }
@@ -520,16 +562,19 @@ body.selecting .toast{bottom:86px}
 <div id="app">
 <header class="top">
   <div class="bar">
+   <div class="bar-l">
     <div class="logo"><svg><use href="#ico"/></svg><span>CATALO<b>GAMES</b></span></div>
-    <div class="stats" id="stats"></div>
+    <button class="btn primary" id="addBtn"></button>
     <button class="btn ghost icobtn" id="filtBtn" title="Ocultar busca e filtros"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 6h9M17 6h3M4 12h3M11 12h9M4 18h11M19 18h1"/><circle cx="15" cy="6" r="2"/><circle cx="9" cy="12" r="2"/><circle cx="17" cy="18" r="2"/></svg></button>
     <button class="btn ghost icobtn" id="cfgBtn" title="Configurações">⋯</button>
-    <nav class="tabs" id="tabs">
+   </div>
+    <nav class="tabs noanim" id="tabs">
+      <span class="tab-ind" id="tabInd"></span>
       <button type="button" data-t="cat">🎮 Catálogo</button>
       <button type="button" data-t="lists">📚 Listas</button>
       <button type="button" data-t="perfil">👤 Perfil</button>
     </nav>
-    <button class="btn primary" id="addBtn"></button>
+   <div class="bar-r"><div class="stats" id="stats"></div></div>
   </div>
 
   <div class="tools" id="toolsCat">
@@ -539,22 +584,22 @@ body.selecting .toast{bottom:86px}
     <select id="fiStatus"></select>
     <select id="fiAno"></select>
     <select id="fiNota"></select>
-    <select id="sort" title="Ordenar">
-      <option value="ano-desc">↓ Terminado recentemente</option>
-      <option value="ano-asc">↑ Terminado há mais tempo</option>
-      <option value="nota-desc">↓ Maior nota</option>
-      <option value="nota-asc">↑ Menor nota</option>
+    <select id="sort" title="Ordenar por">
+      <option value="ano-desc">Mais recentes</option>
+      <option value="ano-asc">Mais antigos</option>
+      <option value="nota-desc">Maior nota</option>
+      <option value="nota-asc">Menor nota</option>
       <option value="titulo">A–Z</option>
-      <option value="horas-desc">↓ Mais horas</option>
-      <option value="lanc-desc">↓ Lançamento mais novo</option>
-      <option value="lanc-asc">↑ Lançamento mais antigo</option>
-      <option value="criado-desc">↓ Adicionado recentemente</option>
+      <option value="horas-desc">Mais horas</option>
+      <option value="lanc-desc">Lançamento: novos</option>
+      <option value="lanc-asc">Lançamento: antigos</option>
+      <option value="criado-desc">Últimos adicionados</option>
     </select>
     <span class="toggle" id="tFav">★ Favoritos</span>
-    <span class="toggle hidden" id="tPend" title="Jogos importados que ainda faltam capa e outras infos">⏳ Para completar</span>
+    <span class="toggle hidden" id="tPend" title="Jogos importados que ainda faltam capa e outras infos">⏳ Completar</span>
     <select id="fiGroup" title="Como agrupar os jogos">
-      <option value="ano">Agrupar: ano que terminei</option>
-      <option value="lanc">Agrupar: ano de lançamento</option>
+      <option value="ano">Agrupar: ano</option>
+      <option value="lanc">Agrupar: lançamento</option>
       <option value="">Sem agrupar</option>
     </select>
     <button class="link hidden" id="clearF">limpar filtros</button>
@@ -655,18 +700,31 @@ Shinobi - 2025 - 2002 - PS2 - 8</div>
         <p class="tip">Dica: achou a capa? Clique com o botão direito nela → <b>Copiar imagem</b>, volte aqui e aperte <kbd>Ctrl</kbd>+<kbd>V</kbd>.</p>
       </div>
       <div class="fields">
+        <div class="sec-t">O jogo</div>
         <label class="f full"><span>Título *</span><div class="ac"><input id="fTitulo" required autocomplete="off" placeholder="Digite o nome (se o jogo já estiver numa lista, dá pra puxar com a capa)"><div class="sugg" id="fSugg"></div></div></label>
         <label class="f"><span>Plataforma</span><input id="fPlat" list="dlPlat" placeholder="PC, PS5, Switch…"></label>
         <label class="f"><span>Status</span><select id="fStatus"></select></label>
+        <div class="f"><span>Favorito</span><label class="chk"><input type="checkbox" id="fFav"> ★ Favorito</label></div>
         <label class="f"><span>Terminado em <small>(ano)</small></span><input id="fAno" type="number" min="1970" max="2100" placeholder="ex: 2025"></label>
-        <label class="f"><span>Ano de lançamento</span><input id="fLanc" type="number" min="1970" max="2100" placeholder="ex: 2022"></label>
+        <label class="f"><span>Lançamento <small>(ano)</small></span><input id="fLanc" type="number" min="1970" max="2100" placeholder="ex: 2022"></label>
         <label class="f"><span>Horas jogadas</span><input id="fHoras" type="number" min="0" step="0.5" placeholder="ex: 45"></label>
-        <div class="f"><span>Favorito</span><label class="chk"><input type="checkbox" id="fFav"> ★ Um dos meus favoritos</label></div>
+        <div class="sec-t">Sua avaliação</div>
         <div class="f full"><span>Nota</span>
           <div class="nota-row" id="notaRow"><input type="range" id="fNota" min="0" max="10" step="0.5"><output id="notaOut">–</output><button type="button" class="link" id="notaClear">sem nota</button></div>
         </div>
         <div class="f full"><span>Gêneros <small>(clique pra marcar)</small></span><input id="genNew" class="gen-search" placeholder="Buscar ou criar gênero… (Enter)" autocomplete="off"><div class="chips" id="genChips"></div></div>
-        <label class="f full"><span>Comentário / review</span><textarea id="fReview" rows="4" placeholder="O que achou? Momentos marcantes, se jogaria de novo…"></textarea></label>
+        <label class="f full"><span>Comentário / review</span><textarea id="fReview" rows="3" placeholder="O que achou? Momentos marcantes, se jogaria de novo…"></textarea></label>
+        <div class="sec-t">Banner do topo <small style="text-transform:none;letter-spacing:0;font-weight:400">· a imagem larga que aparece em cima na tela do jogo (opcional)</small></div>
+        <div class="f full">
+          <div class="bn-row">
+            <div class="bn-prev" id="bnPrev">Sem banner</div>
+            <div class="bn-acts">
+              <button type="button" class="btn sm sgbtn" id="bnSg" disabled title="Digite o nome do jogo pra buscar">🔍 Buscar banner nos Heroes do SteamGridDB</button>
+              <div class="bn-line"><label class="btn sm">Escolher arquivo<input type="file" accept="image/*" id="bnFile" hidden></label><button type="button" class="btn sm ghost" id="bnRm">Remover</button></div>
+              <div class="url-row"><input id="bnUrl" placeholder="ou cole o link de uma imagem"><button type="button" class="btn sm" id="bnUrlBtn">Usar</button></div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <footer>
@@ -789,7 +847,7 @@ Shinobi - 2025 - 2002 - PS2 - 8</div>
       </select>
     </div>
     <div class="sg-body" id="sgBody"></div>
-    <footer><span class="ver">Capas feitas pela comunidade do <a href="https://www.steamgriddb.com" target="_blank" rel="noopener">SteamGridDB</a></span><span class="sp"></span><button type="button" class="btn ghost hidden" id="sgMore">Carregar mais capas</button></footer>
+    <footer><span class="ver">Imagens feitas pela comunidade do <a href="https://www.steamgriddb.com" target="_blank" rel="noopener">SteamGridDB</a></span><span class="sp"></span><button type="button" class="btn ghost hidden" id="sgMore">Carregar mais</button></footer>
   </div>
 </div>
 
@@ -1100,16 +1158,22 @@ function makePicker(root, { getTitle, setTitle }){
 }
 
 /* ---------------- SteamGridDB ---------------- */
-const SGM = { picker: null, page: 0, items: [], done: false, token: 0 };
+const SGM = { picker: null, page: 0, items: [], done: false, token: 0, kind: 'grids' };
+const SG_ESTILOS = {
+  grids: [['', 'Todos os estilos'], ['alternate', 'Alternativo'], ['material', 'Material'], ['white_logo', 'Logo branco'], ['no_logo', 'Sem logo'], ['blurred', 'Desfocado']],
+  heroes: [['', 'Todos os estilos'], ['alternate', 'Alternativo'], ['material', 'Material'], ['blurred', 'Desfocado']],
+};
 const sgOpen = () => $('#sgBg').classList.contains('open');
-function openSgdb(picker, title){
-  SGM.picker = picker;
+function openSgdb(picker, title, kind = 'grids'){
+  SGM.picker = picker; SGM.kind = kind;
+  $('#sgStyle').innerHTML = SG_ESTILOS[kind].map(([v, t]) => `<option value="${v}">${t}</option>`).join('');
+  $('#sgBg').querySelector('h2').textContent = kind === 'heroes' ? 'Banners (Heroes) do SteamGridDB' : 'Capas do SteamGridDB';
   $('#sgQ').value = title;
   $('#sgBg').classList.add('open');
   sgSearch();
 }
 function closeSgdb(){ $('#sgBg').classList.remove('open'); SGM.token++; }
-function sgSkeleton(n = 12){ return `<div class="sg-grid">${'<div class="sgc skel"></div>'.repeat(n)}</div>`; }
+function sgSkeleton(n = 12){ const h = SGM.kind === 'heroes'; return `<div class="sg-grid${h ? ' heroes' : ''}">${'<div class="sgc skel"></div>'.repeat(h ? 6 : n)}</div>`; }
 function sgMessage(html){ $('#sgBody').innerHTML = `<div class="sg-msg">${html}</div>`; $('#sgMore').classList.toggle('hidden', !!(true)); }
 function sgError(r){
   if (r.erro === 'sem-chave' || r.erro === 'chave') {
@@ -1159,9 +1223,9 @@ async function sgLoad(reset){
   if (reset) { SGM.token++; SGM.page = 0; SGM.items = []; SGM.done = false; $('#sgBody').innerHTML = sgSkeleton(); }
   const tk = SGM.token;
   const gameName = $('#sgGame').selectedOptions[0] ? $('#sgGame').selectedOptions[0].textContent : '';
-  $('#sgSub').textContent = `Carregando capas de ${gameName}…`;
+  $('#sgSub').textContent = `Carregando ${SGM.kind === 'heroes' ? 'banners' : 'capas'} de ${gameName}…`;
   $('#sgMore').disabled = true;
-  const r = await api.sgdbGrids($('#sgGame').value, SGM.page, $('#sgStyle').value);
+  const r = await api.sgdbGrids($('#sgGame').value, SGM.page, $('#sgStyle').value, SGM.kind);
   if (tk !== SGM.token) return;
   $('#sgMore').disabled = false;
   if (r.erro) return sgError(r);
@@ -1173,10 +1237,10 @@ async function sgLoad(reset){
 function sgRender(gameName){
   if (!SGM.items.length) {
     $('#sgSub').textContent = gameName;
-    return sgMessage(`<h3>Nenhuma capa vertical pra esse jogo${$('#sgStyle').value ? ' nesse estilo' : ''}</h3><p>${$('#sgStyle').value ? 'Tente “Todos os estilos”.' : 'Se apareceu mais de um jogo na lista de cima, tente outro.'}</p>`);
+    return sgMessage(`<h3>Nenhum${SGM.kind === 'heroes' ? ' banner' : 'a capa vertical'} pra esse jogo${$('#sgStyle').value ? ' nesse estilo' : ''}</h3><p>${$('#sgStyle').value ? 'Tente “Todos os estilos”.' : 'Se apareceu mais de um jogo na lista de cima, tente outro.'}</p>`);
   }
-  $('#sgSub').textContent = `${gameName} · ${plural(SGM.items.length, 'capa')}${SGM.done ? '' : '+'} · clique numa pra usar`;
-  $('#sgBody').innerHTML = `<div class="sg-grid">${SGM.items.map((it, i) => `<button type="button" class="sgc" data-i="${i}" title="${it.width}×${it.height}${it.author && it.author.name ? ' · por ' + esc(it.author.name) : ''}"><img loading="lazy" alt="" src="${esc(it.thumb || it.url)}"><span class="sz">${it.width}×${it.height}</span></button>`).join('')}</div>`;
+  $('#sgSub').textContent = `${gameName} · ${SGM.kind === 'heroes' ? plural(SGM.items.length, 'banner') : plural(SGM.items.length, 'capa')}${SGM.done ? '' : '+'} · clique ${SGM.kind === 'heroes' ? 'num' : 'numa'} pra usar`;
+  $('#sgBody').innerHTML = `<div class="sg-grid${SGM.kind === 'heroes' ? ' heroes' : ''}">${SGM.items.map((it, i) => `<button type="button" class="sgc" data-i="${i}" title="${it.width}×${it.height}${it.author && it.author.name ? ' · por ' + esc(it.author.name) : ''}"><img loading="lazy" alt="" src="${esc(it.thumb || it.url)}"><span class="sz">${it.width}×${it.height}</span></button>`).join('')}</div>`;
   $('#sgBody').querySelectorAll('.sgc img').forEach(img => { img.onload = () => img.classList.add('ok'); img.onerror = () => img.closest('.sgc').remove(); });
   $('#sgMore').classList.toggle('hidden', !!(SGM.done));
 }
@@ -1189,7 +1253,7 @@ async function sgChoose(i, el){
   if (!blob) return toast('Não consegui baixar essa capa. Tente outra.');
   SGM.picker.setBlob(blob);
   closeSgdb();
-  toast('✓ Capa do SteamGridDB aplicada');
+  toast(SGM.kind === 'heroes' ? '✓ Banner do SteamGridDB aplicado' : '✓ Capa do SteamGridDB aplicada');
 }
 
 /* ---------------- inicialização ---------------- */
@@ -1211,6 +1275,15 @@ async function boot(){
 }
 
 /* ---------------- app / abas ---------------- */
+/* a caixinha da aba selecionada desliza até a aba clicada */
+function moveTabInd(){
+  const b = $('#tabs button.on'), ind = $('#tabInd'); if (!b) return;
+  ind.style.width = b.offsetWidth + 'px';
+  ind.style.transform = `translateX(${b.offsetLeft - 3}px)`;
+  if ($('#tabs').classList.contains('noanim')) requestAnimationFrame(() => requestAnimationFrame(() => $('#tabs').classList.remove('noanim')));
+}
+addEventListener('resize', () => { $('#tabs').classList.add('noanim'); moveTabInd(); });
+document.fonts && document.fonts.ready.then(() => { $('#tabs').classList.add('noanim'); moveTabInd(); });
 function startApp(){
   setTab(view.tab);
 }
@@ -1224,6 +1297,7 @@ function setTab(t){
   if (!lst) { $('#toolsList').classList.add('hidden'); $('#toolsListView').classList.add('hidden'); }
   openListId = null;
   $('#tabs').querySelectorAll('button').forEach(b => b.classList.toggle('on', b.dataset.t === t));
+  moveTabInd();
   $('#addBtn').classList.toggle('hidden', pf);
   $('#addBtn').innerHTML = cat ? '＋ Adicionar jogo' : '＋ Criar lista';
   if (cat) render(); else if (lst) renderLists(); else renderPerfil();
@@ -1494,8 +1568,8 @@ async function drawProfileCard(cv, o){
   }
   // blocos que vêm depois da imagem do topo (centralizados no espaço que sobra)
   const blocos = [];
-  if (o.foto) blocos.push({ h: 168, draw: async y => {
-    const d = 160, cx = W / 2, cy = y + d / 2;
+  if (o.foto) blocos.push({ h: 188, draw: async y => {
+    const d = 180, cx = W / 2, cy = y + d / 2;
     ctx.save(); ctx.beginPath(); ctx.arc(cx, cy, d / 2 + 7, 0, Math.PI * 2); ctx.fillStyle = '#0b0d12'; ctx.fill(); ctx.restore();
     ctx.save(); ctx.beginPath(); ctx.arc(cx, cy, d / 2, 0, Math.PI * 2); ctx.clip();
     const img = await loadImgFor(perfil.avatar);
@@ -1506,27 +1580,29 @@ async function drawProfileCard(cv, o){
   }, sobe: true });
   if (o.nome && perfil.nome) blocos.push({ h: 56, draw: async y => { ctx.fillStyle = '#fff'; ctx.font = `800 42px ${FONT}`; ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic'; wrapText(ctx, perfil.nome, W / 2, y + 44, W - 80, 48, 1); } });
   const top = perfil.top5.map(id => games.find(g => g.id === id)).filter(Boolean);
-  const temResto = top.length > 1;
-  if (o.top5 && top.length) blocos.push({ h: temResto ? 520 : 330, draw: async y => {
+  if (o.top5 && top.length) blocos.push({ h: 338, draw: async y => {
     ctx.fillStyle = acc; ctx.font = `800 19px ${FONT}`; ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic';
     ctx.fillText('T O P   5   F A V O R I T O S', W / 2, y + 26);
     const imgs = await Promise.all(top.map(g => loadImgFor(g)));
-    const draw1 = (i, x, yy, w) => {
-      const h = w * 1.5, r = 12;
-      ctx.save(); ctx.shadowColor = 'rgba(0,0,0,.6)'; ctx.shadowBlur = 22; ctx.shadowOffsetY = 8; ctx.fillStyle = '#111'; rr(ctx, x, yy, w, h, r); ctx.fill(); ctx.restore();
-      drawCoverImg(ctx, imgs[i], x, yy, w, h, r, top[i].titulo);
-      const [bg, fg] = rankColors(i), bs = i === 0 ? 40 : 32;
-      ctx.fillStyle = bg; rr(ctx, x + 10, yy + h - bs - 10, bs, bs, 8); ctx.fill();
-      ctx.fillStyle = fg; ctx.font = `800 ${bs * 0.55}px ${FONT}`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(String(i + 1), x + 10 + bs / 2, yy + h - bs / 2 - 9);
-      if (i === 0) { ctx.save(); ctx.strokeStyle = '#e8b923'; ctx.lineWidth = 5; rr(ctx, x - 2, yy - 2, w + 4, h + 4, r + 2); ctx.stroke(); ctx.restore(); }
-    };
-    // 1º grande no meio, coroa em cima; os outros 4 numa fileira embaixo
-    const w1 = 170, x1 = (W - w1) / 2, y1 = y + 72;
-    ctx.font = `46px ${FONT}`; ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic'; ctx.fillText('👑', W / 2, y1 - 4);
-    draw1(0, x1, y1, w1);
-    const resto = top.slice(1), w2 = 118, g2 = 16;
-    const tot = resto.length * w2 + (resto.length - 1) * g2, x0 = (W - tot) / 2, y2 = y1 + w1 * 1.5 + 18;
-    resto.forEach((_, k) => draw1(k + 1, x0 + k * (w2 + g2), y2, w2));
+    // lado a lado; o 1º é 15% maior e tem a coroa. Todos alinhados por baixo.
+    const n = top.length, gp = 14, maxW = W - 60;
+    let w = (maxW - gp * (n - 1)) / (n - 1 + 1.15); w = Math.min(w, 150);
+    const w1 = w * 1.15, tot = w1 + (n - 1) * w + (n - 1) * gp;
+    const base = y + 66 + w1 * 1.5;              // linha de baixo das capas
+    let x = (W - tot) / 2;
+    top.forEach((g, i) => {
+      const ww = i === 0 ? w1 : w, hh = ww * 1.5, yy = base - hh, r = 12;
+      ctx.save(); ctx.shadowColor = 'rgba(0,0,0,.6)'; ctx.shadowBlur = 22; ctx.shadowOffsetY = 8; ctx.fillStyle = '#111'; rr(ctx, x, yy, ww, hh, r); ctx.fill(); ctx.restore();
+      drawCoverImg(ctx, imgs[i], x, yy, ww, hh, r, g.titulo);
+      const [bg, fg] = rankColors(i), bs = i === 0 ? 34 : 28;
+      ctx.fillStyle = bg; rr(ctx, x + 9, yy + hh - bs - 9, bs, bs, 7); ctx.fill();
+      ctx.fillStyle = fg; ctx.font = `800 ${bs * 0.55}px ${FONT}`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(String(i + 1), x + 9 + bs / 2, yy + hh - bs / 2 - 8);
+      if (i === 0) {
+        ctx.save(); ctx.strokeStyle = '#e8b923'; ctx.lineWidth = 4; rr(ctx, x - 2, yy - 2, ww + 4, hh + 4, r + 2); ctx.stroke(); ctx.restore();
+        ctx.font = `40px ${FONT}`; ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic'; ctx.fillText('👑', x + ww / 2, yy - 6);
+      }
+      x += ww + gp;
+    });
   } });
   const stats = [];
   if (o.ano) stats.push([String(games.filter(g => g.status === 'terminado' && g.ano === ANO_ATUAL).length), `jogos em ${ANO_ATUAL}`]);
@@ -1548,7 +1624,7 @@ async function drawProfileCard(cv, o){
   } });
   // posiciona: a foto "sobe" um pouco por cima da imagem do topo
   const GAP = 14, total = blocos.reduce((s, b) => s + b.h, 0) + GAP * (blocos.length - 1);
-  let y = heroH ? heroH - (blocos[0] && blocos[0].sobe ? 105 : 0) : 70;
+  let y = heroH ? heroH - (blocos[0] && blocos[0].sobe ? 120 : 0) : 70;
   const sobra = H - 56 - y - total;
   if (sobra > 0) y += Math.min(sobra / 2, heroH ? 24 : sobra / 2);
   for (const b of blocos) { await b.draw(y); y += b.h + GAP; }
@@ -1682,15 +1758,15 @@ function renderFilters(){
   const gens = [...new Set(games.flatMap(g => g.generos || []))].sort((a, b) => a.localeCompare(b, 'pt-BR'));
   const anos = [...new Set(games.map(g => yearOf(g) || 'sem'))].sort().reverse();
   const sts = Object.keys(STATUS).filter(k => games.some(g => g.status === k));
-  view.plat = fillSelect($('#fiPlat'), 'Todas as plataformas', plats, view.plat);
-  view.gen = fillSelect($('#fiGen'), 'Todos os gêneros', gens, view.gen);
-  view.status = fillSelect($('#fiStatus'), 'Todos os status', sts, view.status, k => STATUS[k].n);
-  view.ano = fillSelect($('#fiAno'), 'Todos os anos', anos, view.ano, a => a === 'sem' ? 'Sem ano' : 'Terminados em ' + a);
+  view.plat = fillSelect($('#fiPlat'), 'Plataforma', plats, view.plat);
+  view.gen = fillSelect($('#fiGen'), 'Gênero', gens, view.gen);
+  view.status = fillSelect($('#fiStatus'), 'Status', sts, view.status, k => STATUS[k].n);
+  view.ano = fillSelect($('#fiAno'), 'Ano', anos, view.ano, a => a === 'sem' ? 'Sem ano' : 'Terminados em ' + a);
   const notas = [...new Set(games.filter(g => g.nota != null).map(g => Math.floor(g.nota)))].sort((a, b) => b - a);
   const semNota = games.some(g => g.nota == null);
   const ops = notas.map(n => [String(n), n === 10 ? 'Nota 10' : `Nota ${n}  (${n} e ${n},5)`]);
   if (semNota) ops.push(['-1', 'Sem nota']);
-  $('#fiNota').innerHTML = `<option value="">Qualquer nota</option>` + ops.map(([v, t]) => `<option value="${v}">${t}</option>`).join('');
+  $('#fiNota').innerHTML = `<option value="">Nota</option>` + ops.map(([v, t]) => `<option value="${v}">${t}</option>`).join('');
   if (!ops.some(o => o[0] === view.nota)) view.nota = '';
   $('#fiNota').value = view.nota; $('#fiNota').classList.toggle('on', view.nota !== '');
   $('#sort').value = view.sort;
@@ -1698,7 +1774,7 @@ function renderFilters(){
   const nPend = games.filter(g => g.pendente).length;
   if (!nPend) view.pend = false;
   $('#tPend').classList.toggle('hidden', !nPend); $('#tPend').classList.toggle('on', !!view.pend);
-  $('#tPend').textContent = `⏳ Para completar (${nPend})`;
+  $('#tPend').textContent = `⏳ Completar (${nPend})`;
   $('#fiGroup').value = view.group;
   $('#cardSize').value = view.card;
   document.documentElement.style.setProperty('--card', view.card + 'px');
@@ -1754,7 +1830,8 @@ function render(){
   const main = $('#main');
   const fs = $('#fromSearch');
   fs.classList.toggle('hidden', !(filtersActive() && list.length));
-  fs.textContent = `📚 Criar lista com ${list.length === 1 ? 'esse jogo' : `esses ${list.length} jogos`}`;
+  fs.textContent = `📚 Virar lista (${list.length})`;
+  fs.title = `Criar uma lista com ${list.length === 1 ? 'esse jogo' : `esses ${list.length} jogos`}`;
   if (!games.length) { main.innerHTML = `<div class="empty"><h3>Seu catálogo está vazio</h3><p>Clique em <b>＋ Adicionar jogo</b> pra cadastrar o primeiro.</p><p style="margin-top:22px;font-size:13px">Já usava o Catalogame antes? <button class="link" onclick="openImport()">Trazer sua biblioteca antiga</button></p></div>`; return; }
   if (!list.length) { main.innerHTML = `<div class="empty"><h3>Nenhum jogo com esses filtros</h3><p><button class="link" onclick="clearFilters()">Limpar filtros</button></p></div>`; return; }
   const cards = view.group === 'ano' ? list.map(g => ({ g, plays: [g] })) : clusterize(list);
@@ -1826,11 +1903,12 @@ function openDetail(id){
     ['Horas', g.horas != null ? fmtNum(g.horas) + ' h' : ''],
     ['Gêneros', (g.generos || []).length ? `<div class="tagrow">${sortGens(g.generos).map(t => `<span class="tag">${esc(t)}</span>`).join('')}</div>` : ''],
   ].filter(r => r[1] !== '' && r[1] != null);
+  $('#detail').classList.add('dt');
   $('#detail').innerHTML = `
-    <header><h2 style="font-size:14px;color:var(--mut);font-weight:600">Detalhes</h2><button class="x" data-close>✕</button></header>
+    <div class="dt-hero" id="dHero"><button type="button" class="x dt-x" data-close title="Fechar (Esc)">✕</button></div>
     <div class="detail">
       <div class="dc" id="dCover">${placeholder(g.titulo)}</div>
-      <div>
+      <div class="dt-info">
         <h1>${esc(g.titulo)} ${g.favorito ? '<span style="color:var(--warn)">★</span>' : ''}</h1>
         ${st ? `<span class="pill" style="color:${st.c};border-color:${st.c}">${st.n}</span>` : ''}
         <div class="big">${g.nota != null ? `<div class="bignota" style="color:${notaColor(g.nota)}">${fmtNum(g.nota)}<small> / 10</small></div>` : `<div style="color:var(--dim)">Sem nota</div>`}</div>
@@ -1848,6 +1926,12 @@ function openDetail(id){
     </footer>`;
   openModal('#detailBg');
   coverURL(g).then(u => { if (u) $('#dCover').innerHTML = `<img src="${esc(u)}" alt="">`; });
+  // banner: o hero do jogo; se não tiver, a própria capa desfocada
+  (async () => {
+    const hb = g.banner && await coverURL(g.banner);
+    const u = hb || await coverURL(g);
+    if (u && $('#dHero')) $('#dHero').insertAdjacentHTML('afterbegin', `<img src="${esc(u)}" alt="" class="${hb ? '' : 'blur'}">`);
+  })();
   $('#dEdit').onclick = () => { closeModals(true); openForm(g.id); };
   $('#dDel').onclick = () => deleteGame(g.id);
   $('#dFav').onclick = async () => { g.favorito = !g.favorito; await persist(); render(); openDetail(g.id); };
@@ -1880,12 +1964,26 @@ async function deleteGame(id){
   const g = games.find(x => x.id === id); if (!g) return;
   if (!confirm(`Excluir "${g.titulo}" do catálogo?`)) return;
   await removeCover(g);
+  if (g.banner) await removeCover(g.banner);
   games = games.filter(x => x.id !== id);
   await persist(); closeModals(true); render(); toast('Jogo excluído');
 }
 
 /* ---------------- formulário do jogo ---------------- */
-const form = { id: null, nota: null, gens: new Set() };
+const form = { id: null, nota: null, gens: new Set(), banner: null, bnUrl: null };
+/* banner do topo do jogo (hero) */
+function bannerOf(g){ if (!g.banner) g.banner = { id: g.id + '-banner', capa: '', capaUrl: '', capaV: 0 }; return g.banner; }
+async function showBn(){
+  const box = $('#bnPrev');
+  if (form.bnUrl) { URL.revokeObjectURL(form.bnUrl); form.bnUrl = null; }
+  let u = null;
+  if (form.banner && form.banner.blob) { u = form.bnUrl = URL.createObjectURL(form.banner.blob); }
+  else if (!(form.banner && form.banner.remove) && form.id) { const g = games.find(x => x.id === form.id); if (g && g.banner) u = await coverURL(g.banner); }
+  box.classList.toggle('has', !!u);
+  box.innerHTML = u ? `<img src="${esc(u)}" alt="">` : 'Sem banner';
+}
+const bnPicker = { setBlob(b){ form.banner = { blob: b }; showBn(); } };
+function bnLinks(){ const t = $('#fTitulo').value.trim(); $('#bnSg').disabled = !t; $('#bnSg').title = t ? `Buscar banners de “${t}”` : 'Digite o nome do jogo pra buscar'; }
 const gp = makePicker($('#gPicker'), {
   getTitle: () => $('#fTitulo').value,
   setTitle: t => { $('#fTitulo').value = t; gp.links(); },
@@ -1950,6 +2048,7 @@ function openForm(id){
   $('#fDelete').classList.toggle('hidden', !g);
   gp.reset();
   if (g) coverURL(g).then(u => { if (u && !gp.pending) gp.show(u, !!g.capaUrl && !g.capa); });
+  form.banner = null; $('#bnUrl').value = ''; showBn(); bnLinks();
   openModal('#formBg');
   $('#fTitulo').focus();
 }
@@ -1981,8 +2080,17 @@ async function saveForm(e){
       else if (p.blob) await storeCover(g, await normalizeImage(p.blob));
       else if (p.url) { await removeCover(g); g.capaUrl = p.url; }
     }
+    const bp = form.banner;
+    if (bp) {
+      if (bp.remove) await removeCover(bannerOf(g));
+      else if (bp.blob) await storeCover(bannerOf(g), await normalizeImage(bp.blob, 1920));
+    }
     if (isNew) games.push(g);
     const outras = await syncSiblings(g, { capa: !!p });
+    if (bp) for (const s of siblingsOf(g)) {   // o banner também é igual em todas as jogadas
+      const b = g.banner && g.banner.capa ? await gameCoverBlob(g.banner) : null;
+      if (b) await storeCover(bannerOf(s), b); else if (s.banner) await removeCover(s.banner);
+    }
     await persist();
     closeModals(true); clearUrlCache(); render();
     toast(outras ? `${isNew ? `“${titulo}” adicionado` : 'Alterações salvas'} · nota, lançamento, gêneros e capa igualados em ${plural(outras, 'outra jogada', 'outras jogadas')}` : isNew ? `“${titulo}” adicionado ao catálogo` : 'Alterações salvas', outras ? 4200 : 2600);
@@ -2050,6 +2158,8 @@ async function fillReplay(plays){
   form.gens = new Set(g.generos || []); renderGenChips();
   const b = await gameCoverBlob(g);
   if (b) gp.setBlob(b); else if (g.capaUrl) gp.setUrl(g.capaUrl);
+  const bb = g.banner ? await gameCoverBlob(g.banner) : null;
+  if (bb) { form.banner = { blob: bb }; showBn(); }
   toast(`Dados de “${g.titulo}” puxados. Confira o ano e salve`, 3500);
   $('#fAno').focus(); $('#fAno').select();
 }
@@ -2668,6 +2778,18 @@ $('#fiGroup').addEventListener('change', e => { view.group = e.target.value; sav
 $('#clearF').onclick = clearFilters;
 $('#cardSize').addEventListener('input', e => { view.card = +e.target.value; document.documentElement.style.setProperty('--card', view.card + 'px'); saveView(); });
 $('#cfgBtn').onclick = openCfg;
+$('#bnSg').onclick = () => { const t = $('#fTitulo').value.trim(); if (t) openSgdb(bnPicker, t, 'heroes'); };
+$('#bnFile').addEventListener('change', e => { const f = e.target.files[0]; e.target.value = ''; if (f && f.type.startsWith('image/')) { form.banner = { blob: f }; showBn(); } });
+$('#bnRm').onclick = () => { form.banner = { remove: true }; showBn(); };
+const usarBnUrl = async () => {
+  const u = $('#bnUrl').value.trim(); if (!u) return;
+  $('#bnPrev').textContent = 'Baixando…';
+  const b = await tryFetchImage(u);
+  if (!b) { toast('Não consegui baixar essa imagem'); return showBn(); }
+  form.banner = { blob: b }; $('#bnUrl').value = ''; showBn();
+};
+$('#bnUrlBtn').onclick = usarBnUrl;
+$('#bnUrl').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); usarBnUrl(); } });
 $('#catExport').onclick = () => { if (!games.length) return toast('Cadastre jogos primeiro'); openExport('cat'); };
 $('#lvExport').onclick = () => { if (openListId) openExport('lista'); };
 $('#exGo').onclick = () => doExport().catch(e => reportError('Não consegui exportar a imagem.', e));
@@ -2776,7 +2898,7 @@ document.addEventListener('keydown', e => {
 
 // formulário do jogo
 $('#form').addEventListener('submit', saveForm);
-$('#fTitulo').addEventListener('input', () => { gp.links(); FS.hi = -1; renderFSugg(); });
+$('#fTitulo').addEventListener('input', () => { gp.links(); bnLinks(); FS.hi = -1; renderFSugg(); });
 $('#fTitulo').addEventListener('blur', () => setTimeout(closeFSugg, 150));
 $('#fTitulo').addEventListener('keydown', e => {
   const open = $('#fSugg').classList.contains('open') && FS.items.length;

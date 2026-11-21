@@ -20,6 +20,6 @@ contextBridge.exposeInMainWorld('catalogame', {
   savePng:        (nome, bytes)  => ipcRenderer.invoke('save-png', nome, bytes),
   showInFolder:   f              => ipcRenderer.invoke('show-in-folder', f),
   sgdbSearch:     termo          => ipcRenderer.invoke('sgdb:search', termo),
-  sgdbGrids:      (id, page, st) => ipcRenderer.invoke('sgdb:grids', id, page, st),
+  sgdbGrids:      (id, page, st, tipo) => ipcRenderer.invoke('sgdb:grids', id, page, st, tipo),
   importPick:     kind           => ipcRenderer.invoke('import:pick', kind),
 });

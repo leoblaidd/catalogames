@@ -176,11 +176,13 @@ ipcMain.handle('sgdb:search', (_e, termo) => {
   termo = String(termo || '').trim(); if (!termo) return { data: [] };
   return sgdb('/search/autocomplete/' + encodeURIComponent(termo));
 });
-ipcMain.handle('sgdb:grids', (_e, gameId, page, estilo) => {
+ipcMain.handle('sgdb:grids', (_e, gameId, page, estilo, tipo) => {
   const id = parseInt(gameId, 10); if (!id) return { data: [] };
-  const q = new URLSearchParams({ dimensions: '600x900,342x482,660x930', types: 'static', nsfw: 'false', humor: 'any', limit: '50', page: String(parseInt(page, 10) || 0) });
+  const heroes = tipo === 'heroes';
+  const q = new URLSearchParams({ types: 'static', nsfw: 'false', humor: 'any', limit: '50', page: String(parseInt(page, 10) || 0) });
+  if (!heroes) q.set('dimensions', '600x900,342x482,660x930');   // capas verticais
   if (/^[a-z_]+$/.test(estilo || '')) q.set('styles', estilo);
-  return sgdb(`/grids/game/${id}?${q}`);
+  return sgdb(`/${heroes ? 'heroes' : 'grids'}/game/${id}?${q}`);   // heroes = banners largos
 });
 
 /* ---------- atualizações (Releases do GitHub) ---------- */

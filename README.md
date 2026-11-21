@@ -15,7 +15,7 @@ O Catalogames é um app para Windows que organiza os jogos que você já zerou, 
 
 ## ✨ Funções
 
-O app tem três abas lado a lado: **🎮 Catálogo**, **📚 Listas** e **👤 Perfil**.
+O app tem três abas no centro do topo: **🎮 Catálogo**, **📚 Listas** e **👤 Perfil**, com uma animação deslizando entre elas. Os botões ficam à esquerda.
 
 ### Catálogo
 - Grade de capas com tamanho ajustável, agrupada pelo ano em que você terminou, pelo ano de lançamento ou sem agrupar.
@@ -31,6 +31,8 @@ O app tem três abas lado a lado: **🎮 Catálogo**, **📚 Listas** e **👤 P
 - Gêneros em ordem alfabética, com busca: digite pra filtrar ou criar um novo. A lista é editável nas configurações.
 - **Importar uma lista de jogos** de um arquivo `.txt` ou `.md`, um por linha: `Nome - ano que jogou - ano do jogo - plataforma - nota`. O que não estiver no padrão é pulado, e o app mostra uma prévia antes de importar. Os jogos importados aparecem com borda colorida até você completar capa, horas e gêneros.
 
+- **Tela do jogo:** clique numa capa e abre um card centralizado com o banner do jogo no topo e a capa grande sobreposta. Sem banner, o app usa a própria capa desfocada.
+
 ### Perfil
 - Foto de perfil, nome e uma imagem de topo larga, que expande quando você rola para cima.
 - Números: jogos catalogados, listas e horas jogadas.
@@ -39,7 +41,7 @@ O app tem três abas lado a lado: **🎮 Catálogo**, **📚 Listas** e **👤 P
 - Dá pra ajustar a posição da imagem do topo, arrastando ou pelo controle.
 
 ### Exportar imagens (PNG)
-- **Card do perfil** (800 × 1200): foto, um pouco da imagem do topo, nome, Top 5 no centro e números como jogos do ano, jogos ao todo e plataforma mais jogada. Você desmarca o que não quiser antes de exportar.
+- **Card do perfil** (800 × 1200): foto, um pouco da imagem do topo, nome, Top 5 lado a lado (o 1º com coroa e um pouco maior) e números como jogos do ano, jogos ao todo e plataforma mais jogada. Você desmarca o que não quiser antes de exportar.
 - **Lista:** fundo preto, nome da lista na cor do tema, capas grandes em 3, 5 ou 10 colunas, com ou sem ranking e nomes.
 - **Catálogo:** os jogos de um ano, de uma plataforma ou de um gênero (um filtro por vez), com nota e nomes opcionais.
 - Sempre com prévia antes, e você escolhe onde salvar.
@@ -58,6 +60,7 @@ O app tem três abas lado a lado: **🎮 Catálogo**, **📚 Listas** e **👤 P
 
 ### Capas
 - **SteamGridDB integrado:** digite o nome do jogo e clique em *Buscar capa no SteamGridDB*. Abre uma grade com as capas da comunidade, e um clique baixa a escolhida. Precisa de uma [chave gratuita da API](https://www.steamgriddb.com/profile/preferences/api), configurada uma única vez.
+- **Banner do topo:** na edição do jogo tem um espaço para o banner largo, com busca nos **Heroes** do SteamGridDB, arquivo ou link.
 - Também dá para colar uma imagem (<kbd>Ctrl</kbd>+<kbd>V</kbd>), arrastar um arquivo ou usar um link, inclusive o link da página do jogo na Steam.
 - Ao cadastrar um jogo que já está em alguma lista, o app sugere ele e reaproveita a capa.
 - As imagens grandes são reduzidas automaticamente para não pesar a pasta.
@@ -118,6 +121,14 @@ npm run dist       # gera o instalador do Windows em dist/ (NSIS, sem precisar d
 ---
 
 ## 📜 Versões
+
+### 1.7.0
+- Abas centralizadas no topo, com animação deslizante; botões à esquerda.
+- Filtros do catálogo mais compactos, cabendo numa linha só em 1080p.
+- Nova tela do jogo: centralizada, com banner no topo, capa maior e X no canto superior esquerdo.
+- Banner do jogo na edição, com busca nos Heroes do SteamGridDB.
+- Formulário de edição mais largo e organizado em seções.
+- Card do perfil: Top 5 lado a lado, com o 1º maior e de coroa.
 
 ### 1.6.0
 - Exportar PNG: card do perfil, listas e catálogo (por ano, plataforma ou gênero), com prévia.
