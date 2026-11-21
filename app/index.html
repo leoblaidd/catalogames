@@ -58,12 +58,14 @@ textarea{resize:vertical}
 header.top{position:sticky;top:0;z-index:20;background:var(--hdr);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
 .bar{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:16px;padding:12px 22px}
 .bar-l{display:flex;align-items:center;gap:10px;min-width:0}
-.bar-l .logo{margin-right:8px}
-.bar-r{display:flex;justify-content:flex-end;min-width:0}
+.bar-l .logo{margin-right:6px;flex:none}
+.bar-r{display:flex;align-items:center;justify-content:flex-end;gap:10px;min-width:0}
 .logo{font-weight:800;letter-spacing:.12em;font-size:18px;display:flex;align-items:center;gap:8px;color:var(--txt)}
 .logo b{color:var(--acc2)}
 .logo svg{width:24px;height:24px;color:var(--acc2)}
-.stats{color:var(--mut);font-size:13px;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:right}
+.stats{color:var(--mut);font-size:13px;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-left:14px;border-left:1px solid var(--line)}
+.stats:empty{display:none}
+html{scrollbar-gutter:stable}
 .stats strong{color:var(--txt);font-weight:600}
 .icobtn{position:relative;width:36px;height:36px;padding:0;justify-content:center;font-size:16px}
 .icobtn svg{width:17px;height:17px}
@@ -260,7 +262,7 @@ body.ctrl #main .card,body.selecting #main .card{cursor:copy}
 .dt-hero img{width:100%;height:100%;object-fit:cover;display:block}
 .dt-hero img.blur{filter:blur(26px) brightness(.6) saturate(1.25);transform:scale(1.25)}
 .dt-hero::after{content:"";position:absolute;inset:auto 0 0 0;height:150px;background:linear-gradient(transparent,var(--bg2))}
-.dt-x{position:absolute;top:14px;left:14px;z-index:4;width:38px;height:38px;padding:0;border-radius:50%;background:rgba(8,10,14,.55);color:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;backdrop-filter:blur(4px)}
+.dt-x{position:absolute;top:14px;right:14px;z-index:4;width:38px;height:38px;padding:0;border-radius:50%;background:rgba(8,10,14,.55);color:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;backdrop-filter:blur(4px)}
 .dt-x:hover{background:rgba(8,10,14,.8);color:#fff}
 .modal.dt .detail{grid-template-columns:240px 1fr;gap:32px;padding:0 34px 8px;margin-top:-170px;position:relative;z-index:2;overflow:auto;min-height:0}
 .modal.dt .dc{box-shadow:0 22px 50px rgba(0,0,0,.6);border:3px solid var(--bg2);align-self:start}
@@ -544,8 +546,8 @@ body.selecting .toast{bottom:86px}
   .form-body,.detail{grid-template-columns:1fr}
   .form-body .drop,.detail .dc{max-width:220px;margin:0 auto}
   .stats{display:none}
-  .bar{grid-template-columns:auto 1fr;}
-  .bar-r{display:none}
+  .bar{grid-template-columns:auto 1fr auto;gap:8px;padding:10px 12px}
+  .logo span{display:none}
   .le-top{flex-direction:column;align-items:stretch}
   .le-top .switches{flex-wrap:wrap}
 }
@@ -564,9 +566,7 @@ body.selecting .toast{bottom:86px}
   <div class="bar">
    <div class="bar-l">
     <div class="logo"><svg><use href="#ico"/></svg><span>CATALO<b>GAMES</b></span></div>
-    <button class="btn primary" id="addBtn"></button>
-    <button class="btn ghost icobtn" id="filtBtn" title="Ocultar busca e filtros"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 6h9M17 6h3M4 12h3M11 12h9M4 18h11M19 18h1"/><circle cx="15" cy="6" r="2"/><circle cx="9" cy="12" r="2"/><circle cx="17" cy="18" r="2"/></svg></button>
-    <button class="btn ghost icobtn" id="cfgBtn" title="Configurações">⋯</button>
+    <div class="stats" id="stats"></div>
    </div>
     <nav class="tabs noanim" id="tabs">
       <span class="tab-ind" id="tabInd"></span>
@@ -574,7 +574,11 @@ body.selecting .toast{bottom:86px}
       <button type="button" data-t="lists">📚 Listas</button>
       <button type="button" data-t="perfil">👤 Perfil</button>
     </nav>
-   <div class="bar-r"><div class="stats" id="stats"></div></div>
+   <div class="bar-r">
+    <button class="btn primary" id="addBtn"></button>
+    <button class="btn ghost icobtn" id="filtBtn" title="Ocultar busca e filtros"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 6h9M17 6h3M4 12h3M11 12h9M4 18h11M19 18h1"/><circle cx="15" cy="6" r="2"/><circle cx="9" cy="12" r="2"/><circle cx="17" cy="18" r="2"/></svg></button>
+    <button class="btn ghost icobtn" id="cfgBtn" title="Configurações">⋯</button>
+   </div>
   </div>
 
   <div class="tools" id="toolsCat">
@@ -1932,20 +1936,50 @@ function openDetail(id){
     const u = hb || await coverURL(g);
     if (u && $('#dHero')) $('#dHero').insertAdjacentHTML('afterbegin', `<img src="${esc(u)}" alt="" class="${hb ? '' : 'blur'}">`);
   })();
-  $('#dEdit').onclick = () => { closeModals(true); openForm(g.id); };
+  $('#dEdit').onclick = () => { closeModals(true); openForm(g.id); form.backTo = g.id; };
   $('#dDel').onclick = () => deleteGame(g.id);
   $('#dFav').onclick = async () => { g.favorito = !g.favorito; await persist(); render(); openDetail(g.id); };
   $('#dReplay').onclick = () => { closeModals(true); openForm(null); fillReplay([g, ...siblingsOf(g)]); };
   $('#detail').querySelectorAll('.prow[data-pid]').forEach(r => r.onclick = () => { if (r.dataset.pid !== g.id) openDetail(r.dataset.pid); });
   const uni = $('#dUnify');
+  if (uni) checkPlaysDiff(g);
   if (uni) uni.onclick = async () => {
     const n = siblingsOf(g).length;
-    const ok = await showMsg('Igualar as jogadas', `<p>Usar a <b>nota</b>, o <b>ano de lançamento</b>, os <b>gêneros</b> e a <b>capa</b> desta jogada (${g.ano ?? 'sem ano'}) nas outras ${n}?</p><p style="color:var(--mut);font-size:13px">Plataforma, ano em que terminou, horas, status e comentário de cada jogada continuam como estão.</p>`,
+    const ok = await showMsg('Igualar as jogadas', `<p>Usar a <b>nota</b>, o <b>ano de lançamento</b>, os <b>gêneros</b>, a <b>capa</b> e o <b>banner</b> desta jogada (${g.ano ?? 'sem ano'}) nas outras ${n}?</p><p style="color:var(--mut);font-size:13px">Plataforma, ano em que terminou, horas, status e comentário de cada jogada continuam como estão.</p>`,
       [{ label: 'Cancelar', value: false }, { label: 'Igualar', primary: true, value: true }]);
     if (!ok) return;
-    await syncSiblings(g, { capa: true }); await persist(); clearUrlCache(); render(); openDetail(g.id);
+    await syncSiblings(g, { capa: true });
+    const bb = g.banner && g.banner.capa ? await gameCoverBlob(g.banner) : null;
+    for (const s of siblingsOf(g)) { if (bb) await storeCover(bannerOf(s), bb); else if (s.banner) await removeCover(s.banner); }
+    await persist(); clearUrlCache(); render(); openDetail(g.id);
     toast('✓ Jogadas igualadas');
   };
+}
+/* "assinatura" da capa (e do banner), pra saber se as jogadas usam a mesma imagem */
+async function imgSig(o){
+  if (!o) return '';
+  if (o.capaUrl && !(o.capa && o.capa !== 'idb')) return 'url:' + o.capaUrl;
+  if (!hasCover(o)) return '';
+  try {
+    const b = await gameCoverBlob(o); if (!b) return o.capaUrl ? 'url:' + o.capaUrl : '';
+    const u = new Uint8Array(await b.arrayBuffer());
+    let h = 2166136261; for (let i = 0; i < u.length; i++) { h ^= u[i]; h = Math.imul(h, 16777619); }
+    return u.length + ':' + (h >>> 0);
+  } catch { return '?'; }
+}
+async function checkPlaysDiff(g){
+  const sibs = siblingsOf(g);
+  const campos = [];
+  if (sibs.some(s => (s.nota ?? null) !== (g.nota ?? null))) campos.push('nota');
+  if (sibs.some(s => (s.lancamento ?? null) !== (g.lancamento ?? null))) campos.push('lançamento');
+  if (sibs.some(s => sortGens(s.generos || []).join() !== sortGens(g.generos || []).join())) campos.push('gêneros');
+  const [cg, bg] = await Promise.all([imgSig(g), imgSig(g.banner)]);
+  for (const s of sibs) { if (await imgSig(s) !== cg) { campos.push('capa'); break; } }
+  for (const s of sibs) { if (await imgSig(s.banner) !== bg) { campos.push('banner'); break; } }
+  const w = $('#dWarn'); if (!w || !$('#detailBg').classList.contains('open')) return;
+  const lista = campos.length > 1 ? campos.slice(0, -1).join(', ') + ' ou ' + campos.at(-1) : campos[0];
+  w.textContent = campos.length ? `⚠ As jogadas estão com ${lista} diferente${campos.length > 1 || campos[0] === 'gêneros' ? 's' : ''}.` : '';
+  w.classList.toggle('hidden', !campos.length);
 }
 function playsBox(g){
   const sibs = siblingsOf(g); if (!sibs.length) return '';
@@ -1956,8 +1990,8 @@ function playsBox(g){
       <b>${p.ano ?? '—'}</b><span>${esc(p.plataforma || '')}</span>
       <span class="h">${p.horas != null ? fmtNum(p.horas) + ' h' : ''}</span>
       ${st ? `<span class="pill" style="color:${st.c};border-color:${st.c}">${st.n}</span>` : '<span></span>'}</div>`; }).join('')}
-    <div class="pact">${diff ? '<span class="warn">⚠ As jogadas estão com nota, lançamento ou gêneros diferentes.</span>' : ''}
-      <button type="button" class="link" id="dUnify">Igualar nota, lançamento, gêneros e capa usando esta</button></div>
+    <div class="pact"><span class="warn${diff ? '' : ' hidden'}" id="dWarn">⚠ As jogadas estão com nota, lançamento ou gêneros diferentes.</span>
+      <button type="button" class="link" id="dUnify">Igualar nota, lançamento, gêneros, capa e banner usando esta</button></div>
   </div>`;
 }
 async function deleteGame(id){
@@ -2031,6 +2065,7 @@ function genEnter(){
 }
 function openForm(id){
   const g = id ? games.find(x => x.id === id) : null;
+  form.backTo = null;
   form.id = g ? g.id : null;
   form.gens = new Set(g ? g.generos || [] : []);
   $('#formTitle').textContent = g ? 'Editar jogo' : 'Adicionar jogo';
@@ -2092,7 +2127,9 @@ async function saveForm(e){
       if (b) await storeCover(bannerOf(s), b); else if (s.banner) await removeCover(s.banner);
     }
     await persist();
+    const back = !isNew && form.backTo === g.id;
     closeModals(true); clearUrlCache(); render();
+    if (back) openDetail(g.id);
     toast(outras ? `${isNew ? `“${titulo}” adicionado` : 'Alterações salvas'} · nota, lançamento, gêneros e capa igualados em ${plural(outras, 'outra jogada', 'outras jogadas')}` : isNew ? `“${titulo}” adicionado ao catálogo` : 'Alterações salvas', outras ? 4200 : 2600);
   } catch (err) { console.error(err); }
   finally { btn.disabled = false; }
@@ -2486,11 +2523,15 @@ $('#leGrid').addEventListener('click', e => {
 function openModal(sel){ $(sel).classList.add('open'); document.body.style.overflow = 'hidden'; }
 function closeModals(force){
   if (!force && $('#leBg').classList.contains('open') && (LE.dirty || panelHasContent()) && !confirm('Descartar as alterações dessa lista?')) return false;
+  // editou a partir da tela do jogo e cancelou: volta pra ela
+  const volta = !force && $('#formBg').classList.contains('open') && !sgOpen() && form.backTo;
+  if (volta) form.backTo = null;
   if ($('#leBg').classList.contains('open')) cleanupEditor();
   document.querySelectorAll('.modal-bg.open:not(.msgbg):not(.subbg)').forEach(m => m.classList.remove('open'));
   if (sgOpen()) closeSgdb();
   if (!$('#msgBg').classList.contains('open')) document.body.style.overflow = '';
   gp.reset(); lp.reset();
+  if (volta && games.some(x => x.id === volta)) openDetail(volta);
   return true;
 }
 const anyModalOpen = () => !!document.querySelector('.modal-bg.open');

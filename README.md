@@ -15,7 +15,7 @@ O Catalogames é um app para Windows que organiza os jogos que você já zerou, 
 
 ## ✨ Funções
 
-O app tem três abas no centro do topo: **🎮 Catálogo**, **📚 Listas** e **👤 Perfil**, com uma animação deslizando entre elas. Os botões ficam à esquerda.
+O app tem três abas no centro do topo: **🎮 Catálogo**, **📚 Listas** e **👤 Perfil**, com uma animação deslizando entre elas. O nome fica à esquerda, com os números da aba ao lado, e os botões da aba à direita, com as configurações sempre no canto.
 
 ### Catálogo
 - Grade de capas com tamanho ajustável, agrupada pelo ano em que você terminou, pelo ano de lançamento ou sem agrupar.
@@ -31,7 +31,7 @@ O app tem três abas no centro do topo: **🎮 Catálogo**, **📚 Listas** e **
 - Gêneros em ordem alfabética, com busca: digite pra filtrar ou criar um novo. A lista é editável nas configurações.
 - **Importar uma lista de jogos** de um arquivo `.txt` ou `.md`, um por linha: `Nome - ano que jogou - ano do jogo - plataforma - nota`. O que não estiver no padrão é pulado, e o app mostra uma prévia antes de importar. Os jogos importados aparecem com borda colorida até você completar capa, horas e gêneros.
 
-- **Tela do jogo:** clique numa capa e abre um card centralizado com o banner do jogo no topo e a capa grande sobreposta. Sem banner, o app usa a própria capa desfocada.
+- **Tela do jogo:** clique numa capa e abre um card centralizado com o banner do jogo no topo e a capa grande sobreposta. Sem banner, o app usa a própria capa desfocada. Depois de editar, você volta para essa tela.
 
 ### Perfil
 - Foto de perfil, nome e uma imagem de topo larga, que expande quando você rola para cima.
@@ -121,6 +121,13 @@ npm run dist       # gera o instalador do Windows em dist/ (NSIS, sem precisar d
 ---
 
 ## 📜 Versões
+
+### 1.7.1
+- Topo reorganizado: nome e números à esquerda, abas no centro, botões e configurações à direita.
+- O X da tela do jogo voltou para o canto superior direito.
+- Ao salvar ou cancelar a edição, você volta para a tela do jogo.
+- Jogadas repetidas: o aviso também mostra quando a capa ou o banner estão diferentes, e o "igualar" inclui o banner.
+- Ícone novo: preto e cinza escuro, com borda branca leve.
 
 ### 1.7.0
 - Abas centralizadas no topo, com animação deslizante; botões à esquerda.

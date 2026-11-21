@@ -1,6 +1,6 @@
 {
   "name": "catalogames",
-  "version": "1.7.0",
+  "version": "1.7.1",
   "description": "Catálogo de jogos zerados, com listas e capas",
   "main": "main.js",
   "scripts": {
