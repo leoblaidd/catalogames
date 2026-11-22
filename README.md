@@ -9,7 +9,7 @@
 
 **Autor:** [@leoblaidd](https://github.com/leoblaidd)
 
-O Catalogames é um app para Windows que organiza os jogos que você já zerou, jogou ou quer jogar. Ele funciona como uma estante de capas: você cadastra cada jogo com nota, plataforma e ano, e monta listas e rankings com eles. Tudo fica salvo numa pasta do seu PC, sem conta, sem nuvem e sem internet obrigatória.
+O Catalogames é um app leve para Windows (instalador de ~1,4 MB, feito com Tauri) que organiza os jogos que você já zerou, jogou ou quer jogar. Ele funciona como uma estante de capas: você cadastra cada jogo com nota, plataforma e ano, e monta listas e rankings com eles. Tudo fica salvo numa pasta do seu PC, sem conta, sem nuvem e sem internet obrigatória.
 
 ---
 
@@ -23,10 +23,15 @@ O app tem três abas no centro do topo: **🎮 Catálogo**, **📚 Listas** e **
 - Busca instantânea (atalho <kbd>/</kbd>) e filtros por plataforma, gênero, status, ano e nota.
 - **Filtro de nota exato:** "Nota 5" mostra os jogos com 5 e 5,5, com os 5,5 primeiro.
 - Ordenação por data, nota, nome, horas ou lançamento.
-- Botão para esconder a barra de busca e filtros e deixar só as capas.
+- **Dois jeitos de mostrar os filtros** (escolha nas Configurações):
+  - **Barra no topo**, com os filtros escritos por extenso.
+  - **Dock flutuante** embaixo, com a busca, um ícone pra cada filtro e o tamanho das capas. Cada ícone abre uma gaveta com as opções em quadradinhos.
+- Botão para esconder a busca e os filtros (ou o dock) e deixar só as capas.
 - **Jogou de novo?** Jogos com o mesmo título contam como o mesmo jogo jogado em anos diferentes:
   - Ao cadastrar, o app sugere o jogo e puxa nota, lançamento, gêneros e capa. Você só ajusta o ano.
   - Nota, lançamento, gêneros e capa ficam sempre iguais em todas as jogadas.
+  - A tela do jogo mostra só "🔁 Você jogou isso X vezes" e os anos. Clicar num ano abre aquela jogada.
+  - Se as jogadas ficarem com dados diferentes, aparece o botão **Igualar ao 1º registro**, que copia tudo da primeira jogada cadastrada.
   - Fora do agrupamento por ano terminado, as jogadas viram uma pilha de capas. Passando o mouse, elas se abrem para o lado.
 - Gêneros em ordem alfabética, com busca: digite pra filtrar ou criar um novo. A lista é editável nas configurações.
 - **Importar uma lista de jogos** de um arquivo `.txt` ou `.md`, um por linha: `Nome - ano que jogou - ano do jogo - plataforma - nota`. O que não estiver no padrão é pulado, e o app mostra uma prévia antes de importar. Os jogos importados aparecem com borda colorida até você completar capa, horas e gêneros.
@@ -41,7 +46,7 @@ O app tem três abas no centro do topo: **🎮 Catálogo**, **📚 Listas** e **
 - Dá pra ajustar a posição da imagem do topo, arrastando ou pelo controle.
 
 ### Exportar imagens (PNG)
-- **Card do perfil** (800 × 1200): foto, um pouco da imagem do topo, nome, Top 5 lado a lado (o 1º com coroa e um pouco maior) e números como jogos do ano, jogos ao todo e plataforma mais jogada. Você desmarca o que não quiser antes de exportar.
+- **Card do perfil** (800 de largura, altura conforme o que você marcar): foto, um pouco da imagem do topo, nome, Top 5 lado a lado (o 1º com coroa e um pouco maior) e números como jogos do ano, jogos ao todo e plataforma mais jogada. Você desmarca o que não quiser antes de exportar.
 - **Lista:** fundo preto, nome da lista na cor do tema, capas grandes em 3, 5 ou 10 colunas, com ou sem ranking e nomes.
 - **Catálogo:** os jogos de um ano, de uma plataforma ou de um gênero (um filtro por vez), com nota e nomes opcionais.
 - Sempre com prévia antes, e você escolhe onde salvar.
@@ -92,9 +97,11 @@ Catalogames\
 
 ## 📥 Instalação
 
-1. Baixe o `Catalogames-Instalador-x.y.z.exe` mais recente em **[Releases](../../releases)**.
+1. Baixe o instalador mais recente em **[Releases](../../releases)**.
 2. Execute e escolha a pasta de instalação (por exemplo, `D:\Jogos\Catalogames`).
 3. O Windows pode mostrar "O Windows protegeu o computador", porque o instalador não tem assinatura digital paga. Clique em **Mais informações → Executar assim mesmo**.
+
+> O app usa o **WebView2** (o motor do Edge que já vem no Windows 11 e na maioria dos Windows 10). Se faltar, o instalador avisa e mostra onde baixar.
 
 > Evite instalar em *Arquivos de Programas*: o Windows não deixa gravar ali, e aí os dados vão para `%APPDATA%\Catalogames\dados`.
 
@@ -102,25 +109,38 @@ Catalogames\
 
 ## 🛠️ Rodando o código
 
-Feito com [Electron](https://www.electronjs.org/). A interface inteira está em um único arquivo HTML, sem frameworks.
+Feito com [Tauri 2](https://tauri.app/) (Rust). A interface inteira está em um único arquivo HTML, sem frameworks, e usa o WebView2 do Windows em vez de levar um navegador junto.
 
 ```bash
-npm install
-npm start          # abre o app em modo desenvolvimento
-npm run dist       # gera o instalador do Windows em dist/ (NSIS, sem precisar de Wine)
+cd src-tauri
+cargo run                      # abre o app em modo desenvolvimento
+../build/fazer-instalador.sh   # gera o instalador do Windows em dist/ (compila a partir do Linux)
 ```
+
+O `fazer-instalador.sh` compila pra `x86_64-pc-windows-gnu` (precisa do `mingw-w64` e do `rust-src`) e usa o `makensis` pra montar o instalador.
 
 | Arquivo | O que faz |
 |---|---|
-| `app/index.html` | A interface toda: catálogo, listas, modais, temas |
-| `main.js` | Processo principal: janela, leitura e gravação em `dados\`, downloads de imagens, API do SteamGridDB |
-| `preload.js` | Ponte segura entre a interface e o disco |
+| `app/index.html` | A interface toda: catálogo, listas, perfil, modais, temas |
+| `src-tauri/src/main.rs` | O app em Rust: janela, leitura e gravação em `dados\`, downloads de imagens, SteamGridDB, atualizações |
+| `src-tauri/src/ponte.js` | Ponte entre a interface e o Rust (cria o `window.catalogame`) |
+| `src-tauri/tauri.conf.json` | Configuração do Tauri (nome, versão, ícone) |
 | `build/instalador.nsi` | Script do instalador (NSIS). Instala por cima mantendo a pasta `dados` |
-| `build/fazer-instalador.js` | Monta o app e compila o instalador |
+| `build/fazer-instalador.sh` | Compila o app e o instalador |
+
+> Até a 1.7.1 o app era feito com Electron. Esse código continua no histórico do repositório.
 
 ---
 
 ## 📜 Versões
+
+### 1.8.0
+- **Agora em Tauri (Rust):** instalador de ~1,4 MB (antes ~110 MB) e app instalado com ~4 MB. Mesmas funções e mesmos dados.
+- Filtros do catálogo também em **dock flutuante** embaixo, com ícones e gavetas de opções (escolha nas Configurações).
+- Jogadas repetidas mais limpas na tela do jogo, com o botão **Igualar ao 1º registro** quando os dados divergem.
+- Card do perfil com altura que acompanha o que foi marcado pra exportar.
+- Título das imagens de catálogo e lista menor e em semibold.
+- Capa da tela do jogo sem borda, só com uma sombra leve.
 
 ### 1.7.1
 - Topo reorganizado: nome e números à esquerda, abas no centro, botões e configurações à direita.

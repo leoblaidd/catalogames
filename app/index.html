@@ -78,6 +78,39 @@ html{scrollbar-gutter:stable}
 .search svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);width:15px;height:15px;color:var(--dim)}
 .tools select{width:auto;max-width:168px;padding:7px 26px 7px 9px;font-size:13px;background-color:var(--bg2);text-overflow:ellipsis}
 .tools select.on{border-color:var(--acc);background:var(--accsolid)}
+/* ---- filtros no modo dock (barra flutuante embaixo) ---- */
+.tools:not(.dock) .dk, .tools:not(.dock) .dk-drawer{display:none!important}
+.tools.dock{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:30;flex-wrap:nowrap;gap:4px;padding:7px;max-width:calc(100vw - 28px);
+  background:color-mix(in srgb,var(--bg2) 88%,transparent);backdrop-filter:blur(14px);border:1px solid var(--line);border-radius:18px;box-shadow:0 18px 50px var(--sh2),0 2px 8px rgba(0,0,0,.25)}
+.tools.dock > select, .tools.dock > .toggle, .tools.dock > #clearF, .tools.dock > #catExport, .tools.dock > #fromSearch{display:none}
+.tools.dock .search{flex:0 1 240px;min-width:150px;max-width:240px}
+.tools.dock .search input{border-radius:12px;background:var(--bg)}
+.dk-sep{width:1px;align-self:stretch;margin:6px 4px;background:var(--line);flex:none}
+.dkb{position:relative;flex:none;width:38px;height:38px;border-radius:11px;border:1px solid transparent;background:none;color:var(--mut);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;transition:background .15s,color .15s}
+.dkb svg{width:19px;height:19px}
+.dkb:hover{background:var(--bg3);color:var(--txt)}
+.dkb.on{color:var(--acc2);background:var(--accsolid);border-color:var(--acc)}
+.dkb.on[data-dk="fav"] svg{fill:currentColor}
+.dkb.open{background:var(--bg4);color:var(--txt)}
+.dkb.off{display:none}
+.dkb .n{position:absolute;top:-5px;right:-5px;min-width:17px;height:17px;padding:0 4px;border-radius:9px;background:var(--acc);color:#fff;font-size:10.5px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.tools.dock:not(.dk-open) .dkb:hover::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 10px);left:50%;transform:translateX(-50%);white-space:nowrap;background:var(--bg4);color:var(--txt);border:1px solid var(--line);padding:5px 9px;border-radius:7px;font-size:12px;pointer-events:none;box-shadow:0 6px 18px var(--sh2)}
+.tools.dock .size{flex:none;margin:0 6px 0 2px}
+.dk-drawer{position:absolute;left:50%;bottom:calc(100% + 12px);transform:translateX(-50%);width:min(660px,calc(100vw - 28px));max-height:min(56vh,520px);overflow:auto;
+  background:var(--bg2);border:1px solid var(--line);border-radius:16px;box-shadow:0 22px 60px var(--sh2);padding:14px;animation:dkUp .16s ease-out}
+.dk-drawer.c3{width:min(460px,calc(100vw - 28px))}
+@keyframes dkUp{from{opacity:0;transform:translate(-50%,8px)}to{opacity:1;transform:translate(-50%,0)}}
+.dk-drawer h4{margin:0 2px 10px;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--dim);display:flex;justify-content:space-between}
+.dk-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.dk-drawer.c3 .dk-grid{grid-template-columns:repeat(3,1fr)}
+.dk-box{border:1px solid var(--line);background:var(--bg);border-radius:11px;padding:12px 8px;min-height:58px;cursor:pointer;color:var(--txt);font:inherit;font-size:13px;font-weight:600;line-height:1.2;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;text-align:center;word-break:break-word}
+.dk-box small{font-weight:400;color:var(--dim);font-size:11.5px}
+.dk-box:hover{border-color:var(--acc);background:var(--bg3)}
+.dk-box.on{border-color:var(--acc);background:var(--accsolid);color:var(--acc2)}
+body.dock-on main{padding-bottom:120px}
+body.dock-on .toast{bottom:96px}
+body.dock-on .selbar{bottom:92px}
 .toggle{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--mut);border:1px solid var(--line);border-radius:8px;padding:6px 10px;white-space:nowrap;cursor:pointer;user-select:none;background:var(--bg2)}
 .toggle.on{color:var(--txt);border-color:var(--acc);background:var(--accsolid)}
 
@@ -265,7 +298,7 @@ body.ctrl #main .card,body.selecting #main .card{cursor:copy}
 .dt-x{position:absolute;top:14px;right:14px;z-index:4;width:38px;height:38px;padding:0;border-radius:50%;background:rgba(8,10,14,.55);color:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;backdrop-filter:blur(4px)}
 .dt-x:hover{background:rgba(8,10,14,.8);color:#fff}
 .modal.dt .detail{grid-template-columns:240px 1fr;gap:32px;padding:0 34px 8px;margin-top:-170px;position:relative;z-index:2;overflow:auto;min-height:0}
-.modal.dt .dc{box-shadow:0 22px 50px rgba(0,0,0,.6);border:3px solid var(--bg2);align-self:start}
+.modal.dt .dc{box-shadow:0 10px 28px rgba(0,0,0,.38);border:0;align-self:start}
 .modal.dt .dt-info{padding-top:118px;min-width:0}
 .modal.dt h1{font-size:30px;text-shadow:0 2px 14px rgba(0,0,0,.35)}
 .modal.dt > footer{border-top:0;padding:16px 34px 24px}
@@ -334,16 +367,15 @@ body.ctrl #main .card,body.selecting #main .card{cursor:copy}
 .sg-key{display:flex;gap:8px;margin-top:12px}
 
 /* jogadas no detalhe */
-.plays-box{margin-top:18px;border:1px solid var(--line);border-radius:10px;overflow:hidden}
-.plays-box h3{margin:0;padding:10px 14px;font-size:13px;background:var(--bg3);border-bottom:1px solid var(--line)}
-.prow{display:grid;grid-template-columns:64px 1fr auto auto;gap:10px;align-items:center;padding:8px 14px;border-bottom:1px solid var(--line);cursor:pointer;font-size:13.5px}
-.prow:last-of-type{border-bottom:0}
-.prow:hover{background:var(--bg3)}
-.prow.cur{background:var(--accbg)}
-.prow b{font-size:14px}
-.prow .h{color:var(--mut);font-size:12.5px}
-.pact{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:10px 14px;border-top:1px solid var(--line);background:var(--bg3)}
-.pact .warn{flex-basis:100%;font-size:12.5px;color:var(--warn)}
+.dplays{margin-top:16px;display:flex;align-items:center;flex-wrap:wrap;gap:4px 8px;font-size:14px;color:var(--mut)}
+.dplays .pi{font-size:15px}
+.dplays b{color:var(--txt);font-weight:600}
+.dplays .anos{display:inline}
+.dplays .py{background:none;border:0;padding:0;font:inherit;color:var(--mut);cursor:pointer}
+.dplays .py:hover{color:var(--txt);text-decoration:underline}
+.dplays .py.cur{color:var(--acc2);font-weight:600;cursor:default;text-decoration:none}
+.dplays .sep{color:var(--dim)}
+#dUnify.hidden{display:none}
 .sugg .sh + .sg{margin-top:0}
 .sugg .sh.sep{border-top:1px solid var(--line);margin-top:4px;padding-top:8px}
 
@@ -505,6 +537,7 @@ body.ctrl #main .card,body.selecting #main .card{cursor:copy}
 .cfg-body section:last-child{border-bottom:0}
 .cfg-body h3{margin:0 0 10px;font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--mut)}
 .seg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.seg.two{grid-template-columns:repeat(2,1fr)}
 .seg button{border:1px solid var(--line);background:var(--bg);border-radius:10px;padding:12px 8px 10px;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-weight:600;text-align:center;width:100%;line-height:1.2}
 .seg button .ic{font-size:20px;line-height:1;display:block}
 .seg button b{display:block;font-weight:600}
@@ -609,7 +642,9 @@ body.selecting .toast{bottom:86px}
     <button class="link hidden" id="clearF">limpar filtros</button>
     <button class="btn sm" id="catExport" title="Gerar uma imagem PNG com os jogos de um ano, plataforma ou gênero">📤 Exportar</button>
     <button class="btn sm fromsearch hidden" id="fromSearch" title="Cria uma lista nova com os jogos que estão aparecendo agora">📚 Criar lista com esses jogos</button>
+    <span class="dk dk-sep"></span><button type="button" class="dk dkb" data-dk="plat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="6"/><path d="M6.5 12h4M8.5 10v4"/><circle cx="15.5" cy="11" r=".9" fill="currentColor"/><circle cx="17.5" cy="13.2" r=".9" fill="currentColor"/></svg></button><button type="button" class="dk dkb" data-dk="gen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8z"/><circle cx="7.5" cy="7.5" r="1.4"/></svg></button><button type="button" class="dk dkb" data-dk="status"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m8 12.2 2.8 2.8L16 9.5"/></svg></button><button type="button" class="dk dkb" data-dk="ano"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2.5"/><path d="M3 10h18M8 3v4M16 3v4"/></svg></button><button type="button" class="dk dkb" data-dk="nota"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="6"/><path d="m8.6 13.8-1.6 7.2 5-2.8 5 2.8-1.6-7.2"/></svg></button><button type="button" class="dk dkb" data-dk="sort"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4v16M3.5 16.5 7 20l3.5-3.5M17 20V4M13.5 7.5 17 4l3.5 3.5"/></svg></button><button type="button" class="dk dkb" data-dk="group"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 9 5-9 5-9-5 9-5z"/><path d="m3 13 9 5 9-5"/></svg></button><span class="dk dk-sep"></span><button type="button" class="dk dkb" data-dk="fav"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 17.3 6.4 20.2l1.1-6.2L3 9.6l6.2-.9z"/></svg></button><button type="button" class="dk dkb off" data-dk="pend"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12M6 21h12M7.5 3v3.5L12 12l-4.5 5.5V21M16.5 3v3.5L12 12l4.5 5.5V21"/></svg></button><button type="button" class="dk dkb" data-dk="export"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3.5M7.5 8 12 3.5 16.5 8"/><path d="M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/></svg></button><button type="button" class="dk dkb off" data-dk="lista"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h11M4 12h11M4 18h7M18 14.5v7M14.5 18h7"/></svg></button><button type="button" class="dk dkb off" data-dk="clear"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 6.5l11 11M17.5 6.5l-11 11"/></svg></button><span class="dk dk-sep"></span>
     <label class="size" title="Tamanho das capas">▫<input type="range" id="cardSize" min="110" max="280" step="10">▣</label>
+    <div class="dk-drawer hidden" id="dkDrawer"></div>
   </div>
 
   <div class="tools hidden" id="toolsList">
@@ -649,6 +684,12 @@ body.selecting .toast{bottom:86px}
           <button type="button" data-v="auto"><span class="ic">🖥️</span><b>Automático</b><small>segue o Windows</small></button>
           <button type="button" data-v="escuro"><span class="ic">🌙</span><b>Escuro</b><small>sempre escuro</small></button>
           <button type="button" data-v="claro"><span class="ic">☀️</span><b>Claro</b><small>sempre claro</small></button>
+        </div>
+      </section>
+      <section><h3>Filtros do catálogo</h3>
+        <div class="seg two" id="cfgFiltros">
+          <button type="button" data-v="barra"><span class="ic">☰</span><b>Barra no topo</b><small>filtros com os nomes escritos</small></button>
+          <button type="button" data-v="dock"><span class="ic">⚓</span><b>Dock flutuante</b><small>ícones numa barra embaixo</small></button>
         </div>
       </section>
       <section><h3>Cor de destaque</h3><div class="swatches" id="cfgCores"></div></section>
@@ -1289,6 +1330,7 @@ function moveTabInd(){
 addEventListener('resize', () => { $('#tabs').classList.add('noanim'); moveTabInd(); });
 document.fonts && document.fonts.ready.then(() => { $('#tabs').classList.add('noanim'); moveTabInd(); });
 function startApp(){
+  applyFiltMode();
   setTab(view.tab);
 }
 function setTab(t){
@@ -1515,7 +1557,7 @@ async function drawGridArt(cv, { titulo, sub, itens, cols, nomes, ranked, notas 
   const cw = (W - pad * 2 - gap * (cols - 1)) / cols, ch = cw * 1.5;
   const fsName = Math.max(15, Math.min(32, cw * 0.095)), lhName = fsName * 1.25;
   const nameH = nomes ? lhName * 2 + 14 : 0;
-  const headH = sub ? 230 : 190;
+  const headH = sub ? 215 : 180;
   const rows = Math.max(1, Math.ceil(itens.length / cols));
   let H = Math.round(headH + rows * (ch + nameH) + (rows - 1) * gap + 110);
   const MAXH = 16000, sc = H > MAXH ? MAXH / H : 1;
@@ -1523,9 +1565,9 @@ async function drawGridArt(cv, { titulo, sub, itens, cols, nomes, ranked, notas 
   const ctx = cv.getContext('2d'); ctx.setTransform(sc, 0, 0, sc, 0, 0);
   ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H);
   ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic';
-  ctx.fillStyle = ACC(); ctx.font = `800 ${titulo.length > 28 ? 58 : 72}px ${FONT}`;
-  wrapText(ctx, titulo, W / 2, 128, W - pad * 2, 76, 1);
-  if (sub) { ctx.fillStyle = '#8b93a5'; ctx.font = `500 30px ${FONT}`; ctx.fillText(sub, W / 2, 182); }
+  ctx.fillStyle = ACC(); ctx.font = `600 ${titulo.length > 28 ? 42 : 50}px ${FONT}`;
+  wrapText(ctx, titulo, W / 2, 120, W - pad * 2, 60, 1);
+  if (sub) { ctx.fillStyle = '#8b93a5'; ctx.font = `500 27px ${FONT}`; ctx.fillText(sub, W / 2, 170); }
   const imgs = await Promise.all(itens.map(it => loadImgFor(it.obj)));
   itens.forEach((it, i) => {
     const r = Math.floor(i / cols), c = i % cols;
@@ -1556,20 +1598,12 @@ async function drawGridArt(cv, { titulo, sub, itens, cols, nomes, ranked, notas 
   ctx.fillText('C A T A L O G A M E S', W / 2, H - 48);
 }
 
-/* card do perfil (800 × 1200) */
+/* card do perfil: 800 de largura; a altura acompanha o que foi marcado pra exportar */
 async function drawProfileCard(cv, o){
-  const W = 800, H = 1200; cv.width = W; cv.height = H;
-  const ctx = cv.getContext('2d'); ctx.setTransform(1, 0, 0, 1, 0, 0);
+  const W = 800;
+  const ctx = cv.getContext('2d');
   const acc = ACC(), S = perfilStats();
-  ctx.fillStyle = '#0b0d12'; ctx.fillRect(0, 0, W, H);
   const heroH = o.capa ? 300 : 0;
-  if (o.capa) {
-    const img = await loadImgFor(perfil.hero);
-    if (img) drawCoverImg(ctx, img, 0, 0, W, heroH, 0, '', perfil.heroPos ?? 50);
-    else { const g = ctx.createLinearGradient(0, 0, W, heroH); g.addColorStop(0, acc); g.addColorStop(1, '#111'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, heroH); }
-    const fade = ctx.createLinearGradient(0, heroH - 160, 0, heroH); fade.addColorStop(0, 'rgba(11,13,18,0)'); fade.addColorStop(1, '#0b0d12');
-    ctx.fillStyle = fade; ctx.fillRect(0, heroH - 160, W, 161);
-  }
   // blocos que vêm depois da imagem do topo (centralizados no espaço que sobra)
   const blocos = [];
   if (o.foto) blocos.push({ h: 188, draw: async y => {
@@ -1626,11 +1660,20 @@ async function drawProfileCard(cv, o){
       ctx.fillStyle = '#8b93a5'; ctx.font = `600 ${n > 4 ? 13 : 15}px ${FONT}`; wrapText(ctx, l, x + bw / 2, y + 80, bw - 12, 16, 1);
     });
   } });
-  // posiciona: a foto "sobe" um pouco por cima da imagem do topo
-  const GAP = 14, total = blocos.reduce((s, b) => s + b.h, 0) + GAP * (blocos.length - 1);
-  let y = heroH ? heroH - (blocos[0] && blocos[0].sobe ? 120 : 0) : 70;
-  const sobra = H - 56 - y - total;
-  if (sobra > 0) y += Math.min(sobra / 2, heroH ? 24 : sobra / 2);
+  // posiciona: a foto "sobe" um pouco por cima da imagem do topo; a altura sai da soma dos blocos
+  const GAP = 18, total = blocos.reduce((s, b) => s + b.h, 0) + GAP * Math.max(0, blocos.length - 1);
+  let y = heroH ? heroH - (blocos[0] && blocos[0].sobe ? 120 : 0) + (blocos.length ? 0 : 0) : 56;
+  if (heroH && blocos[0] && !blocos[0].sobe) y += 20;
+  const H = Math.max(heroH ? heroH + 60 : 160, Math.round(y + total + (blocos.length ? 92 : 40)));
+  cv.width = W; cv.height = H; ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.fillStyle = '#0b0d12'; ctx.fillRect(0, 0, W, H);
+  if (o.capa) {
+    const img = await loadImgFor(perfil.hero);
+    if (img) drawCoverImg(ctx, img, 0, 0, W, heroH, 0, '', perfil.heroPos ?? 50);
+    else { const g = ctx.createLinearGradient(0, 0, W, heroH); g.addColorStop(0, acc); g.addColorStop(1, '#111'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, heroH); }
+    const fade = ctx.createLinearGradient(0, heroH - 160, 0, heroH); fade.addColorStop(0, 'rgba(11,13,18,0)'); fade.addColorStop(1, '#0b0d12');
+    ctx.fillStyle = fade; ctx.fillRect(0, heroH - 160, W, 161);
+  }
   for (const b of blocos) { await b.draw(y); y += b.h + GAP; }
   ctx.fillStyle = '#3a4150'; ctx.font = `700 16px ${FONT}`; ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic';
   ctx.fillText('C A T A L O G A M E S', W / 2, H - 26);
@@ -1783,7 +1826,7 @@ function renderFilters(){
   $('#cardSize').value = view.card;
   document.documentElement.style.setProperty('--card', view.card + 'px');
   $('#clearF').classList.toggle('hidden', !filtersActive());
-  renderFiltBtn();
+  renderFiltBtn(); renderDock();
   $('#dlPlat').innerHTML = [...new Set([...plats, ...PLAT_DEF])].map(p => `<option value="${esc(p)}">`).join('');
 }
 function renderStats(list){
@@ -1836,6 +1879,7 @@ function render(){
   fs.classList.toggle('hidden', !(filtersActive() && list.length));
   fs.textContent = `📚 Virar lista (${list.length})`;
   fs.title = `Criar uma lista com ${list.length === 1 ? 'esse jogo' : `esses ${list.length} jogos`}`;
+  renderDock();
   if (!games.length) { main.innerHTML = `<div class="empty"><h3>Seu catálogo está vazio</h3><p>Clique em <b>＋ Adicionar jogo</b> pra cadastrar o primeiro.</p><p style="margin-top:22px;font-size:13px">Já usava o Catalogame antes? <button class="link" onclick="openImport()">Trazer sua biblioteca antiga</button></p></div>`; return; }
   if (!list.length) { main.innerHTML = `<div class="empty"><h3>Nenhum jogo com esses filtros</h3><p><button class="link" onclick="clearFilters()">Limpar filtros</button></p></div>`; return; }
   const cards = view.group === 'ano' ? list.map(g => ({ g, plays: [g] })) : clusterize(list);
@@ -1865,6 +1909,83 @@ function render(){
 function clearFilters(){ Object.assign(view, { q:'', plat:'', gen:'', status:'', ano:'', nota:'', fav:false, pend:false }); $('#q').value = ''; render(); }
 const filtersActive = () => !!(view.q.trim() || view.plat || view.gen || view.status || view.ano || view.nota !== '' || view.fav || view.pend);
 
+/* ---------- modo dock: os mesmos filtros, como ícones numa barra flutuante embaixo ---------- */
+const DK = {
+  plat:   { sel: '#fiPlat',   nome: 'Plataforma', todos: 'Todas' },
+  gen:    { sel: '#fiGen',    nome: 'Gênero',     todos: 'Todos' },
+  status: { sel: '#fiStatus', nome: 'Status',     todos: 'Todos' },
+  ano:    { sel: '#fiAno',    nome: 'Ano em que terminou', todos: 'Todos' },
+  nota:   { sel: '#fiNota',   nome: 'Nota',       todos: 'Todas' },
+  sort:   { sel: '#sort',     nome: 'Ordenar por' },
+  group:  { sel: '#fiGroup',  nome: 'Agrupar' },
+};
+let dkAberto = null;
+const tools0 = { pai: null, prox: null };
+function applyFiltMode(){
+  const t = $('#toolsCat'), dock = CFG.filtros === 'dock';
+  if (!tools0.pai) { tools0.pai = t.parentNode; tools0.prox = t.nextSibling; }
+  // fora do cabeçalho (que tem desfoque e prenderia a barra no topo)
+  if (dock && t.parentNode !== document.body) document.body.appendChild(t);
+  if (!dock && t.parentNode !== tools0.pai) tools0.pai.insertBefore(t, tools0.prox);
+  t.classList.toggle('dock', dock);
+  document.body.classList.toggle('dock-on', dock);
+  fecharDk(); renderDock();
+}
+function dkTexto(k, o){
+  const t = o.textContent.trim();
+  if (!o.value && DK[k].todos) return [DK[k].todos, ''];
+  if (k === 'ano') return [t.replace(/^Terminados em /, ''), ''];
+  if (k === 'nota') { const m = t.match(/^(Nota \d+)\s*\((.*)\)$/); return m ? [m[1], m[2]] : [t, '']; }
+  if (k === 'group') return [t.replace(/^Agrupar: /, 'Por '), ''];
+  return [t, ''];
+}
+function renderDock(){
+  const t = $('#toolsCat'); if (!t || !t.classList.contains('dock')) return;
+  t.querySelectorAll('.dkb').forEach(b => {
+    const k = b.dataset.dk, d = DK[k];
+    if (d) {
+      const sel = $(d.sel), o = sel.options[sel.selectedIndex];
+      const ativo = k === 'sort' ? sel.value !== 'ano-desc' : k === 'group' ? sel.value !== 'ano' : !!sel.value;
+      b.classList.toggle('on', ativo);
+      b.dataset.tip = ativo && o ? `${d.nome}: ${dkTexto(k, o).filter(Boolean).join(' ')}` : d.nome;
+    } else if (k === 'fav') { b.classList.toggle('on', !!view.fav); b.dataset.tip = view.fav ? 'Só favoritos (clique pra ver todos)' : 'Só favoritos'; }
+    else if (k === 'pend') { const n = games.filter(g => g.pendente).length; b.classList.toggle('off', !n); b.classList.toggle('on', !!view.pend); b.dataset.tip = `Completar (${n} faltando infos)`; }
+    else if (k === 'export') b.dataset.tip = 'Exportar imagem';
+    else if (k === 'lista') { const fs = $('#fromSearch'); b.classList.toggle('off', fs.classList.contains('hidden')); b.dataset.tip = fs.textContent.replace(/^📚\s*/, ''); }
+    else if (k === 'clear') { b.classList.toggle('off', !filtersActive()); b.dataset.tip = 'Limpar filtros'; }
+  });
+  if (dkAberto) abrirDk(dkAberto, true);
+}
+function abrirDk(k, so){
+  const d = DK[k], box = $('#dkDrawer'), sel = $(d.sel);
+  const ops = [...sel.options];
+  box.classList.toggle('c3', ops.length <= 6);
+  box.innerHTML = `<h4><span>${d.nome}</span>${k === 'sort' || k === 'group' ? '' : `<span>${ops.filter(o => o.value).length}</span>`}</h4>
+    <div class="dk-grid">${ops.map(o => { const [a, b] = dkTexto(k, o);
+      return `<button type="button" class="dk-box${o.value === sel.value ? ' on' : ''}" data-v="${esc(o.value)}">${esc(a)}${b ? `<small>${esc(b)}</small>` : ''}</button>`; }).join('')}</div>`;
+  box.querySelectorAll('.dk-box').forEach(b => b.onclick = () => {
+    sel.value = b.dataset.v; sel.dispatchEvent(new Event('change', { bubbles: true })); fecharDk();
+  });
+  box.classList.remove('hidden'); dkAberto = k;
+  $('#toolsCat').classList.add('dk-open');
+  $('#toolsCat').querySelectorAll('.dkb').forEach(b => b.classList.toggle('open', b.dataset.dk === k));
+}
+function fecharDk(){
+  dkAberto = null; const box = $('#dkDrawer'); if (!box) return;
+  box.classList.add('hidden'); box.innerHTML = '';
+  $('#toolsCat').classList.remove('dk-open');
+  $('#toolsCat').querySelectorAll('.dkb.open').forEach(b => b.classList.remove('open'));
+}
+$('#toolsCat').addEventListener('click', e => {
+  const b = e.target.closest('.dkb'); if (!b) return;
+  const k = b.dataset.dk;
+  if (DK[k]) return dkAberto === k ? fecharDk() : abrirDk(k);
+  fecharDk();
+  ({ fav: () => $('#tFav').click(), pend: () => $('#tPend').click(), export: () => $('#catExport').click(), lista: () => $('#fromSearch').click(), clear: () => clearFilters() })[k]?.();
+});
+document.addEventListener('mousedown', e => { if (dkAberto && !e.target.closest('#toolsCat')) fecharDk(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && dkAberto) { e.stopImmediatePropagation(); fecharDk(); } }, true);
+
 /* ocultar / mostrar busca e filtros */
 function renderFiltBtn(){
   const b = $('#filtBtn'), hid = !!view.filtrosOcultos;
@@ -1872,6 +1993,7 @@ function renderFiltBtn(){
   b.innerHTML = b.innerHTML.replace(/<span class="dot"><\/span>/, '') + (hid && filtersActive() ? '<span class="dot"></span>' : '');
   b.title = hid ? 'Mostrar busca e filtros' + (filtersActive() ? ' (tem filtro ativo)' : '') : 'Ocultar busca e filtros';
   $('#toolsCat').classList.toggle('hidden', view.tab !== 'cat' || hid);
+  if (hid || view.tab !== 'cat') fecharDk();
 }
 function toggleFilters(force){
   view.filtrosOcultos = force != null ? !force : !view.filtrosOcultos;
@@ -1924,6 +2046,7 @@ function openDetail(id){
     <footer>
       <button class="btn ghost danger" id="dDel">Excluir</button>
       <span class="sp"></span>
+      <button class="btn ghost hidden" id="dUnify">🔗 Igualar ao 1º registro</button>
       <button class="btn ghost" id="dReplay" title="Cria uma nova entrada desse jogo pra outro ano, com nota, gêneros e capa já preenchidos">🔁 Joguei de novo</button>
       <button class="btn ghost" id="dFav">${g.favorito ? '☆ Tirar dos favoritos' : '★ Favoritar'}</button>
       <button class="btn primary" id="dEdit">Editar</button>
@@ -1940,19 +2063,18 @@ function openDetail(id){
   $('#dDel').onclick = () => deleteGame(g.id);
   $('#dFav').onclick = async () => { g.favorito = !g.favorito; await persist(); render(); openDetail(g.id); };
   $('#dReplay').onclick = () => { closeModals(true); openForm(null); fillReplay([g, ...siblingsOf(g)]); };
-  $('#detail').querySelectorAll('.prow[data-pid]').forEach(r => r.onclick = () => { if (r.dataset.pid !== g.id) openDetail(r.dataset.pid); });
-  const uni = $('#dUnify');
-  if (uni) checkPlaysDiff(g);
-  if (uni) uni.onclick = async () => {
-    const n = siblingsOf(g).length;
-    const ok = await showMsg('Igualar as jogadas', `<p>Usar a <b>nota</b>, o <b>ano de lançamento</b>, os <b>gêneros</b>, a <b>capa</b> e o <b>banner</b> desta jogada (${g.ano ?? 'sem ano'}) nas outras ${n}?</p><p style="color:var(--mut);font-size:13px">Plataforma, ano em que terminou, horas, status e comentário de cada jogada continuam como estão.</p>`,
+  $('#detail').querySelectorAll('.py[data-pid]').forEach(r => r.onclick = () => openDetail(r.dataset.pid));
+  if (siblingsOf(g).length) checkPlaysDiff(g);
+  $('#dUnify').onclick = async () => {
+    const src = oldestPlay([g, ...siblingsOf(g)]);
+    const ok = await showMsg('Igualar ao 1º registro', `<p>Copiar a <b>nota</b>, o <b>lançamento</b>, os <b>gêneros</b>, a <b>capa</b> e o <b>banner</b> da primeira jogada que você cadastrou (<b>${src.ano ?? 'sem ano'}</b>${src.plataforma ? ' · ' + esc(src.plataforma) : ''}) pras outras?</p><p style="color:var(--mut);font-size:13px">Plataforma, ano em que terminou, horas, status e comentário de cada jogada continuam como estão.</p>`,
       [{ label: 'Cancelar', value: false }, { label: 'Igualar', primary: true, value: true }]);
     if (!ok) return;
-    await syncSiblings(g, { capa: true });
-    const bb = g.banner && g.banner.capa ? await gameCoverBlob(g.banner) : null;
-    for (const s of siblingsOf(g)) { if (bb) await storeCover(bannerOf(s), bb); else if (s.banner) await removeCover(s.banner); }
+    await syncSiblings(src, { capa: true });
+    const bb = src.banner && src.banner.capa ? await gameCoverBlob(src.banner) : null;
+    for (const s of siblingsOf(src)) { if (bb) await storeCover(bannerOf(s), bb); else if (s.banner) await removeCover(s.banner); }
     await persist(); clearUrlCache(); render(); openDetail(g.id);
-    toast('✓ Jogadas igualadas');
+    toast('✓ Jogadas igualadas ao 1º registro');
   };
 }
 /* "assinatura" da capa (e do banner), pra saber se as jogadas usam a mesma imagem */
@@ -1967,8 +2089,8 @@ async function imgSig(o){
     return u.length + ':' + (h >>> 0);
   } catch { return '?'; }
 }
-async function checkPlaysDiff(g){
-  const sibs = siblingsOf(g);
+async function checkPlaysDiff(g0){
+  const g = oldestPlay([g0, ...siblingsOf(g0)]), sibs = siblingsOf(g);
   const campos = [];
   if (sibs.some(s => (s.nota ?? null) !== (g.nota ?? null))) campos.push('nota');
   if (sibs.some(s => (s.lancamento ?? null) !== (g.lancamento ?? null))) campos.push('lançamento');
@@ -1976,23 +2098,23 @@ async function checkPlaysDiff(g){
   const [cg, bg] = await Promise.all([imgSig(g), imgSig(g.banner)]);
   for (const s of sibs) { if (await imgSig(s) !== cg) { campos.push('capa'); break; } }
   for (const s of sibs) { if (await imgSig(s.banner) !== bg) { campos.push('banner'); break; } }
-  const w = $('#dWarn'); if (!w || !$('#detailBg').classList.contains('open')) return;
-  const lista = campos.length > 1 ? campos.slice(0, -1).join(', ') + ' ou ' + campos.at(-1) : campos[0];
-  w.textContent = campos.length ? `⚠ As jogadas estão com ${lista} diferente${campos.length > 1 || campos[0] === 'gêneros' ? 's' : ''}.` : '';
-  w.classList.toggle('hidden', !campos.length);
+  const b = $('#dUnify'); if (!b || !$('#detailBg').classList.contains('open')) return;
+  const lista = campos.length > 1 ? campos.slice(0, -1).join(', ') + ' e ' + campos.at(-1) : campos[0];
+  b.title = campos.length ? `As jogadas estão com ${lista} diferente${campos.length > 1 || campos[0] === 'gêneros' ? 's' : ''}. Clique pra deixar todas iguais à primeira que você cadastrou (${g.ano ?? 'sem ano'}).` : '';
+  b.classList.toggle('hidden', !campos.length);
+}
+/* a jogada cadastrada primeiro (as sem data de cadastro vêm de versões antigas, então são mais antigas) */
+function oldestPlay(plays){
+  return [...plays].sort((a, b) => (a.criadoEm || '').localeCompare(b.criadoEm || '') || (a.ano ?? 9999) - (b.ano ?? 9999))[0];
 }
 function playsBox(g){
   const sibs = siblingsOf(g); if (!sibs.length) return '';
-  const all = [g, ...sibs].sort((a, b) => (b.ano ?? 0) - (a.ano ?? 0));
-  const diff = sibs.some(s => (s.nota ?? null) !== (g.nota ?? null) || (s.lancamento ?? null) !== (g.lancamento ?? null) || sortGens(s.generos || []).join() !== sortGens(g.generos || []).join());
-  return `<div class="plays-box"><h3>🔁 Você jogou isso ${all.length} vezes</h3>
-    ${all.map(p => { const st = STATUS[p.status]; return `<div class="prow${p.id === g.id ? ' cur' : ''}" data-pid="${p.id}" title="${p.id === g.id ? 'Você está vendo esta' : 'Abrir esta jogada'}">
-      <b>${p.ano ?? '—'}</b><span>${esc(p.plataforma || '')}</span>
-      <span class="h">${p.horas != null ? fmtNum(p.horas) + ' h' : ''}</span>
-      ${st ? `<span class="pill" style="color:${st.c};border-color:${st.c}">${st.n}</span>` : '<span></span>'}</div>`; }).join('')}
-    <div class="pact"><span class="warn${diff ? '' : ' hidden'}" id="dWarn">⚠ As jogadas estão com nota, lançamento ou gêneros diferentes.</span>
-      <button type="button" class="link" id="dUnify">Igualar nota, lançamento, gêneros, capa e banner usando esta</button></div>
-  </div>`;
+  const all = [g, ...sibs].sort((a, b) => (a.ano ?? 9999) - (b.ano ?? 9999));
+  const anos = all.map(p => p.id === g.id
+    ? `<span class="py cur" title="Você está vendo esta">${p.ano ?? 'sem ano'}</span>`
+    : `<button type="button" class="py" data-pid="${p.id}" title="Abrir a jogada de ${p.ano ?? 'sem ano'}${p.plataforma ? ' · ' + esc(p.plataforma) : ''}">${p.ano ?? 'sem ano'}</button>`);
+  return `<div class="dplays"><span class="pi">🔁</span> Você jogou isso <b>${all.length} vezes</b> <span class="sep">·</span>
+    <span class="anos">${anos.join('<span class="sep">, </span>')}</span></div>`;
 }
 async function deleteGame(id){
   const g = games.find(x => x.id === id); if (!g) return;
@@ -2539,6 +2661,7 @@ const anyModalOpen = () => !!document.querySelector('.modal-bg.open');
 let APPVER = '';
 function renderCfg(){
   $('#cfgTema').querySelectorAll('button').forEach(b => b.classList.toggle('on', b.dataset.v === CFG.tema));
+  $('#cfgFiltros').querySelectorAll('button').forEach(b => b.classList.toggle('on', b.dataset.v === (CFG.filtros === 'dock' ? 'dock' : 'barra')));
   const preset = CORES.some(([c]) => c.toLowerCase() === CFG.cor.toLowerCase());
   $('#cfgCores').innerHTML = CORES.map(([c, n]) => `<button type="button" class="sw${c.toLowerCase() === CFG.cor.toLowerCase() ? ' on' : ''}" data-c="${c}" title="${n}" style="background:${c}"></button>`).join('')
     + `<label class="sw custom${preset ? '' : ' on'}" title="Escolher outra cor"><span></span><input type="color" id="cfgCor" value="${esc(CFG.cor)}"></label>`
@@ -2903,6 +3026,7 @@ $('#sgBody').addEventListener('click', async e => {
 });
 $('#sgBody').addEventListener('keydown', async e => { if (e.target.id === 'sgKeyIn' && e.key === 'Enter') { e.preventDefault(); $('#sgKeySave').click(); } });
 $('#cfgTema').addEventListener('click', e => { const b = e.target.closest('button[data-v]'); if (b) setTema(b.dataset.v); });
+$('#cfgFiltros').addEventListener('click', e => { const b = e.target.closest('button[data-v]'); if (!b) return; CFG.filtros = b.dataset.v; saveConfig(); applyFiltMode(); renderCfg(); });
 $('#cfgCores').addEventListener('click', e => { const b = e.target.closest('button[data-c]'); if (b) setCor(b.dataset.c); });
 $('#cfgCores').addEventListener('input', e => { if (e.target.id === 'cfgCor') { setCor(e.target.value, false); $('#cfgCores .lbl').textContent = 'Personalizada · ' + e.target.value.toUpperCase(); $('#cfgCores .sw.on')?.classList.remove('on'); e.target.closest('.sw').classList.add('on'); } });
 $('#cfgCores').addEventListener('change', e => { if (e.target.id === 'cfgCor') renderCfg(); });

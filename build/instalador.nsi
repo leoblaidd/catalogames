@@ -1,4 +1,6 @@
-; Catalogames — instalador (NSIS, gerado sem Wine)
+; Catalogames — instalador da versão EXPERIMENTAL em Tauri (NSIS)
+; Usa as mesmas chaves de registro e a mesma pasta da versão Electron:
+; dá pra instalar uma por cima da outra, nos dois sentidos, sem perder a pasta "dados".
 ; Segue as mesmas chaves de registro do instalador antigo (electron-builder),
 ; então instalar por cima de uma versão anterior funciona normalmente.
 ; Os jogos ficam em $INSTDIR\dados e NUNCA são apagados sem perguntar.
@@ -28,7 +30,7 @@ InstallDir "$LOCALAPPDATA\Programs\${PRODUCT}"
 InstallDirRegKey HKCU "${INSTALL_KEY}" "InstallLocation"
 SetCompressor /SOLID lzma
 ManifestDPIAware true
-BrandingText "${PRODUCT} ${VERSION}"
+BrandingText "${PRODUCT} ${VERSION} (experimental Tauri)"
 
 !include "MUI2.nsh"
 !include "LogicLib.nsh"
@@ -52,14 +54,14 @@ VIProductVersion "${VERSION}.0"
 VIAddVersionKey /LANG=${LANG_PORTUGUESEBR} "ProductName" "${PRODUCT}"
 VIAddVersionKey /LANG=${LANG_PORTUGUESEBR} "ProductVersion" "${VERSION}"
 VIAddVersionKey /LANG=${LANG_PORTUGUESEBR} "FileVersion" "${VERSION}"
-VIAddVersionKey /LANG=${LANG_PORTUGUESEBR} "FileDescription" "Instalador do ${PRODUCT}"
+VIAddVersionKey /LANG=${LANG_PORTUGUESEBR} "FileDescription" "Instalador do ${PRODUCT} (experimental Tauri)"
 VIAddVersionKey /LANG=${LANG_PORTUGUESEBR} "CompanyName" "leoblaidd"
 VIAddVersionKey /LANG=${LANG_PORTUGUESEBR} "LegalCopyright" "leoblaidd"
 
 ; ---------- fecha o app se estiver aberto ----------
 !macro FecharApp UN
 Function ${UN}FecharApp
-  FindWindow $0 "Chrome_WidgetWin_1" "${PRODUCT}"
+  FindWindow $0 "" "${PRODUCT}"
   ${If} $0 <> 0
     MessageBox MB_OKCANCEL|MB_ICONINFORMATION "O Catalogames está aberto.$\r$\n$\r$\nClique em OK pra fechar ele e continuar." /SD IDOK IDOK +2
     Abort
@@ -100,8 +102,27 @@ FunctionEnd
 !insertmacro LimparMenosDados ""
 !insertmacro LimparMenosDados "un."
 
+; ---------- o Tauri usa o WebView2 (motor do Edge) que vem no Windows ----------
+Function ChecarWebView2
+  ReadRegStr $0 HKLM "SOFTWARE\WOW6432Node\Microsoft\EdgeUpdate\Clients\{F3017226-FE2A-4295-8BDF-00C3A9A7E4C5}" "pv"
+  ${If} $0 == ""
+  ${OrIf} $0 == "0.0.0.0"
+    ReadRegStr $0 HKLM "SOFTWARE\Microsoft\EdgeUpdate\Clients\{F3017226-FE2A-4295-8BDF-00C3A9A7E4C5}" "pv"
+  ${EndIf}
+  ${If} $0 == ""
+  ${OrIf} $0 == "0.0.0.0"
+    ReadRegStr $0 HKCU "Software\Microsoft\EdgeUpdate\Clients\{F3017226-FE2A-4295-8BDF-00C3A9A7E4C5}" "pv"
+  ${EndIf}
+  ${If} $0 == ""
+  ${OrIf} $0 == "0.0.0.0"
+    MessageBox MB_YESNO|MB_ICONEXCLAMATION "Essa versão do Catalogames precisa do Microsoft Edge WebView2, que não foi encontrado nesse PC.$\r$\n$\r$\n(Ele já vem no Windows 11 e na maioria dos Windows 10 atualizados.)$\r$\n$\r$\nQuer abrir a página da Microsoft pra instalar? A instalação do Catalogames continua normalmente." /SD IDNO IDNO +2
+    ExecShell "open" "https://developer.microsoft.com/microsoft-edge/webview2/#download"
+  ${EndIf}
+FunctionEnd
+
 Section "Catalogames" SecMain
   SetShellVarContext current
+  Call ChecarWebView2
   Call FecharApp
   SetOutPath "$INSTDIR"
   ; versão anterior: tira os arquivos antigos (a pasta dados fica)
@@ -124,7 +145,7 @@ Section "Catalogames" SecMain
   WriteRegStr HKCU "${INSTALL_KEY}" "InstallLocation" "$INSTDIR"
   WriteRegStr HKCU "${INSTALL_KEY}" "KeepShortcuts" "true"
   WriteRegStr HKCU "${INSTALL_KEY}" "ShortcutName" "${PRODUCT}"
-  WriteRegStr HKCU "${UNINST_KEY}" "DisplayName" "${PRODUCT} ${VERSION}"
+  WriteRegStr HKCU "${UNINST_KEY}" "DisplayName" "${PRODUCT} ${VERSION} (experimental Tauri)"
   WriteRegStr HKCU "${UNINST_KEY}" "DisplayVersion" "${VERSION}"
   WriteRegStr HKCU "${UNINST_KEY}" "Publisher" "leoblaidd"
   WriteRegStr HKCU "${UNINST_KEY}" "DisplayIcon" "$INSTDIR\${EXE},0"
