@@ -14,6 +14,6 @@ cp src-tauri/target/x86_64-pc-windows-gnu/release/catalogames.exe dist/app/Catal
 cp src-tauri/target/x86_64-pc-windows-gnu/release/WebView2Loader.dll dist/app/
 echo "3/3 compilando o instalador…"
 NSIS=$(dirname "$(dirname "$(ls ~/.cache/electron-builder/nsis-3.0.4.1/*/linux/makensis | head -1)")")
-OUT="$PWD/dist/Catalogames-Tauri-Experimental-$VERSAO.exe"
+OUT="$PWD/dist/Catalogames-Instalador-$VERSAO.exe"
 (cd build && NSISDIR="$NSIS" "$NSIS/linux/makensis" -V2 -DVERSION="$VERSAO" -DSRC="$PWD/../dist/app" -DOUT="$OUT" instalador.nsi)
 ls -la dist/app "$OUT"

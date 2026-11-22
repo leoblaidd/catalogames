@@ -37,6 +37,7 @@ O app tem três abas no centro do topo: **🎮 Catálogo**, **📚 Listas** e **
 - **Importar uma lista de jogos** de um arquivo `.txt` ou `.md`, um por linha: `Nome - ano que jogou - ano do jogo - plataforma - nota`. O que não estiver no padrão é pulado, e o app mostra uma prévia antes de importar. Os jogos importados aparecem com borda colorida até você completar capa, horas e gêneros.
 
 - **Tela do jogo:** clique numa capa e abre um card centralizado com o banner do jogo no topo e a capa grande sobreposta. Sem banner, o app usa a própria capa desfocada. Depois de editar, você volta para essa tela.
+- **Modo arte:** o botão ao lado do X abre a tela do jogo em tela cheia, com o banner ocupando tudo, a capa maior no canto inferior esquerdo, as infos ao lado e os botões à direita. O **Voltar** (ou Esc) retorna ao modo normal.
 
 ### Perfil
 - Foto de perfil, nome e uma imagem de topo larga, que expande quando você rola para cima.
@@ -71,6 +72,8 @@ O app tem três abas no centro do topo: **🎮 Catálogo**, **📚 Listas** e **
 - As imagens grandes são reduzidas automaticamente para não pesar a pasta.
 
 ### Aparência
+- **Rolagem suave** com a roda do mouse no catálogo, nas listas e no perfil.
+- **Efeitos sonoros** suaves e graves (trocar de aba, abrir e fechar, salvar, exportar, filtros), criados na hora pelo próprio app. Dá pra desligar nas Configurações.
 - Tema **escuro**, **claro** ou **automático** (segue o Windows).
 - Cor de destaque com 10 opções prontas ou qualquer cor personalizada.
 
@@ -133,6 +136,11 @@ O `fazer-instalador.sh` compila pra `x86_64-pc-windows-gnu` (precisa do `mingw-w
 ---
 
 ## 📜 Versões
+
+### 1.9.0
+- **Modo arte:** tela cheia na tela do jogo, com o banner ocupando tudo, a capa maior e as infos num painel.
+- **Efeitos sonoros** (com opção pra desligar nas Configurações).
+- **Rolagem suave** no catálogo, nas listas e no perfil.
 
 ### 1.8.0
 - **Agora em Tauri (Rust):** instalador de ~1,4 MB (antes ~110 MB) e app instalado com ~4 MB. Mesmas funções e mesmos dados.

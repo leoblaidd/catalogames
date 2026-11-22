@@ -302,6 +302,32 @@ body.ctrl #main .card,body.selecting #main .card{cursor:copy}
 .modal.dt .dt-info{padding-top:118px;min-width:0}
 .modal.dt h1{font-size:30px;text-shadow:0 2px 14px rgba(0,0,0,.35)}
 .modal.dt > footer{border-top:0;padding:16px 34px 24px}
+.dt-max,.dt-back{position:absolute;top:14px;z-index:4;height:38px;padding:0;border-radius:19px;background:rgba(8,10,14,.55);color:#fff;border:0;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;font:inherit;font-size:14px;font-weight:600;backdrop-filter:blur(4px)}
+.dt-max{right:60px;width:38px}
+.dt-max svg,.dt-back svg{width:17px;height:17px}
+.dt-back{left:18px;padding:0 16px 0 12px;display:none}
+.dt-max:hover,.dt-back:hover{background:rgba(8,10,14,.8)}
+/* modo arte: a tela do jogo ocupa tudo abaixo da barra das abas */
+#detailBg.full{top:var(--topH,64px);padding:0;background:var(--bg);backdrop-filter:none;align-items:stretch;overflow:hidden}
+.modal.dt.full{max-width:none;width:100%;height:100%;max-height:none;border:0;border-radius:0;box-shadow:none;display:block;background:var(--bg);animation:dtFull .24s ease-out}
+@keyframes dtFull{from{opacity:.4;transform:scale(.985)}to{opacity:1;transform:none}}
+.modal.dt.full .dt-hero{position:absolute;inset:0;height:auto}
+.modal.dt.full .dt-hero::after{height:68%;background:linear-gradient(to bottom,transparent,color-mix(in srgb,var(--bg) 55%,transparent) 45%,var(--bg) 96%)}
+.modal.dt.full .dt-hero::before{content:"";position:absolute;inset:0 auto 0 0;width:55%;z-index:1;background:linear-gradient(to right,color-mix(in srgb,var(--bg) 45%,transparent),transparent)}
+.modal.dt.full .dt-hero img{position:relative;z-index:0}
+.modal.dt.full .dt-max{display:none}
+.modal.dt.full .dt-back{display:flex}
+.modal.dt.full .detail{position:absolute;left:52px;bottom:44px;margin:0;padding:0;grid-template-columns:300px auto;gap:34px;align-items:end;overflow:visible;
+  max-width:calc(100% - 104px - var(--footW,480px))}
+.modal.dt.full .dc{box-shadow:0 24px 60px rgba(0,0,0,.55)}
+.modal.dt.full .dt-info{padding:22px 26px;border-radius:16px;max-width:680px;min-width:340px;max-height:calc(100vh - var(--topH,64px) - 110px);overflow:auto;
+  background:color-mix(in srgb,var(--bg2) 74%,transparent);backdrop-filter:blur(14px);border:1px solid color-mix(in srgb,var(--txt) 10%,transparent);box-shadow:0 18px 50px rgba(0,0,0,.3)}
+.modal.dt.full h1{font-size:36px;margin-top:0}
+.modal.dt.full > footer{position:absolute;right:52px;bottom:44px;padding:0;gap:10px;background:none}
+.modal.dt.full > footer .sp,.modal.dt.full #dDel{display:none}
+.modal.dt.full > footer .btn.ghost{background:rgba(10,12,16,.55);color:#fff;border-color:rgba(255,255,255,.16);backdrop-filter:blur(8px)}
+.modal.dt.full > footer .btn.ghost:hover{background:rgba(10,12,16,.78)}
+@media (max-width:1100px){.modal.dt.full .detail{grid-template-columns:220px auto;bottom:110px;max-width:calc(100% - 104px)}}
 .detail .dc{aspect-ratio:2/3;border-radius:var(--r);overflow:hidden;--card:260px;box-shadow:0 10px 30px var(--sh2)}
 .detail .dc img{width:100%;height:100%;object-fit:cover}
 .detail h1{margin:0 0 8px;font-size:26px;line-height:1.15}
@@ -685,6 +711,9 @@ body.selecting .toast{bottom:86px}
           <button type="button" data-v="escuro"><span class="ic">🌙</span><b>Escuro</b><small>sempre escuro</small></button>
           <button type="button" data-v="claro"><span class="ic">☀️</span><b>Claro</b><small>sempre claro</small></button>
         </div>
+      </section>
+      <section><h3>Sons</h3>
+        <label class="switch" style="display:inline-flex"><input type="checkbox" id="cfgSom"> Efeitos sonoros (trocar de aba, abrir e salvar, filtros…)</label>
       </section>
       <section><h3>Filtros do catálogo</h3>
         <div class="seg two" id="cfgFiltros">
@@ -1329,12 +1358,111 @@ function moveTabInd(){
 }
 addEventListener('resize', () => { $('#tabs').classList.add('noanim'); moveTabInd(); });
 document.fonts && document.fonts.ready.then(() => { $('#tabs').classList.add('noanim'); moveTabInd(); });
+/* ---------------- efeitos sonoros (sintetizados na hora, sem arquivos) ----------------
+   tons graves e macios: osciladores senoidais/triangulares passando por um filtro passa-baixa */
+const SOM = (() => {
+  let ac = null, saida = null, ult = { p: 0, t: 0, nome: '' };
+  const PRI = { salvar: 3, exportar: 3, limpar: 2, filtro: 2, aba: 1, abrir: 1, fechar: 1 };
+  function ctx(){
+    if (!ac) {
+      ac = new (window.AudioContext || window.webkitAudioContext)();
+      const lp = ac.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 2000; lp.Q.value = 0.5;
+      const g = ac.createGain(); g.gain.value = 0.22;
+      lp.connect(g).connect(ac.destination); saida = lp;
+    }
+    if (ac.state === 'suspended') ac.resume();
+    return ac;
+  }
+  function tom(c, t0, f, dur, { tipo = 'sine', vol = 0.5, f2 = 0, ataque = 0.012 } = {}){
+    const o = c.createOscillator(), g = c.createGain();
+    o.type = tipo; o.frequency.setValueAtTime(f, t0);
+    if (f2) o.frequency.exponentialRampToValueAtTime(f2, t0 + dur);
+    g.gain.setValueAtTime(0.0001, t0);
+    g.gain.exponentialRampToValueAtTime(vol, t0 + ataque);
+    g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+    o.connect(g).connect(saida); o.start(t0); o.stop(t0 + dur + 0.05);
+  }
+  function sopro(c, t0, dur, f1, f2, vol){
+    const n = Math.floor(c.sampleRate * dur), buf = c.createBuffer(1, n, c.sampleRate), d = buf.getChannelData(0);
+    for (let i = 0; i < n; i++) d[i] = Math.random() * 2 - 1;
+    const src = c.createBufferSource(), bp = c.createBiquadFilter(), g = c.createGain();
+    src.buffer = buf; bp.type = 'bandpass'; bp.Q.value = 1.2;
+    bp.frequency.setValueAtTime(f1, t0); bp.frequency.exponentialRampToValueAtTime(f2, t0 + dur);
+    g.gain.setValueAtTime(0.0001, t0); g.gain.exponentialRampToValueAtTime(vol, t0 + dur * 0.3); g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+    src.connect(bp).connect(g).connect(saida); src.start(t0); src.stop(t0 + dur + 0.02);
+  }
+  const SONS = {
+    // trocar de aba: um "toc" curto e grave
+    aba:      (c, t) => { tom(c, t, 233, 0.11, { vol: 0.55, f2: 185 }); tom(c, t, 466, 0.05, { tipo: 'triangle', vol: 0.08 }); },
+    // abrir: duas notas subindo (sol → dó)
+    abrir:    (c, t) => { tom(c, t, 196, 0.16, { tipo: 'triangle', vol: 0.4 }); tom(c, t + 0.065, 262, 0.2, { tipo: 'triangle', vol: 0.34 }); },
+    // fechar: as mesmas notas descendo, mais baixinho
+    fechar:   (c, t) => { tom(c, t, 262, 0.13, { vol: 0.32 }); tom(c, t + 0.06, 196, 0.17, { vol: 0.28 }); },
+    // salvar: acorde maior em arpejo (lá, dó#, mi)
+    salvar:   (c, t) => { [220, 277.2, 329.6].forEach((f, i) => tom(c, t + i * 0.045, f, 0.42, { tipo: 'triangle', vol: 0.3 })); tom(c, t + 0.09, 110, 0.35, { vol: 0.25 }); },
+    // exportar: um "clique" de câmera + arpejo que brilha
+    exportar: (c, t) => { sopro(c, t, 0.08, 1400, 600, 0.22); [262, 330, 392, 523].forEach((f, i) => tom(c, t + 0.05 + i * 0.06, f, 0.34, { vol: 0.24 })); },
+    // escolher uma opção: um "plim" curto
+    filtro:   (c, t) => { tom(c, t, 294, 0.1, { tipo: 'triangle', vol: 0.42, f2: 330 }); },
+    // limpar filtros: um "vupt" descendo
+    limpar:   (c, t) => { sopro(c, t, 0.2, 1100, 260, 0.16); tom(c, t, 392, 0.2, { vol: 0.3, f2: 175 }); },
+  };
+  return nome => {
+    if (CFG.sons === false || !SONS[nome]) return;
+    const agora = performance.now(), p = PRI[nome] || 1;
+    // um som "maior" (salvar/exportar) cobre os menores que vierem logo depois
+    if (agora - ult.t < 260 && (ult.p > p || (ult.nome === nome && agora - ult.t < 60))) return;
+    ult = { p, t: agora, nome };
+    try { const c = ctx(); SONS[nome](c, c.currentTime + 0.005); } catch {}
+  };
+})();
+
+/* ---------------- rolagem suave (roda do mouse) ---------------- */
+(() => {
+  const ativos = new Map();
+  function rolavel(el, dy){
+    for (let n = el; n && n.nodeType === 1 && n !== document.body && n !== document.documentElement; n = n.parentElement) {
+      const oy = getComputedStyle(n).overflowY;
+      if ((oy === 'auto' || oy === 'scroll') && n.scrollHeight > n.clientHeight + 1) {
+        if ((dy > 0 && n.scrollTop + n.clientHeight < n.scrollHeight - 1) || (dy < 0 && n.scrollTop > 0)) return n;
+        if (n.classList.contains('modal-bg')) return null; // não passa a rolagem do modal pra página
+      }
+    }
+    return anyModalOpen() ? null : document.scrollingElement;
+  }
+  addEventListener('wheel', e => {
+    if (e.defaultPrevented || e.ctrlKey || Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
+    if (e.target.closest && e.target.closest('textarea, select, input[type=range]')) return;
+    // touchpad já rola suave sozinho
+    if (e.deltaMode === 0 && Math.abs(e.deltaY) < 40) return; // passos pequenos = touchpad
+    const dy = e.deltaY * (e.deltaMode === 1 ? 40 : e.deltaMode === 2 ? innerHeight : 1);
+    const el = rolavel(e.target, dy); if (!el) return;
+    e.preventDefault();
+    let st = ativos.get(el);
+    if (!st) { st = { pos: el.scrollTop, alvo: el.scrollTop, raf: 0 }; ativos.set(el, st); }
+    st.alvo = Math.max(0, Math.min(el.scrollHeight - el.clientHeight, st.alvo + dy));
+    if (st.raf) return;
+    const passo = () => {
+      if (Math.abs(el.scrollTop - st.pos) > 3) st.pos = el.scrollTop; // alguém rolou por fora (barra, teclado)
+      const d = st.alvo - st.pos;
+      if (Math.abs(d) < 0.6) { el.scrollTop = st.alvo; ativos.delete(el); return; }
+      st.pos += d * 0.16; el.scrollTop = st.pos;
+      st.raf = requestAnimationFrame(passo);
+    };
+    st.raf = requestAnimationFrame(passo);
+  }, { passive: false });
+})();
+
+let appIniciado = false;
 function startApp(){
   applyFiltMode();
   setTab(view.tab);
+  appIniciado = true;
 }
 function setTab(t){
   if (!['cat', 'lists', 'perfil'].includes(t)) t = 'cat';
+  if (appIniciado && t !== view.tab) SOM('aba');
+  if (appIniciado && $('#detailBg').classList.contains('open')) closeModals(true);
   view.tab = t; saveView();
   const cat = t === 'cat', lst = t === 'lists', pf = t === 'perfil';
   $('#main').classList.toggle('hidden', !cat); $('#filtBtn').classList.toggle('hidden', !cat);
@@ -1760,6 +1888,7 @@ async function doExport(){
   if (!blob) return toast('Não consegui gerar a imagem');
   const f = await api.savePng(EX.nome, new Uint8Array(await blob.arrayBuffer()));
   if (!f) return;
+  SOM('exportar');
   closeModals(true);
   toast('✓ Imagem salva', 3000);
   api.showInFolder(f);
@@ -1906,7 +2035,7 @@ function render(){
   }
   renderSel();
 }
-function clearFilters(){ Object.assign(view, { q:'', plat:'', gen:'', status:'', ano:'', nota:'', fav:false, pend:false }); $('#q').value = ''; render(); }
+function clearFilters(){ SOM('limpar'); Object.assign(view, { q:'', plat:'', gen:'', status:'', ano:'', nota:'', fav:false, pend:false }); $('#q').value = ''; render(); }
 const filtersActive = () => !!(view.q.trim() || view.plat || view.gen || view.status || view.ano || view.nota !== '' || view.fav || view.pend);
 
 /* ---------- modo dock: os mesmos filtros, como ícones numa barra flutuante embaixo ---------- */
@@ -1986,6 +2115,10 @@ $('#toolsCat').addEventListener('click', e => {
 document.addEventListener('mousedown', e => { if (dkAberto && !e.target.closest('#toolsCat')) fecharDk(); });
 document.addEventListener('keydown', e => { if (e.key === 'Escape' && dkAberto) { e.stopImmediatePropagation(); fecharDk(); } }, true);
 
+/* som ao escolher uma opção nos filtros (barra ou dock) */
+$('#toolsCat').addEventListener('change', e => { if (e.target.matches('select')) SOM('filtro'); });
+$('#toolsCat').addEventListener('click', e => { if (e.target.closest('.toggle, .dkb[data-dk="fav"], .dkb[data-dk="pend"]')) SOM('filtro'); });
+
 /* ocultar / mostrar busca e filtros */
 function renderFiltBtn(){
   const b = $('#filtBtn'), hid = !!view.filtrosOcultos;
@@ -2019,8 +2152,18 @@ function selectedGames(){
 }
 
 /* ---------------- detalhes do jogo ---------------- */
-function openDetail(id){
+let detFull = false;
+function setDetFull(on){
+  detFull = !!on;
+  const bg = $('#detailBg');
+  if (on) bg.style.setProperty('--topH', Math.round($('.bar').getBoundingClientRect().bottom) + 'px');
+  bg.classList.toggle('full', detFull); $('#detail').classList.toggle('full', detFull);
+  if (on) { const f = $('#detail > footer'); if (f) $('#detail').style.setProperty('--footW', (f.scrollWidth + 30) + 'px'); }
+}
+addEventListener('resize', () => { if (detFull) setDetFull(true); });
+function openDetail(id, manterModo){
   const g = games.find(x => x.id === id); if (!g) return;
+  if (!manterModo) detFull = false;
   const st = STATUS[g.status];
   const rows = [
     ['Plataforma', esc(g.plataforma)],
@@ -2031,7 +2174,7 @@ function openDetail(id){
   ].filter(r => r[1] !== '' && r[1] != null);
   $('#detail').classList.add('dt');
   $('#detail').innerHTML = `
-    <div class="dt-hero" id="dHero"><button type="button" class="x dt-x" data-close title="Fechar (Esc)">✕</button></div>
+    <div class="dt-hero" id="dHero"><button type="button" class="dt-back" id="dBack" title="Voltar (Esc)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>Voltar</button><button type="button" class="dt-max" id="dMax" title="Modo arte (tela cheia)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></button><button type="button" class="x dt-x" data-close title="Fechar (Esc)">✕</button></div>
     <div class="detail">
       <div class="dc" id="dCover">${placeholder(g.titulo)}</div>
       <div class="dt-info">
@@ -2052,6 +2195,9 @@ function openDetail(id){
       <button class="btn primary" id="dEdit">Editar</button>
     </footer>`;
   openModal('#detailBg');
+  setDetFull(detFull);
+  $('#dMax').onclick = () => { setDetFull(true); SOM('aba'); };
+  $('#dBack').onclick = () => { setDetFull(false); SOM('aba'); };
   coverURL(g).then(u => { if (u) $('#dCover').innerHTML = `<img src="${esc(u)}" alt="">`; });
   // banner: o hero do jogo; se não tiver, a própria capa desfocada
   (async () => {
@@ -2061,9 +2207,9 @@ function openDetail(id){
   })();
   $('#dEdit').onclick = () => { closeModals(true); openForm(g.id); form.backTo = g.id; };
   $('#dDel').onclick = () => deleteGame(g.id);
-  $('#dFav').onclick = async () => { g.favorito = !g.favorito; await persist(); render(); openDetail(g.id); };
+  $('#dFav').onclick = async () => { g.favorito = !g.favorito; await persist(); render(); openDetail(g.id, true); SOM('filtro'); };
   $('#dReplay').onclick = () => { closeModals(true); openForm(null); fillReplay([g, ...siblingsOf(g)]); };
-  $('#detail').querySelectorAll('.py[data-pid]').forEach(r => r.onclick = () => openDetail(r.dataset.pid));
+  $('#detail').querySelectorAll('.py[data-pid]').forEach(r => r.onclick = () => openDetail(r.dataset.pid, true));
   if (siblingsOf(g).length) checkPlaysDiff(g);
   $('#dUnify').onclick = async () => {
     const src = oldestPlay([g, ...siblingsOf(g)]);
@@ -2073,7 +2219,7 @@ function openDetail(id){
     await syncSiblings(src, { capa: true });
     const bb = src.banner && src.banner.capa ? await gameCoverBlob(src.banner) : null;
     for (const s of siblingsOf(src)) { if (bb) await storeCover(bannerOf(s), bb); else if (s.banner) await removeCover(s.banner); }
-    await persist(); clearUrlCache(); render(); openDetail(g.id);
+    await persist(); clearUrlCache(); render(); openDetail(g.id, true); SOM('salvar');
     toast('✓ Jogadas igualadas ao 1º registro');
   };
 }
@@ -2250,8 +2396,9 @@ async function saveForm(e){
     }
     await persist();
     const back = !isNew && form.backTo === g.id;
+    SOM('salvar');
     closeModals(true); clearUrlCache(); render();
-    if (back) openDetail(g.id);
+    if (back) openDetail(g.id, true);
     toast(outras ? `${isNew ? `“${titulo}” adicionado` : 'Alterações salvas'} · nota, lançamento, gêneros e capa igualados em ${plural(outras, 'outra jogada', 'outras jogadas')}` : isNew ? `“${titulo}” adicionado ao catálogo` : 'Alterações salvas', outras ? 4200 : 2600);
   } catch (err) { console.error(err); }
   finally { btn.disabled = false; }
@@ -2583,7 +2730,7 @@ async function saveList(){
     if (isNew) lists.push(l); else lists[idx] = l;
     await persist();
     const origem = LE.origem;
-    LE.dirty = false; closeModals(true);
+    LE.dirty = false; SOM('salvar'); closeModals(true);
     if (origem === 'sel') clearSel();
     if (view.tab === 'lists') { renderLists(); toast(isNew ? `Lista “${nome}” criada` : 'Lista salva'); }
     else { render(); toast(isNew ? `Lista “${nome}” criada · veja em 📚 Listas` : 'Lista salva', 3500); }
@@ -2642,18 +2789,21 @@ $('#leGrid').addEventListener('click', e => {
 });
 
 /* ---------------- modais / menu ---------------- */
-function openModal(sel){ $(sel).classList.add('open'); document.body.style.overflow = 'hidden'; }
+function openModal(sel){ if (!$(sel).classList.contains('open')) SOM('abrir'); $(sel).classList.add('open'); document.body.style.overflow = 'hidden'; }
 function closeModals(force){
   if (!force && $('#leBg').classList.contains('open') && (LE.dirty || panelHasContent()) && !confirm('Descartar as alterações dessa lista?')) return false;
   // editou a partir da tela do jogo e cancelou: volta pra ela
   const volta = !force && $('#formBg').classList.contains('open') && !sgOpen() && form.backTo;
   if (volta) form.backTo = null;
   if ($('#leBg').classList.contains('open')) cleanupEditor();
+  const algum = !!document.querySelector('.modal-bg.open:not(.msgbg):not(.subbg)');
   document.querySelectorAll('.modal-bg.open:not(.msgbg):not(.subbg)').forEach(m => m.classList.remove('open'));
+  $('#detailBg').classList.remove('full');
+  if (!force && algum) SOM('fechar');
   if (sgOpen()) closeSgdb();
   if (!$('#msgBg').classList.contains('open')) document.body.style.overflow = '';
   gp.reset(); lp.reset();
-  if (volta && games.some(x => x.id === volta)) openDetail(volta);
+  if (volta && games.some(x => x.id === volta)) openDetail(volta, true);
   return true;
 }
 const anyModalOpen = () => !!document.querySelector('.modal-bg.open');
@@ -2725,6 +2875,7 @@ function miniMD(md){
 function renderUpd(){
   $('#updCur').textContent = APPVER || '?';
   $('#updAuto').checked = CFG.autoUpdate !== false;
+  $('#cfgSom').checked = CFG.sons !== false;
   const r = UPD.info, box = $('#updRes');
   if (!r) { box.innerHTML = ''; return; }
   if (r.carregando) { box.innerHTML = 'Procurando versão nova no GitHub…'; return; }
@@ -2967,6 +3118,7 @@ $('#exOpts').addEventListener('change', e => {
 $('#exOpts').addEventListener('click', e => { const b = e.target.closest('[data-cols]'); if (!b) return; EX.o.cols = +b.dataset.cols; renderExOpts(); drawEx(); });
 $('#updCheck').onclick = () => checkUpdate(false);
 $('#updAuto').addEventListener('change', e => { CFG.autoUpdate = e.target.checked; saveConfig(); });
+$('#cfgSom').addEventListener('change', e => { CFG.sons = e.target.checked; saveConfig(); if (CFG.sons) SOM('salvar'); });
 $('#updRes').addEventListener('click', e => {
   if (e.target.id === 'updGo') installUpdate();
   if (e.target.id === 'updPage' && UPD.info && UPD.info.pagina) api.openExternal(UPD.info.pagina);
@@ -3048,6 +3200,7 @@ document.addEventListener('keydown', e => {
   if (e.key === 'Escape' && sgOpen()) { e.preventDefault(); closeSgdb(); return; }
   if (e.key === 'Escape' && $('#liSugg').classList.contains('open')) { e.preventDefault(); closeSugg(); return; }
   if (e.key === 'Escape') {
+    if (detFull && $('#detailBg').classList.contains('open') && !$('#formBg').classList.contains('open')) { setDetFull(false); SOM('aba'); return; }
     if (anyModalOpen()) closeModals();
     else if (sel.size) clearSel();
     else if (view.tab === 'lists' && openListId && document.activeElement !== $('#lvq')) closeListPage();

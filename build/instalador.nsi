@@ -1,4 +1,4 @@
-; Catalogames — instalador da versão EXPERIMENTAL em Tauri (NSIS)
+; Catalogames — instalador (Tauri, NSIS)
 ; Usa as mesmas chaves de registro e a mesma pasta da versão Electron:
 ; dá pra instalar uma por cima da outra, nos dois sentidos, sem perder a pasta "dados".
 ; Segue as mesmas chaves de registro do instalador antigo (electron-builder),
@@ -30,7 +30,7 @@ InstallDir "$LOCALAPPDATA\Programs\${PRODUCT}"
 InstallDirRegKey HKCU "${INSTALL_KEY}" "InstallLocation"
 SetCompressor /SOLID lzma
 ManifestDPIAware true
-BrandingText "${PRODUCT} ${VERSION} (experimental Tauri)"
+BrandingText "${PRODUCT} ${VERSION}"
 
 !include "MUI2.nsh"
 !include "LogicLib.nsh"
@@ -54,7 +54,7 @@ VIProductVersion "${VERSION}.0"
 VIAddVersionKey /LANG=${LANG_PORTUGUESEBR} "ProductName" "${PRODUCT}"
 VIAddVersionKey /LANG=${LANG_PORTUGUESEBR} "ProductVersion" "${VERSION}"
 VIAddVersionKey /LANG=${LANG_PORTUGUESEBR} "FileVersion" "${VERSION}"
-VIAddVersionKey /LANG=${LANG_PORTUGUESEBR} "FileDescription" "Instalador do ${PRODUCT} (experimental Tauri)"
+VIAddVersionKey /LANG=${LANG_PORTUGUESEBR} "FileDescription" "Instalador do ${PRODUCT}"
 VIAddVersionKey /LANG=${LANG_PORTUGUESEBR} "CompanyName" "leoblaidd"
 VIAddVersionKey /LANG=${LANG_PORTUGUESEBR} "LegalCopyright" "leoblaidd"
 
@@ -145,7 +145,7 @@ Section "Catalogames" SecMain
   WriteRegStr HKCU "${INSTALL_KEY}" "InstallLocation" "$INSTDIR"
   WriteRegStr HKCU "${INSTALL_KEY}" "KeepShortcuts" "true"
   WriteRegStr HKCU "${INSTALL_KEY}" "ShortcutName" "${PRODUCT}"
-  WriteRegStr HKCU "${UNINST_KEY}" "DisplayName" "${PRODUCT} ${VERSION} (experimental Tauri)"
+  WriteRegStr HKCU "${UNINST_KEY}" "DisplayName" "${PRODUCT} ${VERSION}"
   WriteRegStr HKCU "${UNINST_KEY}" "DisplayVersion" "${VERSION}"
   WriteRegStr HKCU "${UNINST_KEY}" "Publisher" "leoblaidd"
   WriteRegStr HKCU "${UNINST_KEY}" "DisplayIcon" "$INSTDIR\${EXE},0"

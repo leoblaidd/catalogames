@@ -182,7 +182,7 @@ fn info(app: AppHandle) -> Value {
     json!({
         "dados": st.dados.to_string_lossy(),
         "fallback": st.fallback,
-        "versao": format!("{} (experimental Tauri)", app.package_info().version),
+        "versao": app.package_info().version.to_string(),
     })
 }
 
