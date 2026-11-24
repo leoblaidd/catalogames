@@ -1,231 +1,235 @@
 # 🎮 Catalogames
 
-*Catálogo de jogos com forma de backlog local.*
+**🇺🇸 English** | [🇧🇷 Português](README.pt-BR.md)
+
+*A game catalog that works as a local backlog.*
 
 > [!NOTE]
-> **Oi! Um aviso antes de tudo: este projeto é vibecodado.** 🤖
-> Todo o código foi escrito com IA (Claude, da Anthropic), a partir das ideias, pedidos e testes de **[@leoblaidd](https://github.com/leoblaidd)**.
-> Sei que muita gente não curte trabalho feito por IA, e tudo bem. Por isso o aviso vem logo aqui no começo, pra você decidir com calma se quer seguir. Se quiser, seja bem-vindo! 🎮
+> **Hi! A heads-up before anything else: this project is vibe-coded.** 🤖
+> All the code was written with AI (Claude, by Anthropic), based on the ideas, requests and testing of **[@leoblaidd](https://github.com/leoblaidd)**.
+> I know a lot of people don't like AI-made work, and that's okay. That's why this notice comes first, so you can decide calmly whether you want to keep going. If you do, welcome! 🎮
 
-**Autor:** [@leoblaidd](https://github.com/leoblaidd)
+**Author:** [@leoblaidd](https://github.com/leoblaidd)
 
-O Catalogames é um app leve para Windows (instalador de ~1,4 MB, feito com Tauri) que organiza os jogos que você já zerou, jogou ou quer jogar. Ele funciona como uma estante de capas: você cadastra cada jogo com nota, plataforma e ano, e monta listas e rankings com eles. Tudo fica salvo numa pasta do seu PC, sem conta, sem nuvem e sem internet obrigatória.
+Catalogames is a lightweight Windows app (a ~1.4 MB installer, built with Tauri) that organizes the games you've beaten, played or want to play. It works like a shelf of covers: you add each game with a score, platform and year, and build lists and rankings with them. Everything is saved in a folder on your PC, with no account, no cloud and no internet required.
 
----
-
-## ✨ Funções
-
-O app tem três abas no centro do topo: **🎮 Catálogo**, **📚 Listas** e **👤 Perfil**, com uma animação deslizando entre elas. O nome fica à esquerda, com os números da aba ao lado, e os botões da aba à direita, com as configurações sempre no canto.
-
-### Catálogo
-- Grade de capas com tamanho ajustável, agrupada pelo ano em que você terminou, pelo ano de lançamento ou sem agrupar.
-- Para cada jogo: título, plataforma, status (**Terminado**, **Jogado** ou **Quero jogar**), ano em que terminou, ano de lançamento, horas jogadas, nota de 0 a 10 (com meio ponto), gêneros, favorito e um comentário ou review.
-- Busca instantânea (atalho <kbd>/</kbd>) e filtros por plataforma, gênero, status, ano e nota.
-- **Filtro de nota exato:** "Nota 5" mostra os jogos com 5 e 5,5, com os 5,5 primeiro.
-- Ordenação por data, nota, nome, horas ou lançamento.
-- **Dois jeitos de mostrar os filtros** (escolha nas Configurações):
-  - **Barra no topo**, com os filtros escritos por extenso.
-  - **Dock flutuante** embaixo, com a busca, um ícone pra cada filtro e o tamanho das capas. Cada ícone abre uma gaveta com as opções em quadradinhos.
-- Botão para esconder a busca e os filtros (ou o dock) e deixar só as capas.
-- **Jogou de novo?** Jogos com o mesmo título contam como o mesmo jogo jogado em anos diferentes:
-  - Ao cadastrar, o app sugere o jogo e puxa nota, lançamento, gêneros e capa. Você só ajusta o ano.
-  - Nota, lançamento, gêneros e capa ficam sempre iguais em todas as jogadas.
-  - A tela do jogo mostra só "🔁 Você jogou isso X vezes" e os anos. Clicar num ano abre aquela jogada.
-  - Se as jogadas ficarem com dados diferentes, aparece o botão **Igualar ao 1º registro**, que copia tudo da primeira jogada cadastrada.
-  - Fora do agrupamento por ano terminado, as jogadas viram uma pilha de capas. Passando o mouse, elas se abrem para o lado.
-- Gêneros em ordem alfabética, com busca: digite pra filtrar ou criar um novo. A lista é editável nas configurações.
-- **Importar uma lista de jogos** de um arquivo `.txt` ou `.md`, um por linha: `Nome - ano que jogou - ano do jogo - plataforma - nota`. O que não estiver no padrão é pulado, e o app mostra uma prévia antes de importar. Os jogos importados aparecem com borda colorida até você completar capa, horas e gêneros.
-
-- **Tela do jogo:** clique numa capa e abre um card centralizado com o banner do jogo no topo e a capa grande sobreposta. Sem banner, o app usa a própria capa desfocada. Depois de editar, você volta para essa tela.
-- **Modo arte:** o botão ao lado do X abre a tela do jogo em tela cheia, com o banner ocupando tudo, a capa maior no canto inferior esquerdo, as infos ao lado e os botões à direita. O **Voltar** (ou Esc) retorna ao modo normal.
-
-### Perfil
-- Foto de perfil, nome e uma imagem de topo larga, que expande quando você rola para cima.
-- Números: jogos catalogados, listas e horas jogadas.
-- **Top 5 favoritos**, com coroa no 1º. Clique para escolher e arraste para reordenar.
-- Painéis com plataformas mais jogadas, jogos terminados por ano, o mais rejogado, nota média e gênero favorito.
-- Dá pra ajustar a posição da imagem do topo, arrastando ou pelo controle.
-
-### Exportar imagens (PNG)
-- **Card do perfil** (800 de largura, altura conforme o que você marcar): foto, um pouco da imagem do topo, nome, Top 5 lado a lado (o 1º com coroa e um pouco maior) e números como jogos do ano, jogos ao todo e plataforma mais jogada. Você desmarca o que não quiser antes de exportar.
-- **Lista:** fundo preto, nome da lista na cor do tema, capas grandes em 3, 5 ou 10 colunas, com ou sem ranking e nomes.
-- **Catálogo:** os jogos de um ano, de uma plataforma ou de um gênero (um filtro por vez), com nota e nomes opcionais.
-- Sempre com prévia antes, e você escolhe onde salvar.
-
-### Atualizações
-- Em Configurações, o botão **Verificar atualização** procura uma versão nova nas Releases deste repositório. Ele baixa o instalador e abre sozinho. Também dá pra deixar ele verificar toda vez que o app abre.
-
-### Listas e rankings
-- Crie listas como "Top 10 RPGs" ou "Musous favoritos", com ou sem numeração. O top 3 aparece em ouro, prata e bronze.
-- Cada lista abre em tela cheia, com busca, tamanho das capas ajustável e botões de editar e excluir.
-- Arraste as capas para reordenar, tanto na lista aberta quanto no editor. Os números do ranking se ajustam na hora.
-- Opção de esconder os nomes embaixo das capas.
-- Ao digitar o nome de um jogo, o app sugere os jogos que você já catalogou e reaproveita a capa deles.
-- **Lista a partir da busca:** pesquisou ou filtrou? Um botão cria uma lista com os jogos que estão aparecendo.
-- **Seleção com Ctrl:** segure <kbd>Ctrl</kbd> e clique nas capas para marcar. <kbd>Ctrl</kbd>+<kbd>A</kbd> marca todas. Depois é só criar uma lista com as marcadas.
-
-### Capas
-- **SteamGridDB integrado:** digite o nome do jogo e clique em *Buscar capa no SteamGridDB*. Abre uma grade com as capas da comunidade, e um clique baixa a escolhida. Precisa de uma [chave gratuita da API](https://www.steamgriddb.com/profile/preferences/api), configurada uma única vez.
-- **Banner do topo:** na edição do jogo tem um espaço para o banner largo, com busca nos **Heroes** do SteamGridDB, arquivo ou link.
-- Também dá para colar uma imagem (<kbd>Ctrl</kbd>+<kbd>V</kbd>), arrastar um arquivo ou usar um link, inclusive o link da página do jogo na Steam.
-- Ao cadastrar um jogo que já está em alguma lista, o app sugere ele e reaproveita a capa.
-- As imagens grandes são reduzidas automaticamente para não pesar a pasta.
-
-### Aparência
-- **Rolagem suave** com a roda do mouse no catálogo, nas listas e no perfil.
-- **Efeitos sonoros** suaves e graves (trocar de aba, abrir e fechar, salvar, exportar, filtros), criados na hora pelo próprio app. Dá pra desligar nas Configurações.
-- Tema **escuro**, **claro** ou **automático** (segue o Windows).
-- Cor de destaque com 10 opções prontas ou qualquer cor personalizada.
+> The app's interface is in **Brazilian Portuguese**. The names in quotes below are the labels you'll see in the app.
 
 ---
 
-## 💾 Onde ficam seus dados
+## ✨ Features
 
-Tudo fica dentro da pasta onde você instalou o app:
+The app has three tabs at the top center: **🎮 Catálogo** (Catalog), **📚 Listas** (Lists) and **👤 Perfil** (Profile), with a sliding animation between them. The name sits on the left with the tab's numbers next to it, and the tab's buttons are on the right, with the settings always in the corner.
+
+### Catalog
+- A grid of covers with adjustable size, grouped by the year you finished the game, by release year, or not grouped.
+- For each game: title, platform, status (**Terminado** / Finished, **Jogado** / Played or **Quero jogar** / Want to play), year finished, release year, hours played, score from 0 to 10 (in half points), genres, favorite, and a comment or review.
+- Instant search (<kbd>/</kbd> shortcut) and filters by platform, genre, status, year and score.
+- **Exact score filter:** "Score 5" shows games rated 5 and 5.5, with the 5.5 ones first.
+- Sort by date, score, name, hours or release.
+- **Two ways to show the filters** (choose in Settings):
+  - **Top bar**, with the filters written out.
+  - **Floating dock** at the bottom, with search, an icon for each filter and the cover size. Each icon opens a drawer with the options as small tiles.
+- A button to hide the search and filters (or the dock) and leave only the covers.
+- **Played it again?** Games with the same title count as the same game played in different years:
+  - When adding a game, the app suggests it and pulls in the score, release year, genres and cover. You only adjust the year.
+  - Score, release year, genres and cover always stay the same across all playthroughs.
+  - The game screen only shows "🔁 You played this X times" and the years. Clicking a year opens that playthrough.
+  - If the playthroughs end up with different data, a **Match the 1st entry** button appears, copying everything from the first playthrough you added.
+  - Outside of grouping by year finished, playthroughs become a stack of covers. Hover over them and they fan out to the side.
+- Genres in alphabetical order, with search: type to filter or create a new one. The list can be edited in Settings.
+- **Import a list of games** from a `.txt` or `.md` file, one per line: `Name - year played - game year - platform - score`. Anything that doesn't follow the pattern is skipped, and the app shows a preview before importing. Imported games get a colored border until you fill in the cover, hours and genres.
+
+- **Game screen:** click a cover and a centered card opens, with the game's banner at the top and the large cover overlapping it. Without a banner, the app uses the cover itself, blurred. After editing, you come back to this screen.
+- **Art mode:** the button next to the X opens the game screen in full screen, with the banner filling everything, a bigger cover in the lower-left corner, the info beside it and the buttons on the right. **Back** (or Esc) returns to normal mode.
+
+### Profile
+- Profile picture, name and a wide header image that expands when you scroll up.
+- Numbers: games cataloged, lists and hours played.
+- **Top 5 favorites**, with a crown on #1. Click to choose and drag to reorder.
+- Panels with most-played platforms, games finished per year, the most replayed game, average score and favorite genre.
+- You can adjust the position of the header image, by dragging or with the slider.
+
+### Export images (PNG)
+- **Profile card** (800 wide, height depending on what you check): picture, a slice of the header image, name, Top 5 side by side (#1 with a crown and slightly bigger) and numbers like games this year, total games and most-played platform. Uncheck what you don't want before exporting.
+- **List:** black background, list name in the theme color, large covers in 3, 5 or 10 columns, with or without ranking and names.
+- **Catalog:** the games from one year, one platform or one genre (one filter at a time), with optional scores and names.
+- Always with a preview first, and you choose where to save.
+
+### Updates
+- In Settings, the **Verificar atualização** (Check for update) button looks for a new version in this repository's Releases. It downloads the installer and opens it on its own. You can also let it check every time the app opens.
+
+### Lists and rankings
+- Create lists like "Top 10 RPGs" or "Favorite Musou games", numbered or not. The top 3 show up in gold, silver and bronze.
+- Each list opens in full screen, with search, adjustable cover size and edit and delete buttons.
+- Drag covers to reorder, both in the open list and in the editor. Ranking numbers update instantly.
+- Option to hide the names under the covers.
+- As you type a game's name, the app suggests games you've already cataloged and reuses their cover.
+- **List from search:** searched or filtered? A button creates a list with the games currently showing.
+- **Ctrl selection:** hold <kbd>Ctrl</kbd> and click covers to select them. <kbd>Ctrl</kbd>+<kbd>A</kbd> selects all. Then just create a list from the selected ones.
+
+### Covers
+- **Built-in SteamGridDB:** type the game's name and click *Buscar capa no SteamGridDB* (Search cover on SteamGridDB). A grid with the community's covers opens, and one click downloads the one you pick. Requires a [free API key](https://www.steamgriddb.com/profile/preferences/api), set up only once.
+- **Header banner:** the edit screen has a spot for the wide banner, with search in SteamGridDB **Heroes**, a file or a link.
+- You can also paste an image (<kbd>Ctrl</kbd>+<kbd>V</kbd>), drag a file or use a link, including the game's Steam page link.
+- When adding a game that's already in a list, the app suggests it and reuses the cover.
+- Large images are resized automatically so the folder doesn't get heavy.
+
+### Appearance
+- **Smooth scrolling** with the mouse wheel in the catalog, lists and profile.
+- Soft, low **sound effects** (switching tabs, opening and closing, saving, exporting, filters), generated on the fly by the app itself. They can be turned off in Settings.
+- **Dark**, **light** or **automatic** theme (follows Windows).
+- Accent color with 10 presets or any custom color.
+
+---
+
+## 💾 Where your data lives
+
+Everything stays inside the folder where you installed the app:
 
 ```
 Catalogames\
 ├── Catalogames.exe
 └── dados\
-    ├── biblioteca.json   ← jogos e listas (texto legível)
-    ├── config.json       ← tema, cor, preferências
-    └── capas\            ← imagens das capas
+    ├── biblioteca.json   ← games and lists (readable text)
+    ├── config.json       ← theme, color, preferences
+    └── capas\            ← cover images
 ```
 
-- **Atualizar:** é só instalar a versão nova por cima, na mesma pasta. A pasta `dados` nunca é apagada.
-- **Desinstalar:** o desinstalador pergunta se você quer apagar seus jogos. A resposta padrão é "Não".
-- **Backup:** copie a pasta `dados`. Para levar para outro PC, instale lá e cole a pasta.
+- **Update:** just install the new version over the old one, in the same folder. The `dados` folder is never deleted.
+- **Uninstall:** the uninstaller asks whether you want to delete your games. The default answer is "No".
+- **Backup:** copy the `dados` folder. To move to another PC, install there and paste the folder.
 
 ---
 
-## 📥 Instalação
+## 📥 Installation
 
-1. Baixe o instalador mais recente em **[Releases](../../releases)**.
-2. Execute e escolha a pasta de instalação (por exemplo, `D:\Jogos\Catalogames`).
-3. O Windows pode mostrar "O Windows protegeu o computador", porque o instalador não tem assinatura digital paga. Clique em **Mais informações → Executar assim mesmo**.
+1. Download the latest installer from **[Releases](../../releases)**.
+2. Run it and choose the install folder (for example, `D:\Games\Catalogames`).
+3. Windows may show "Windows protected your PC", because the installer doesn't have a paid digital signature. Click **More info → Run anyway**.
 
-> O app usa o **WebView2** (o motor do Edge que já vem no Windows 11 e na maioria dos Windows 10). Se faltar, o instalador avisa e mostra onde baixar.
+> The app uses **WebView2** (the Edge engine that ships with Windows 11 and most Windows 10 installs). If it's missing, the installer tells you and shows where to download it.
 
-> Evite instalar em *Arquivos de Programas*: o Windows não deixa gravar ali, e aí os dados vão para `%APPDATA%\Catalogames\dados`.
+> Avoid installing in *Program Files*: Windows doesn't allow writing there, so the data goes to `%APPDATA%\Catalogames\dados` instead.
 
 ---
 
-## 🛠️ Rodando o código
+## 🛠️ Running the code
 
-Feito com [Tauri 2](https://tauri.app/) (Rust). A interface inteira está em um único arquivo HTML, sem frameworks, e usa o WebView2 do Windows em vez de levar um navegador junto.
+Built with [Tauri 2](https://tauri.app/) (Rust). The whole interface is in a single HTML file, with no frameworks, and it uses Windows' WebView2 instead of shipping a browser along with it.
 
 ```bash
 cd src-tauri
-cargo run                      # abre o app em modo desenvolvimento
-../build/fazer-instalador.sh   # gera o instalador do Windows em dist/ (compila a partir do Linux)
+cargo run                      # opens the app in development mode
+../build/fazer-instalador.sh   # builds the Windows installer into dist/ (cross-compiles from Linux)
 ```
 
-O `fazer-instalador.sh` compila pra `x86_64-pc-windows-gnu` (precisa do `mingw-w64` e do `rust-src`) e usa o `makensis` pra montar o instalador.
+`fazer-instalador.sh` compiles for `x86_64-pc-windows-gnu` (needs `mingw-w64` and `rust-src`) and uses `makensis` to build the installer.
 
-| Arquivo | O que faz |
+| File | What it does |
 |---|---|
-| `app/index.html` | A interface toda: catálogo, listas, perfil, modais, temas |
-| `src-tauri/src/main.rs` | O app em Rust: janela, leitura e gravação em `dados\`, downloads de imagens, SteamGridDB, atualizações |
-| `src-tauri/src/ponte.js` | Ponte entre a interface e o Rust (cria o `window.catalogame`) |
-| `src-tauri/tauri.conf.json` | Configuração do Tauri (nome, versão, ícone) |
-| `build/instalador.nsi` | Script do instalador (NSIS). Instala por cima mantendo a pasta `dados` |
-| `build/fazer-instalador.sh` | Compila o app e o instalador |
+| `app/index.html` | The whole interface: catalog, lists, profile, modals, themes |
+| `src-tauri/src/main.rs` | The app in Rust: window, reading and writing to `dados\`, image downloads, SteamGridDB, updates |
+| `src-tauri/src/ponte.js` | Bridge between the interface and Rust (creates `window.catalogame`) |
+| `src-tauri/tauri.conf.json` | Tauri configuration (name, version, icon) |
+| `build/instalador.nsi` | Installer script (NSIS). Installs over the old version, keeping the `dados` folder |
+| `build/fazer-instalador.sh` | Builds the app and the installer |
 
-> Até a 1.7.1 o app era feito com Electron. Esse código continua no histórico do repositório.
-
----
-
-## ☕ Apoie
-
-O Catalogames é gratuito e vai continuar sendo. Se ele te ajudou e você quiser dar uma força, dá pra me pagar um café no **[Ko-fi](https://ko-fi.com/leoblaidd)**. 💜
-
-[![Apoie no Ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/leoblaidd)
+> Up to 1.7.1 the app was built with Electron. That code is still in the repository history.
 
 ---
 
-## 📜 Versões
+## ☕ Support
+
+Catalogames is free and will stay that way. If it helped you and you'd like to give something back, you can buy me a coffee on **[Ko-fi](https://ko-fi.com/leoblaidd)**. 💜
+
+[![Support me on Ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/leoblaidd)
+
+---
+
+## 📜 Versions
 
 ### 1.9.0
-- **Modo arte:** tela cheia na tela do jogo, com o banner ocupando tudo, a capa maior e as infos num painel.
-- **Efeitos sonoros** (com opção pra desligar nas Configurações).
-- **Rolagem suave** no catálogo, nas listas e no perfil.
+- **Art mode:** full screen on the game screen, with the banner filling everything, a bigger cover and the info in a panel.
+- **Sound effects** (with an option to turn them off in Settings).
+- **Smooth scrolling** in the catalog, lists and profile.
 
 ### 1.8.0
-- **Agora em Tauri (Rust):** instalador de ~1,4 MB (antes ~110 MB) e app instalado com ~4 MB. Mesmas funções e mesmos dados.
-- Filtros do catálogo também em **dock flutuante** embaixo, com ícones e gavetas de opções (escolha nas Configurações).
-- Jogadas repetidas mais limpas na tela do jogo, com o botão **Igualar ao 1º registro** quando os dados divergem.
-- Card do perfil com altura que acompanha o que foi marcado pra exportar.
-- Título das imagens de catálogo e lista menor e em semibold.
-- Capa da tela do jogo sem borda, só com uma sombra leve.
+- **Now built with Tauri (Rust):** ~1.4 MB installer (was ~110 MB) and the installed app is ~4 MB. Same features and same data.
+- Catalog filters also available as a **floating dock** at the bottom, with icons and option drawers (choose in Settings).
+- Cleaner repeated playthroughs on the game screen, with the **Match the 1st entry** button when the data differs.
+- Profile card height follows what you checked for export.
+- Smaller, semibold title on catalog and list images.
+- Game screen cover without a border, just a light shadow.
 
 ### 1.7.1
-- Topo reorganizado: nome e números à esquerda, abas no centro, botões e configurações à direita.
-- O X da tela do jogo voltou para o canto superior direito.
-- Ao salvar ou cancelar a edição, você volta para a tela do jogo.
-- Jogadas repetidas: o aviso também mostra quando a capa ou o banner estão diferentes, e o "igualar" inclui o banner.
-- Ícone novo: preto e cinza escuro, com borda branca leve.
+- Reorganized top bar: name and numbers on the left, tabs in the center, buttons and settings on the right.
+- The game screen's X is back in the top-right corner.
+- When you save or cancel an edit, you return to the game screen.
+- Repeated playthroughs: the notice also shows when the cover or banner differ, and "match" includes the banner.
+- New icon: black and dark gray, with a light white border.
 
 ### 1.7.0
-- Abas centralizadas no topo, com animação deslizante; botões à esquerda.
-- Filtros do catálogo mais compactos, cabendo numa linha só em 1080p.
-- Nova tela do jogo: centralizada, com banner no topo, capa maior e X no canto superior esquerdo.
-- Banner do jogo na edição, com busca nos Heroes do SteamGridDB.
-- Formulário de edição mais largo e organizado em seções.
-- Card do perfil: Top 5 lado a lado, com o 1º maior e de coroa.
+- Tabs centered at the top, with a sliding animation; buttons on the left.
+- More compact catalog filters, fitting on a single line at 1080p.
+- New game screen: centered, with a banner at the top, a bigger cover and the X in the top-left corner.
+- Game banner in the edit screen, with search in SteamGridDB Heroes.
+- Wider edit form, organized into sections.
+- Profile card: Top 5 side by side, with #1 bigger and crowned.
 
 ### 1.6.0
-- Exportar PNG: card do perfil, listas e catálogo (por ano, plataforma ou gênero), com prévia.
-- Verificar atualização direto pelas Releases do GitHub, com download e instalação.
-- Ajuste da posição da imagem do topo do perfil.
-- Capas do Top 5 maiores, acompanhando a largura da tela.
-- Busca nos gêneros: digitar filtra os gêneros, e Enter marca ou cria.
-- Saiu o aviso "role pra cima" da imagem do topo.
+- PNG export: profile card, lists and catalog (by year, platform or genre), with preview.
+- Check for updates straight from GitHub Releases, with download and install.
+- Adjustable position of the profile header image.
+- Bigger Top 5 covers that follow the screen width.
+- Genre search: typing filters the genres, and Enter selects or creates one.
+- Removed the "scroll up" hint from the header image.
 
 ### 1.5.0
-- Abas lado a lado: Catálogo, Listas e **Perfil**.
-- Aba Perfil com foto, nome, imagem de topo, números, Top 5 favoritos e painéis de estatísticas.
-- Importar lista de jogos por arquivo `.txt`/`.md`, com prévia. Os jogos ficam marcados "para completar".
-- Filtro "Para completar".
-- O selo de vezes jogadas saiu. A pilha de capas continua.
+- Side-by-side tabs: Catalog, Lists and **Profile**.
+- Profile tab with picture, name, header image, numbers, Top 5 favorites and stats panels.
+- Import a list of games from a `.txt`/`.md` file, with preview. Games are marked "to complete".
+- "To complete" filter.
+- The times-played badge is gone. The cover stack stays.
 
 ### 1.4.0
-- Agrupar por ano de lançamento, além de ano terminado ou sem agrupar.
-- Jogos repetidos (o mesmo jogo jogado em anos diferentes):
-  - O cadastro sugere o jogo e puxa os dados para uma nova jogada.
-  - As jogadas aparecem empilhadas quando você busca, filtra ou ordena.
-  - A tela do jogo lista todas as jogadas.
-  - Nota, lançamento, gêneros e capa ficam sincronizados entre elas.
-- Gêneros em ordem alfabética.
-- Adicionar e excluir gêneros nas configurações.
+- Group by release year, in addition to year finished or no grouping.
+- Repeated games (the same game played in different years):
+  - Adding a game suggests it and pulls the data into a new playthrough.
+  - Playthroughs appear stacked when you search, filter or sort.
+  - The game screen lists every playthrough.
+  - Score, release year, genres and cover stay in sync between them.
+- Genres in alphabetical order.
+- Add and delete genres in Settings.
 
 ### 1.3.0
-- As listas abrem em tela cheia, com voltar, busca, tamanho das capas e editar/excluir.
-- Arrastar para reordenar com a lista aberta, com o ranking renumerando sozinho.
-- Opção de esconder os nomes dos jogos embaixo das capas.
-- Números do ranking do 4º em diante em branco com número preto.
-- No cadastro, o app sugere jogos que já estão nas listas, com capa.
-- Botões de tema alinhados nas configurações.
+- Lists open in full screen, with back, search, cover size and edit/delete.
+- Drag to reorder with the list open, with the ranking renumbering itself.
+- Option to hide game names under the covers.
+- Ranking numbers from #4 on in white with black numbers.
+- When adding a game, the app suggests games already in your lists, with cover.
+- Theme buttons aligned in Settings.
 
 ### 1.2.0
-- O nome mudou para **Catalogames**. A atualização por cima da versão antiga mantém tudo.
-- Busca de capas no **SteamGridDB** dentro do app, no catálogo e nas listas.
-- Novo botão para ocultar ou mostrar a busca e os filtros.
-- O tamanho das capas voltou para a barra de filtros.
+- The name changed to **Catalogames**. Updating over the old version keeps everything.
+- **SteamGridDB** cover search inside the app, in the catalog and in lists.
+- New button to hide or show the search and filters.
+- Cover size is back in the filter bar.
 
 ### 1.1.0
-- Filtro de nota exato (5 = 5 e 5,5), com os ,5 primeiro.
-- Listas sugerem jogos do catálogo e reaproveitam a capa.
-- Criar lista a partir da busca ou dos jogos marcados com Ctrl.
-- Tema claro, escuro ou automático e cor de destaque personalizável.
-- Janela de configurações.
+- Exact score filter (5 = 5 and 5.5), with the .5 ones first.
+- Lists suggest games from the catalog and reuse the cover.
+- Create a list from search or from games selected with Ctrl.
+- Light, dark or automatic theme and customizable accent color.
+- Settings window.
 
 ### 1.0.0
-- Primeira versão como app instalável: catálogo, listas ranqueadas, capas salvas localmente e importação da versão HTML antiga.
+- First version as an installable app: catalog, ranked lists, locally saved covers and import from the old HTML version.
 
 ---
 
-## 🙏 Créditos
+## 🙏 Credits
 
-- Ideia, direção e testes: **[@leoblaidd](https://github.com/leoblaidd)**
-- Código: escrito com IA (Claude, da Anthropic)
-- Capas da comunidade: [SteamGridDB](https://www.steamgriddb.com)
+- Idea, direction and testing: **[@leoblaidd](https://github.com/leoblaidd)**
+- Code: written with AI (Claude, by Anthropic)
+- Community covers: [SteamGridDB](https://www.steamgriddb.com)
