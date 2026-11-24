@@ -9,6 +9,8 @@
 
 **Autor:** [@leoblaidd](https://github.com/leoblaidd)
 
+[![Apoie no Ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/leoblaidd)
+
 O Catalogames é um app leve para Windows (instalador de ~1,4 MB, feito com Tauri) que organiza os jogos que você já zerou, jogou ou quer jogar. Ele funciona como uma estante de capas: você cadastra cada jogo com nota, plataforma e ano, e monta listas e rankings com eles. Tudo fica salvo numa pasta do seu PC, sem conta, sem nuvem e sem internet obrigatória.
 
 ---
@@ -213,6 +215,14 @@ O `fazer-instalador.sh` compila pra `x86_64-pc-windows-gnu` (precisa do `mingw-w
 
 ### 1.0.0
 - Primeira versão como app instalável: catálogo, listas ranqueadas, capas salvas localmente e importação da versão HTML antiga.
+
+---
+
+## ☕ Apoie
+
+O Catalogames é gratuito e vai continuar sendo. Se ele te ajudou e você quiser dar uma força, dá pra me pagar um café no **[Ko-fi](https://ko-fi.com/leoblaidd)**. 💜
+
+[![Apoie no Ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/leoblaidd)
 
 ---
 
