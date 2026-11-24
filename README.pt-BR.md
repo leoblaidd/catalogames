@@ -13,6 +13,8 @@
 
 O Catalogames é um app leve para Windows (instalador de ~1,4 MB, feito com Tauri) que organiza os jogos que você já zerou, jogou ou quer jogar. Ele funciona como uma estante de capas: você cadastra cada jogo com nota, plataforma e ano, e monta listas e rankings com eles. Tudo fica salvo numa pasta do seu PC, sem conta, sem nuvem e sem internet obrigatória.
 
+![Catálogo com o dock flutuante](screenshots/catalogo.jpg)
+
 ---
 
 ## ✨ Funções
@@ -42,6 +44,9 @@ O app tem três abas no centro do topo: **🎮 Catálogo**, **📚 Listas** e **
 - **Modo arte:** o botão ao lado do X abre a tela do jogo em tela cheia, com o banner ocupando tudo, a capa maior no canto inferior esquerdo, as infos ao lado e os botões à direita. O **Voltar** (ou Esc) retorna ao modo normal.
 
 ### Perfil
+
+![Perfil](screenshots/perfil.jpg)
+
 - Foto de perfil, nome e uma imagem de topo larga, que expande quando você rola para cima.
 - Números: jogos catalogados, listas e horas jogadas.
 - **Top 5 favoritos**, com coroa no 1º. Clique para escolher e arraste para reordenar.
@@ -58,6 +63,9 @@ O app tem três abas no centro do topo: **🎮 Catálogo**, **📚 Listas** e **
 - Em Configurações, o botão **Verificar atualização** procura uma versão nova nas Releases deste repositório. Ele baixa o instalador e abre sozinho. Também dá pra deixar ele verificar toda vez que o app abre.
 
 ### Listas e rankings
+
+![Listas](screenshots/listas.png)
+
 - Crie listas como "Top 10 RPGs" ou "Musous favoritos", com ou sem numeração. O top 3 aparece em ouro, prata e bronze.
 - Cada lista abre em tela cheia, com busca, tamanho das capas ajustável e botões de editar e excluir.
 - Arraste as capas para reordenar, tanto na lista aberta quanto no editor. Os números do ranking se ajustam na hora.

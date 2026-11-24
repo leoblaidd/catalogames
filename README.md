@@ -15,11 +15,13 @@ Catalogames is a lightweight Windows app (a ~1.4 MB installer, built with Tauri)
 
 > The app is available in **English**, **Portuguese** and **Spanish**, and opens in your Windows language. The names in bold below are the labels you'll see in the English version.
 
+![Catalog with the floating dock](screenshots/catalogo.jpg)
+
 ---
 
 ## ✨ Features
 
-The app has three tabs at the top center: **🎮 Catalog** (Catalog), **📚 Lists** (Lists) and **👤 Profile** (Profile), with a sliding animation between them. The name sits on the left with the tab's numbers next to it, and the tab's buttons are on the right, with the settings always in the corner.
+The app has three tabs at the top center: **🎮 Catalog**, **📚 Lists** and **👤 Profile**, with a sliding animation between them. The name sits on the left with the tab's numbers next to it, and the tab's buttons are on the right, with the settings always in the corner.
 
 ### Catalog
 - A grid of covers with adjustable size, grouped by the year you finished the game, by release year, or not grouped.
@@ -44,6 +46,9 @@ The app has three tabs at the top center: **🎮 Catalog** (Catalog), **📚 Lis
 - **Art mode:** the button next to the X opens the game screen in full screen, with the banner filling everything, a bigger cover in the lower-left corner, the info beside it and the buttons on the right. **Back** (or Esc) returns to normal mode.
 
 ### Profile
+
+![Profile](screenshots/perfil.jpg)
+
 - Profile picture, name and a wide header image that expands when you scroll up.
 - Numbers: games cataloged, lists and hours played.
 - **Top 5 favorites**, with a crown on #1. Click to choose and drag to reorder.
@@ -60,6 +65,9 @@ The app has three tabs at the top center: **🎮 Catalog** (Catalog), **📚 Lis
 - In Settings, the **Check for updates** (Check for update) button looks for a new version in this repository's Releases. It downloads the installer and opens it on its own. You can also let it check every time the app opens.
 
 ### Lists and rankings
+
+![Lists](screenshots/listas.png)
+
 - Create lists like "Top 10 RPGs" or "Favorite Musou games", numbered or not. The top 3 show up in gold, silver and bronze.
 - Each list opens in full screen, with search, adjustable cover size and edit and delete buttons.
 - Drag covers to reorder, both in the open list and in the editor. Ranking numbers update instantly.
