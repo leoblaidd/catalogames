@@ -74,6 +74,7 @@ O app tem três abas no centro do topo: **🎮 Catálogo**, **📚 Listas** e **
 - As imagens grandes são reduzidas automaticamente para não pesar a pasta.
 
 ### Aparência
+- **Três idiomas:** português, inglês e espanhol (🌐 **Idioma** nas Configurações, sem reiniciar). Na primeira vez o app abre no idioma do Windows; se não for nenhum dos três, abre em inglês.
 - **Rolagem suave** com a roda do mouse no catálogo, nas listas e no perfil.
 - **Efeitos sonoros** suaves e graves (trocar de aba, abrir e fechar, salvar, exportar, filtros), criados na hora pelo próprio app. Dá pra desligar nas Configurações.
 - Tema **escuro**, **claro** ou **automático** (segue o Windows).
@@ -128,6 +129,7 @@ O `fazer-instalador.sh` compila pra `x86_64-pc-windows-gnu` (precisa do `mingw-w
 |---|---|
 | `app/index.html` | A interface toda: catálogo, listas, perfil, modais, temas |
 | `src-tauri/src/main.rs` | O app em Rust: janela, leitura e gravação em `dados\`, downloads de imagens, SteamGridDB, atualizações |
+| `app/idiomas.js` | Traduções da interface: cada texto em português com a versão em inglês e espanhol |
 | `src-tauri/src/ponte.js` | Ponte entre a interface e o Rust (cria o `window.catalogame`) |
 | `src-tauri/tauri.conf.json` | Configuração do Tauri (nome, versão, ícone) |
 | `build/instalador.nsi` | Script do instalador (NSIS). Instala por cima mantendo a pasta `dados` |
@@ -146,6 +148,10 @@ O Catalogames é gratuito e vai continuar sendo. Se ele te ajudou e você quiser
 ---
 
 ## 📜 Versões
+
+### 2.0.0
+- **Três idiomas:** português, inglês e espanhol, com detecção do idioma do Windows e troca nas Configurações sem reiniciar.
+- Instalador também em português, inglês e espanhol.
 
 ### 1.9.0
 - **Modo arte:** tela cheia na tela do jogo, com o banner ocupando tudo, a capa maior e as infos num painel.

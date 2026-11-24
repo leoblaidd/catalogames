@@ -13,17 +13,17 @@
 
 Catalogames is a lightweight Windows app (a ~1.4 MB installer, built with Tauri) that organizes the games you've beaten, played or want to play. It works like a shelf of covers: you add each game with a score, platform and year, and build lists and rankings with them. Everything is saved in a folder on your PC, with no account, no cloud and no internet required.
 
-> The app's interface is in **Brazilian Portuguese**. The names in quotes below are the labels you'll see in the app.
+> The app is available in **English**, **Portuguese** and **Spanish**, and opens in your Windows language. The names in bold below are the labels you'll see in the English version.
 
 ---
 
 ## ✨ Features
 
-The app has three tabs at the top center: **🎮 Catálogo** (Catalog), **📚 Listas** (Lists) and **👤 Perfil** (Profile), with a sliding animation between them. The name sits on the left with the tab's numbers next to it, and the tab's buttons are on the right, with the settings always in the corner.
+The app has three tabs at the top center: **🎮 Catalog** (Catalog), **📚 Lists** (Lists) and **👤 Profile** (Profile), with a sliding animation between them. The name sits on the left with the tab's numbers next to it, and the tab's buttons are on the right, with the settings always in the corner.
 
 ### Catalog
 - A grid of covers with adjustable size, grouped by the year you finished the game, by release year, or not grouped.
-- For each game: title, platform, status (**Terminado** / Finished, **Jogado** / Played or **Quero jogar** / Want to play), year finished, release year, hours played, score from 0 to 10 (in half points), genres, favorite, and a comment or review.
+- For each game: title, platform, status (**Finished** / Finished, **Played** / Played or **Want to play** / Want to play), year finished, release year, hours played, score from 0 to 10 (in half points), genres, favorite, and a comment or review.
 - Instant search (<kbd>/</kbd> shortcut) and filters by platform, genre, status, year and score.
 - **Exact score filter:** "Score 5" shows games rated 5 and 5.5, with the 5.5 ones first.
 - Sort by date, score, name, hours or release.
@@ -57,7 +57,7 @@ The app has three tabs at the top center: **🎮 Catálogo** (Catalog), **📚 L
 - Always with a preview first, and you choose where to save.
 
 ### Updates
-- In Settings, the **Verificar atualização** (Check for update) button looks for a new version in this repository's Releases. It downloads the installer and opens it on its own. You can also let it check every time the app opens.
+- In Settings, the **Check for updates** (Check for update) button looks for a new version in this repository's Releases. It downloads the installer and opens it on its own. You can also let it check every time the app opens.
 
 ### Lists and rankings
 - Create lists like "Top 10 RPGs" or "Favorite Musou games", numbered or not. The top 3 show up in gold, silver and bronze.
@@ -76,6 +76,7 @@ The app has three tabs at the top center: **🎮 Catálogo** (Catalog), **📚 L
 - Large images are resized automatically so the folder doesn't get heavy.
 
 ### Appearance
+- **Three languages:** English, Portuguese and Spanish (🌐 **Language** in Settings, no restart needed). The first time, the app opens in your Windows language; if it's none of the three, it opens in English.
 - **Smooth scrolling** with the mouse wheel in the catalog, lists and profile.
 - Soft, low **sound effects** (switching tabs, opening and closing, saving, exporting, filters), generated on the fly by the app itself. They can be turned off in Settings.
 - **Dark**, **light** or **automatic** theme (follows Windows).
@@ -130,6 +131,7 @@ cargo run                      # opens the app in development mode
 |---|---|
 | `app/index.html` | The whole interface: catalog, lists, profile, modals, themes |
 | `src-tauri/src/main.rs` | The app in Rust: window, reading and writing to `dados\`, image downloads, SteamGridDB, updates |
+| `app/idiomas.js` | Interface translations: every Portuguese text with its English and Spanish version |
 | `src-tauri/src/ponte.js` | Bridge between the interface and Rust (creates `window.catalogame`) |
 | `src-tauri/tauri.conf.json` | Tauri configuration (name, version, icon) |
 | `build/instalador.nsi` | Installer script (NSIS). Installs over the old version, keeping the `dados` folder |
@@ -148,6 +150,10 @@ Catalogames is free and will stay that way. If it helped you and you'd like to g
 ---
 
 ## 📜 Versions
+
+### 2.0.0
+- **Three languages:** English, Portuguese and Spanish, picked from your Windows language and switchable in Settings without restarting.
+- Installer in English, Portuguese and Spanish too.
 
 ### 1.9.0
 - **Art mode:** full screen on the game screen, with the banner filling everything, a bigger cover and the info in a panel.

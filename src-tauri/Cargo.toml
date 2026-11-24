@@ -1,6 +1,6 @@
 [package]
 name = "catalogames"
-version = "1.9.0"
+version = "2.0.0"
 edition = "2021"
 description = "Catalogames — versão experimental em Tauri"
 authors = ["leoblaidd"]
@@ -16,6 +16,7 @@ serde = { version = "1", features = ["derive"] }
 serde_json = { version = "1", features = ["preserve_order"] }
 ureq = { version = "2", default-features = false, features = ["native-tls", "json"] }
 native-tls = "0.2"
+sys-locale = "0.3"
 
 [target.'cfg(windows)'.dependencies]
 tauri-plugin-single-instance = "2"

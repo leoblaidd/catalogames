@@ -135,6 +135,17 @@ fn cabecalho(req: &Request<'_>, nome: &str) -> String {
     req.headers().get(nome).and_then(|v| v.to_str().ok()).map(pct_decode).unwrap_or_default()
 }
 
+/* ---------- idioma (o mesmo escolhido na interface: pt, en ou es) ---------- */
+fn tx(app: &AppHandle, pt: &str, en: &str, es: &str) -> String {
+    let l = estado(app).config.lock().unwrap().get("idioma").and_then(Value::as_str).unwrap_or("pt").to_string();
+    match l.as_str() {
+        "en" => en,
+        "es" => es,
+        _ => pt,
+    }
+    .to_string()
+}
+
 /* ---------- configurações (tema, cor, visualização) ---------- */
 fn ler_config(dados: &Path) -> Value {
     fs::read_to_string(dados.join("config.json"))
@@ -203,13 +214,13 @@ fn load(app: AppHandle) -> Result<Option<String>, String> {
                 let _ = fs::write(&backup, &txt); // cópia de segurança a cada abertura (só a última)
                 return Ok(Some(txt));
             }
-            "o arquivo está corrompido".into()
+            tx(&app, "o arquivo está corrompido", "the file is corrupted", "el archivo está dañado")
         }
     };
     // arquivo corrompido: tenta a cópia de segurança
     match fs::read_to_string(&backup) {
         Ok(b) if valido(&b) => Ok(Some(b)),
-        _ => Err(format!("Não consegui ler biblioteca.json: {erro}")),
+        _ => Err(format!("{}: {erro}", tx(&app, "Não consegui ler biblioteca.json", "Couldn't read biblioteca.json", "No pude leer biblioteca.json"))),
     }
 }
 
@@ -422,11 +433,11 @@ fn update_install(app: AppHandle) -> Value {
     let a = estado(&app).ultimo_asset.lock().unwrap().clone();
     let permitido = |u: &str| u.starts_with("https://github.com/") || std::env::var("CG_TESTE_GITHUB").map(|b| u.starts_with(&b)).unwrap_or(false);
     let Some(a) = a.filter(|a| permitido(&a.url)) else {
-        return json!({ "erro": "Nenhum instalador encontrado nessa versão." });
+        return json!({ "erro": tx(&app, "Nenhum instalador encontrado nessa versão.", "No installer found in this version.", "No se encontró ningún instalador en esta versión.") });
     };
     let baixar = || -> Result<PathBuf, String> {
         let r = agente().get(&a.url).set("User-Agent", "Catalogames").call().map_err(|e| match e {
-            ureq::Error::Status(s, _) => format!("Download falhou (HTTP {s})."),
+            ureq::Error::Status(s, _) => format!("{} (HTTP {s}).", tx(&app, "Download falhou", "Download failed", "La descarga falló")),
             e => e.to_string(),
         })?;
         let total: u64 = r.header("content-length").and_then(|v| v.parse().ok()).unwrap_or(a.tamanho);
@@ -495,7 +506,7 @@ async fn save_png(app: AppHandle, request: Request<'_>) -> Result<Option<String>
     let destino: Option<PathBuf> = if let Ok(t) = std::env::var("CG_TESTE_SALVAR") {
         Some(PathBuf::from(t).join(&sugerido))
     } else {
-        let mut d = app.dialog().file().set_title("Salvar imagem").set_file_name(&sugerido).add_filter("Imagem PNG", &["png"]);
+        let mut d = app.dialog().file().set_title(tx(&app, "Salvar imagem", "Save image", "Guardar imagen")).set_file_name(&sugerido).add_filter(tx(&app, "Imagem PNG", "PNG image", "Imagen PNG"), &["png"]);
         if let Ok(p) = app.path().download_dir() {
             d = d.set_directory(p);
         }
@@ -529,7 +540,7 @@ async fn import_pick(app: AppHandle, kind: String) -> Result<Value, String> {
         let dir = match teste {
             Some(t) => Some(t),
             None => {
-                let mut d = app.dialog().file().set_title("Escolha a pasta antiga do Catalogame (a que tem biblioteca.json)");
+                let mut d = app.dialog().file().set_title(tx(&app, "Escolha a pasta antiga do Catalogame (a que tem biblioteca.json)", "Choose the old Catalogame folder (the one with biblioteca.json)", "Elige la carpeta antigua de Catalogame (la que tiene biblioteca.json)"));
                 if let Some(w) = &pai {
                     d = d.set_parent(w);
                 }
@@ -538,7 +549,7 @@ async fn import_pick(app: AppHandle, kind: String) -> Result<Value, String> {
         };
         let Some(dir) = dir else { return Ok(Value::Null) };
         let Ok(txt) = fs::read_to_string(dir.join("biblioteca.json")) else {
-            return Ok(json!({ "erro": "Essa pasta não tem o arquivo biblioteca.json." }));
+            return Ok(json!({ "erro": tx(&app, "Essa pasta não tem o arquivo biblioteca.json.", "This folder doesn't have the biblioteca.json file.", "Esta carpeta no tiene el archivo biblioteca.json.") }));
         };
         let data: Value = serde_json::from_str(&txt).map_err(|e| e.to_string())?;
         // copia as capas
@@ -558,7 +569,7 @@ async fn import_pick(app: AppHandle, kind: String) -> Result<Value, String> {
     let arq = match teste {
         Some(t) => Some(t),
         None => {
-            let mut d = app.dialog().file().set_title("Escolha o arquivo de backup do Catalogame").add_filter("Backup do Catalogame", &["json"]);
+            let mut d = app.dialog().file().set_title(tx(&app, "Escolha o arquivo de backup do Catalogame", "Choose the Catalogame backup file", "Elige el archivo de copia de seguridad de Catalogame")).add_filter(tx(&app, "Backup do Catalogame", "Catalogame backup", "Copia de seguridad de Catalogame"), &["json"]);
             if let Some(w) = &pai {
                 d = d.set_parent(w);
             }
@@ -568,7 +579,7 @@ async fn import_pick(app: AppHandle, kind: String) -> Result<Value, String> {
     let Some(arq) = arq else { return Ok(Value::Null) };
     match fs::read_to_string(&arq).map_err(|e| e.to_string()).and_then(|t| serde_json::from_str::<Value>(&t).map_err(|e| e.to_string())) {
         Ok(data) => Ok(json!({ "data": data, "capas": 0 })),
-        Err(e) => Ok(json!({ "erro": format!("Esse arquivo não é um backup válido: {e}") })),
+        Err(e) => Ok(json!({ "erro": format!("{}: {e}", tx(&app, "Esse arquivo não é um backup válido", "This file isn't a valid backup", "Este archivo no es una copia de seguridad válida")) })),
     }
 }
 
@@ -591,7 +602,14 @@ fn ajustar_webview2(w: &tauri::WebviewWindow) {
 fn main() {
     let (dados, fallback) = resolver_dados();
     let config = ler_config(&dados);
-    let script = format!("window.__CG_CONFIG__ = {};\n{}", serde_json::to_string(&config).unwrap_or_else(|_| "{}".into()), PONTE);
+    // idioma do Windows (ex.: "pt-BR"), pra primeira vez que o app abre
+    let idioma_sistema = sys_locale::get_locales().collect::<Vec<_>>();
+    let script = format!(
+        "window.__CG_CONFIG__ = {};\nwindow.__CG_SYS_LANGS__ = {};\n{}",
+        serde_json::to_string(&config).unwrap_or_else(|_| "{}".into()),
+        serde_json::to_string(&idioma_sistema).unwrap_or_else(|_| "[]".into()),
+        PONTE
+    );
     let tema = tema_de(&config);
     // só nos testes automáticos: roda um script extra na interface
     let script = match std::env::var("CG_TESTE_SCRIPT").ok().and_then(|f| fs::read_to_string(f).ok()) {

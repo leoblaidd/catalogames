@@ -705,6 +705,13 @@ body.selecting .toast{bottom:86px}
   <div class="modal cfg">
     <header><h2>Configurações</h2><button type="button" class="x" data-close>✕</button></header>
     <div class="cfg-body">
+      <section><h3>🌐 Idioma</h3>
+        <div class="seg" id="cfgIdioma" translate="no">
+          <button type="button" data-v="pt"><span class="ic">🇧🇷</span><b>Português</b><small>Brasil</small></button>
+          <button type="button" data-v="en"><span class="ic">🇺🇸</span><b>English</b><small>United States</small></button>
+          <button type="button" data-v="es"><span class="ic">🇪🇸</span><b>Español</b><small>España / Latinoamérica</small></button>
+        </div>
+      </section>
       <section><h3>Tema</h3>
         <div class="seg" id="cfgTema">
           <button type="button" data-v="auto"><span class="ic">🖥️</span><b>Automático</b><small>segue o Windows</small></button>
@@ -931,6 +938,7 @@ Shinobi - 2025 - 2002 - PS2 - 8</div>
 <datalist id="dlPlat"></datalist>
 <div class="toast" id="toast"></div>
 
+<script src="idiomas.js"></script>
 <script>
 /* =====================================================================
    CATALOGAME — catálogo de jogos + listas (app instalado)
@@ -940,6 +948,110 @@ Shinobi - 2025 - 2002 - PS2 - 8</div>
    ===================================================================== */
 
 const $ = s => document.querySelector(s);
+
+/* =====================================================================
+   IDIOMAS — o texto original da interface é em português.
+   app/idiomas.js traz as traduções (inglês e espanhol): { "texto pt": ["en", "es"] }.
+   - T('texto', a, b) traduz na hora (com {0}, {1}… pros valores).
+   - O resto da tela é traduzido sozinho: um observador troca os textos e
+     dicas (title/placeholder) assim que aparecem, usando o mesmo dicionário.
+   ===================================================================== */
+const IDIOMAS = { pt: 'Português', en: 'English', es: 'Español' };
+function idiomaDoSistema(){
+  const sis = Array.isArray(window.__CG_SYS_LANGS__) ? window.__CG_SYS_LANGS__ : [];
+  for (const l of [...sis, ...(navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || 'en'])]) {
+    const c = String(l).slice(0, 2).toLowerCase();
+    if (IDIOMAS[c]) return c;
+  }
+  return 'en';
+}
+let LANG = 'pt';
+const TR = { exato: new Map(), padroes: [] };
+function carregarIdioma(l){
+  LANG = IDIOMAS[l] ? l : 'en';
+  document.documentElement.lang = { pt: 'pt-BR', en: 'en', es: 'es' }[LANG];
+  TR.exato.clear(); TR.padroes = [];
+  if (LANG === 'pt') return;
+  const col = LANG === 'en' ? 0 : 1, D = window.CG_IDIOMAS || {};
+  for (const k in D) {
+    const v = D[k] && D[k][col]; if (v == null) continue;
+    const kk = k.replace(/\s+/g, ' ').trim();
+    TR.exato.set(kk, v);
+    if (/\{\d+\}/.test(kk) && !/[<>]/.test(kk)) {
+      // vira padrão: "Jogos em {0}" casa com "Jogos em 2024"
+      const ordem = []; let re = '';
+      kk.split(/(\{\d+\})/).forEach(pt => { const m = pt.match(/^\{(\d+)\}$/); if (m) { ordem.push(m[1]); re += '(.+?)'; } else re += pt.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); });
+      const fixo = kk.split(/\{\d+\}/).sort((a, b) => b.length - a.length)[0];
+      TR.padroes.push({ re: new RegExp('^' + re + '$'), ordem, v, fixo });
+    }
+  }
+}
+function T(s, ...args){
+  let r = LANG === 'pt' ? s : (TR.exato.get(String(s).replace(/\s+/g, ' ').trim()) ?? s);
+  return args.length ? r.replace(/\{(\d+)\}/g, (m, i) => args[i] ?? '') : r;
+}
+// tradução de um texto que já está na tela (pode ter valores no meio)
+function trTexto(txt){
+  const m = txt.match(/^(\s*)([\s\S]*?)(\s*)$/), core = m[2].replace(/\s+/g, ' ');
+  if (!core || !/[A-Za-zÀ-ÿ]/.test(core)) return txt;
+  let r = TR.exato.get(core);
+  if (r == null) for (const p of TR.padroes) {
+    if (p.fixo && !core.includes(p.fixo)) continue;
+    const mm = core.match(p.re);
+    if (mm) { r = p.v.replace(/\{(\d+)\}/g, (x, i) => { const j = p.ordem.indexOf(i); return j < 0 ? '' : mm[j + 1]; }); break; }
+  }
+  return r == null ? txt : m[1] + r + m[3];
+}
+const I18N_ATTRS = ['title', 'placeholder', 'aria-label', 'data-tip'];
+const trOrig = new WeakMap(), trFeito = new WeakMap();
+const semTraducao = n => { const e = n.nodeType === 1 ? n : n.parentElement; return !e || !!e.closest('script,style,[translate="no"]'); };
+function trNoTexto(n){
+  const v = n.nodeValue;
+  if (trFeito.get(n) === v) return;               // foi a gente que escreveu
+  trOrig.set(n, v);
+  const t = LANG === 'pt' || semTraducao(n) ? v : trTexto(v);
+  trFeito.set(n, t);
+  if (t !== v) n.nodeValue = t;
+}
+function trAtributo(el, a){
+  const v = el.getAttribute(a); if (v == null) return;
+  let o = trOrig.get(el); if (!o) { o = {}; trOrig.set(el, o); }
+  let f = trFeito.get(el); if (!f) { f = {}; trFeito.set(el, f); }
+  if (f[a] === v) return;
+  o[a] = v;
+  const t = LANG === 'pt' || semTraducao(el) ? v : trTexto(v);
+  f[a] = t;
+  if (t !== v) el.setAttribute(a, t);
+}
+function trArvore(root){
+  if (root.nodeType === 3) return trNoTexto(root);
+  if (root.nodeType !== 1 || root.closest && root.closest('script,style')) return;
+  for (const a of I18N_ATTRS) if (root.hasAttribute(a)) trAtributo(root, a);
+  const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT | NodeFilter.SHOW_ELEMENT);
+  for (let n = w.nextNode(); n; n = w.nextNode()) {
+    if (n.nodeType === 3) trNoTexto(n);
+    else for (const a of I18N_ATTRS) if (n.hasAttribute(a)) trAtributo(n, a);
+  }
+}
+// trocar de idioma com o app aberto: volta tudo pro original e traduz de novo
+function retraduzirTudo(){
+  const w = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT | NodeFilter.SHOW_ELEMENT);
+  const volta = n => {
+    if (n.nodeType === 3) { const o = trOrig.get(n); if (o != null && trFeito.get(n) === n.nodeValue) { trFeito.delete(n); n.nodeValue = o; } return; }
+    const o = trOrig.get(n), f = trFeito.get(n); if (!o || !f) return;
+    for (const a in o) if (f[a] === n.getAttribute(a)) { delete f[a]; n.setAttribute(a, o[a]); }
+  };
+  volta(document.body); for (let n = w.nextNode(); n; n = w.nextNode()) volta(n);
+  trArvore(document.body);
+}
+const trObs = new MutationObserver(muts => {
+  if (LANG === 'pt') return;
+  for (const m of muts) {
+    if (m.type === 'childList') m.addedNodes.forEach(trArvore);
+    else if (m.type === 'characterData') trNoTexto(m.target);
+    else if (m.type === 'attributes') trAtributo(m.target, m.attributeName);
+  }
+});
 const STATUS = {
   terminado: { n: 'Terminado',   c: '#3ecf8e' },
   jogado:    { n: 'Jogado',      c: '#f5b942' },
@@ -947,6 +1059,11 @@ const STATUS = {
 };
 const STATUS_ANTIGO = { zerado: 'terminado', '100': 'terminado', jogando: 'jogado', abandonado: 'jogado', backlog: 'quero' };
 const PLAT_DEF = ['PC','PS5','PS4','PS3','PS2','PS1','PSP','PS Vita','Switch','Switch 2','Wii U','Wii','GameCube','N64','SNES','NES','3DS','DS','GBA','Game Boy','Xbox Series','Xbox One','Xbox 360','Xbox','Mega Drive','Master System','Dreamcast','Saturn','Arcade','Mobile','Emulador'];
+const platDef = () => PLAT_DEF.map(p => p === 'Emulador' ? T('Emulador') : p);
+const GEN_DEF_IDIOMA = {
+  en: ['Action','Adventure','RPG','Action RPG','JRPG','Soulslike','Musou','Hack and slash','Open world','Platformer','Metroidvania','Shooter','Fighting','Horror','Stealth','Racing','Sports','Strategy','Puzzle','Roguelike','Simulation','Indie','Story-driven'],
+  es: ['Acción','Aventura','RPG','Action RPG','JRPG','Soulslike','Musou','Hack and slash','Mundo abierto','Plataformas','Metroidvania','Disparos','Lucha','Terror','Sigilo','Carreras','Deportes','Estrategia','Puzzle','Roguelike','Simulación','Indie','Narrativo'],
+};
 const GEN_DEF = ['Ação','Aventura','RPG','Action RPG','JRPG','Soulslike','Musou','Hack and slash','Mundo aberto','Plataforma','Metroidvania','Tiro','Luta','Terror','Furtividade','Corrida','Esporte','Estratégia','Puzzle','Roguelike','Simulação','Indie','Narrativo'];
 const ANO_ATUAL = new Date().getFullYear();
 
@@ -965,6 +1082,11 @@ const CFG = (() => {
   let oldView = {}; try { oldView = JSON.parse(localStorage.getItem('catalogame.view') || '{}'); } catch {}
   return { tema: 'escuro', cor: '#3b82f6', ...c, view: { ...oldView, ...(c.view || {}) } };
 })();
+// primeira vez: idioma do Windows (pt, es ou en; outro idioma vira inglês)
+if (!IDIOMAS[CFG.idioma]) CFG.idioma = idiomaDoSistema();
+carregarIdioma(CFG.idioma);
+trArvore(document.body);
+trObs.observe(document.body, { subtree: true, childList: true, characterData: true, attributes: true, attributeFilter: I18N_ATTRS });
 let cfgT;
 function saveConfig(){ clearTimeout(cfgT); cfgT = setTimeout(() => api.setConfig(CFG).catch(e => console.warn(e)), 350); }
 
@@ -1074,7 +1196,7 @@ async function syncSiblings(g, { capa = false } = {}){
   }
   return mudou ? sibs.length : 0;
 }
-function genList(){ return sortGens(CFG.generos || GEN_DEF); }
+function genList(){ return sortGens(CFG.generos || GEN_DEF_IDIOMA[LANG] || GEN_DEF); }
 
 function libraryJSON(){ return JSON.stringify({ app: 'Catalogames', versao: 2, atualizadoEm: new Date().toISOString(), jogos: games, listas: lists, perfil }, null, 2); }
 
@@ -1152,11 +1274,11 @@ const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
 const norm = s => String(s ?? '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
 const hue = s => { let h = 0; for (const c of String(s)) h = (h * 31 + c.charCodeAt(0)) % 360; return h; };
-const fmtNum = (n, d = 1) => Number(n).toLocaleString('pt-BR', { maximumFractionDigits: d });
-const plural = (n, s, p) => `${n} ${n === 1 ? s : (p || s + 's')}`;
+const fmtNum = (n, d = 1) => Number(n).toLocaleString({ pt: 'pt-BR', en: 'en-US', es: 'es-ES' }[LANG] || 'pt-BR', { maximumFractionDigits: d });
+const plural = (n, s, p) => `${n} ${T(n === 1 ? s : (p || s + 's'))}`;
 const yearOf = g => g.ano ? String(g.ano) : '';
 function notaColor(n){ return n >= 9 ? '#3ecf8e' : n >= 7.5 ? '#9fd450' : n >= 6 ? '#f5b942' : n >= 4 ? '#f28c4b' : '#ef5a5a'; }
-function placeholder(title){ return `<div class="ph" style="--h:${hue(title || '?')}">${esc(title || '?')}</div>`; }
+function placeholder(title){ return `<div class="ph" translate="no" style="--h:${hue(title || '?')}">${esc(title || '?')}</div>`; }
 function putImg(el, src, alt){
   if (!src || !el) return;
   const img = new Image(); img.alt = alt || ''; img.draggable = false;
@@ -1297,7 +1419,7 @@ async function sgLoad(reset){
   if (reset) { SGM.token++; SGM.page = 0; SGM.items = []; SGM.done = false; $('#sgBody').innerHTML = sgSkeleton(); }
   const tk = SGM.token;
   const gameName = $('#sgGame').selectedOptions[0] ? $('#sgGame').selectedOptions[0].textContent : '';
-  $('#sgSub').textContent = `Carregando ${SGM.kind === 'heroes' ? 'banners' : 'capas'} de ${gameName}…`;
+  $('#sgSub').textContent = T(SGM.kind === 'heroes' ? 'Carregando banners de {0}…' : 'Carregando capas de {0}…', gameName);
   $('#sgMore').disabled = true;
   const r = await api.sgdbGrids($('#sgGame').value, SGM.page, $('#sgStyle').value, SGM.kind);
   if (tk !== SGM.token) return;
@@ -1311,9 +1433,9 @@ async function sgLoad(reset){
 function sgRender(gameName){
   if (!SGM.items.length) {
     $('#sgSub').textContent = gameName;
-    return sgMessage(`<h3>Nenhum${SGM.kind === 'heroes' ? ' banner' : 'a capa vertical'} pra esse jogo${$('#sgStyle').value ? ' nesse estilo' : ''}</h3><p>${$('#sgStyle').value ? 'Tente “Todos os estilos”.' : 'Se apareceu mais de um jogo na lista de cima, tente outro.'}</p>`);
+    return sgMessage(`<h3>${T(SGM.kind === 'heroes' ? ($('#sgStyle').value ? 'Nenhum banner pra esse jogo nesse estilo' : 'Nenhum banner pra esse jogo') : ($('#sgStyle').value ? 'Nenhuma capa vertical pra esse jogo nesse estilo' : 'Nenhuma capa vertical pra esse jogo'))}</h3><p>${$('#sgStyle').value ? 'Tente “Todos os estilos”.' : 'Se apareceu mais de um jogo na lista de cima, tente outro.'}</p>`);
   }
-  $('#sgSub').textContent = `${gameName} · ${SGM.kind === 'heroes' ? plural(SGM.items.length, 'banner') : plural(SGM.items.length, 'capa')}${SGM.done ? '' : '+'} · clique ${SGM.kind === 'heroes' ? 'num' : 'numa'} pra usar`;
+  $('#sgSub').textContent = `${gameName} · ${SGM.kind === 'heroes' ? plural(SGM.items.length, 'banner') : plural(SGM.items.length, 'capa')}${SGM.done ? '' : '+'} · ${T(SGM.kind === 'heroes' ? 'clique num pra usar' : 'clique numa pra usar')}`;
   $('#sgBody').innerHTML = `<div class="sg-grid${SGM.kind === 'heroes' ? ' heroes' : ''}">${SGM.items.map((it, i) => `<button type="button" class="sgc" data-i="${i}" title="${it.width}×${it.height}${it.author && it.author.name ? ' · por ' + esc(it.author.name) : ''}"><img loading="lazy" alt="" src="${esc(it.thumb || it.url)}"><span class="sz">${it.width}×${it.height}</span></button>`).join('')}</div>`;
   $('#sgBody').querySelectorAll('.sgc img').forEach(img => { img.onload = () => img.classList.add('ok'); img.onerror = () => img.closest('.sgc').remove(); });
   $('#sgMore').classList.toggle('hidden', !!(SGM.done));
@@ -1338,7 +1460,7 @@ async function boot(){
   try { data = await api.load(); }
   catch (e) { falhou = true; reportError('Não consegui abrir sua biblioteca. Nada foi apagado — me chama que a gente resolve.', e); }
   loadData(data);
-  if (!Array.isArray(CFG.generos)) { CFG.generos = sortGens([...GEN_DEF, ...games.flatMap(g => g.generos || [])]); saveConfig(); }
+  if (!Array.isArray(CFG.generos)) { CFG.generos = sortGens([...(GEN_DEF_IDIOMA[LANG] || GEN_DEF), ...games.flatMap(g => g.generos || [])]); saveConfig(); }
   if (!data && !falhou) { try { await persist(); } catch {} }   // cria a biblioteca.json vazia
   startApp();
   if (CFG.autoUpdate !== false) setTimeout(() => checkUpdate(true).catch(() => {}), 4000);
@@ -1455,6 +1577,7 @@ const SOM = (() => {
 
 let appIniciado = false;
 function startApp(){
+  if (!api.getConfig().idioma) saveConfig(); // guarda o idioma detectado
   applyFiltMode();
   setTab(view.tab);
   appIniciado = true;
@@ -1515,10 +1638,10 @@ function renderPerfil(){
   const aMax = Math.max(1, ...anosOrd.map(x => x[1]));
   const recorde = S.anos[0];
   const anoHTML = anosOrd.length ? `<div class="vbars">${anosOrd.map(([a, n]) => `<div class="c"><div class="b${recorde && +recorde[0] === a ? ' max' : ''}" style="height:${Math.max(4, n / aMax * 100)}%"><span>${n}</span></div><div class="y">${a}</div></div>`).join('')}</div>
-    <div class="destaque">Seu ano recorde: <b>${recorde[0]}</b>, com <b>${plural(recorde[1], 'jogo terminado', 'jogos terminados')}</b></div>` : '<div class="vazio">Marque o ano em que terminou os jogos pra ver aqui.</div>';
+    <div class="destaque">${T('Seu ano recorde: <b>{0}</b>, com <b>{1}</b>', recorde[0], plural(recorde[1], 'jogo terminado', 'jogos terminados'))}</div>` : '<div class="vazio">Marque o ano em que terminou os jogos pra ver aqui.</div>';
   // mais rejogado
   const mr = S.maisRejogado;
-  const rejHTML = mr ? `<div class="rejog" data-open="${mr[0].id}" style="cursor:pointer"><div class="cv" id="pfRejCv">${placeholder(mr[0].titulo)}</div><div><div class="t">${esc(mr[0].titulo)}</div><div class="m">Jogado <b>${mr.length} vezes</b></div><div class="m">${[...new Set(mr.map(p => p.ano).filter(Boolean))].sort((a, b) => a - b).join(' · ')}</div></div></div>`
+  const rejHTML = mr ? `<div class="rejog" data-open="${mr[0].id}" style="cursor:pointer"><div class="cv" id="pfRejCv">${placeholder(mr[0].titulo)}</div><div><div class="t" translate="no">${esc(mr[0].titulo)}</div><div class="m">Jogado <b>${mr.length} vezes</b></div><div class="m">${[...new Set(mr.map(p => p.ano).filter(Boolean))].sort((a, b) => a - b).join(' · ')}</div></div></div>`
     : '<div class="vazio">Nenhum jogo rejogado ainda. Quando jogar um de novo, use “🔁 Joguei de novo”.</div>';
   const gen = S.gens[0];
   $('#perfilMain').innerHTML = `
@@ -1748,7 +1871,7 @@ async function drawProfileCard(cv, o){
   const top = perfil.top5.map(id => games.find(g => g.id === id)).filter(Boolean);
   if (o.top5 && top.length) blocos.push({ h: 338, draw: async y => {
     ctx.fillStyle = acc; ctx.font = `800 19px ${FONT}`; ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic';
-    ctx.fillText('T O P   5   F A V O R I T O S', W / 2, y + 26);
+    ctx.fillText(T('T O P   5   F A V O R I T O S'), W / 2, y + 26);
     const imgs = await Promise.all(top.map(g => loadImgFor(g)));
     // lado a lado; o 1º é 15% maior e tem a coroa. Todos alinhados por baixo.
     const n = top.length, gp = 14, maxW = W - 60;
@@ -1771,11 +1894,11 @@ async function drawProfileCard(cv, o){
     });
   } });
   const stats = [];
-  if (o.ano) stats.push([String(games.filter(g => g.status === 'terminado' && g.ano === ANO_ATUAL).length), `jogos em ${ANO_ATUAL}`]);
-  if (o.total) stats.push([String(S.nJogos), 'jogos ao todo']);
-  if (o.plat && S.plats[0]) stats.push([S.plats[0][0], 'plataforma mais jogada']);
-  if (o.horas && S.horas) stats.push([fmtNum(Math.round(S.horas)), 'horas jogadas']);
-  if (o.media && S.media != null) stats.push([fmtNum(Math.round(S.media * 10) / 10), 'nota média']);
+  if (o.ano) stats.push([String(games.filter(g => g.status === 'terminado' && g.ano === ANO_ATUAL).length), T('jogos em {0}', ANO_ATUAL)]);
+  if (o.total) stats.push([String(S.nJogos), T('jogos ao todo')]);
+  if (o.plat && S.plats[0]) stats.push([S.plats[0][0], T('plataforma mais jogada')]);
+  if (o.horas && S.horas) stats.push([fmtNum(Math.round(S.horas)), T('horas jogadas')]);
+  if (o.media && S.media != null) stats.push([fmtNum(Math.round(S.media * 10) / 10), T('nota média')]);
   if (stats.length) blocos.push({ h: 104, draw: async y => {
     const n = stats.length, gp = 14, bw = (W - 60 - gp * (n - 1)) / n;
     stats.forEach(([v, l], i) => {
@@ -1815,7 +1938,7 @@ function openExport(mode){
   if (mode === 'perfil') {
     EX.o = { capa: true, foto: true, nome: true, top5: true, ano: true, total: true, plat: true, horas: false, media: false };
     $('#exTitle').textContent = '📤 Exportar card do perfil';
-    $('#exSub').textContent = 'Imagem 800 × 1200 px · desmarque o que não quiser';
+    $('#exSub').textContent = T('Imagem com 800 px de largura · desmarque o que não quiser');
   } else if (mode === 'lista') {
     const l = lists.find(x => x.id === openListId); if (!l) return;
     EX.o = { listId: l.id, ranked: !!l.ranqueada, nomes: !l.semNomes, cols: exCols(l.itens.length) };
@@ -1865,14 +1988,14 @@ async function drawEx(){
   const tk = ++EX.token, cv = document.createElement('canvas'), o = EX.o;
   $('#exPrev').classList.add('loading');
   try {
-    if (EX.mode === 'perfil') { await drawProfileCard(cv, o); EX.nome = `Perfil ${perfil.nome || ''}`.trim(); }
+    if (EX.mode === 'perfil') { await drawProfileCard(cv, o); EX.nome = T('Perfil {0}', perfil.nome || '').trim(); }
     else if (EX.mode === 'lista') {
       const l = lists.find(x => x.id === o.listId);
       await drawGridArt(cv, { titulo: l.nome, sub: plural(l.itens.length, 'jogo'), itens: l.itens.map(it => ({ titulo: it.titulo, obj: it })), cols: o.cols, nomes: o.nomes, ranked: o.ranked });
       EX.nome = l.nome;
     } else {
       const arr = exGames();
-      const titulo = o.tipo === 'ano' ? `Jogos de ${o.ano}` : o.tipo === 'plat' ? `Jogos de ${o.plat}` : `Jogos de ${o.gen}`;
+      const titulo = T('Jogos de {0}', o.tipo === 'ano' ? o.ano : o.tipo === 'plat' ? o.plat : o.gen);
       await drawGridArt(cv, { titulo, sub: plural(arr.length, 'jogo'), itens: arr.map(g => ({ titulo: g.titulo, obj: g, nota: g.nota })), cols: o.cols, nomes: o.nomes, notas: o.notas });
       EX.nome = titulo;
     }
@@ -1956,13 +2079,13 @@ function renderFilters(){
   document.documentElement.style.setProperty('--card', view.card + 'px');
   $('#clearF').classList.toggle('hidden', !filtersActive());
   renderFiltBtn(); renderDock();
-  $('#dlPlat').innerHTML = [...new Set([...plats, ...PLAT_DEF])].map(p => `<option value="${esc(p)}">`).join('');
+  $('#dlPlat').innerHTML = [...new Set([...plats, ...platDef()])].map(p => `<option value="${esc(p)}">`).join('');
 }
 function renderStats(list){
   const done = games.filter(g => g.status === 'terminado');
   const thisYear = done.filter(g => g.ano === ANO_ATUAL).length;
-  const parts = [`<strong>${done.length}</strong> terminado${done.length === 1 ? '' : 's'}`, `<strong>${thisYear}</strong> em ${ANO_ATUAL}`];
-  if (list.length !== games.length) parts.push(`mostrando <strong>${list.length}</strong> de ${games.length}`);
+  const parts = [T(done.length === 1 ? '<strong>{0}</strong> terminado' : '<strong>{0}</strong> terminados', done.length), T('<strong>{0}</strong> em {1}', thisYear, ANO_ATUAL)];
+  if (list.length !== games.length) parts.push(T('mostrando <strong>{0}</strong> de {1}', list.length, games.length));
   $('#stats').innerHTML = parts.join(' · ');
 }
 function cardHTML(g, plays){
@@ -1974,7 +2097,7 @@ function cardHTML(g, plays){
     const plats = [...new Set(plays.map(p => p.plataforma).filter(Boolean))];
     sub = [plats.length === 1 ? plats[0] : '', anos.join(', ')].filter(Boolean).join(' · ');
   } else sub = [g.plataforma, g.ano].filter(Boolean).join(' · ');
-  const card = `<div class="card${sel.has(g.id) ? ' sel' : ''}${g.pendente ? ' pend' : ''}" data-id="${g.id}" title="${esc(g.titulo)}${multi ? ` · jogado ${plays.length} vezes` : ''}">
+  const card = `<div class="card${sel.has(g.id) ? ' sel' : ''}${g.pendente ? ' pend' : ''}" data-id="${g.id}" title="${esc(g.titulo)}${multi ? ' · ' + T('jogado {0} vezes', plays.length) : ''}">
     ${placeholder(g.titulo)}
     <div class="ck"></div>
     ${g.pendente ? '<div class="pendtag">✎ Clique pra completar</div>' : ''}
@@ -1982,7 +2105,7 @@ function cardHTML(g, plays){
       ${g.favorito ? '<div class="fav">★</div>' : ''}
       ${st && g.status !== 'terminado' ? `<div class="pill" style="color:${st.c};border-color:${st.c}">${st.n}</div>` : ''}
     </div>
-    <div class="info"><div class="t">${esc(g.titulo)}</div>
+    <div class="info"><div class="t" translate="no">${esc(g.titulo)}</div>
       <div class="s"><span>${esc(sub)}</span>${g.nota != null ? `<b class="n" style="background:${notaColor(g.nota)}">${fmtNum(g.nota)}</b>` : ''}</div></div>
   </div>`;
   if (!multi) return card;
@@ -2007,7 +2130,7 @@ function render(){
   const fs = $('#fromSearch');
   fs.classList.toggle('hidden', !(filtersActive() && list.length));
   fs.textContent = `📚 Virar lista (${list.length})`;
-  fs.title = `Criar uma lista com ${list.length === 1 ? 'esse jogo' : `esses ${list.length} jogos`}`;
+  fs.title = list.length === 1 ? T('Criar uma lista com esse jogo') : T('Criar uma lista com esses {0} jogos', list.length);
   renderDock();
   if (!games.length) { main.innerHTML = `<div class="empty"><h3>Seu catálogo está vazio</h3><p>Clique em <b>＋ Adicionar jogo</b> pra cadastrar o primeiro.</p><p style="margin-top:22px;font-size:13px">Já usava o Catalogame antes? <button class="link" onclick="openImport()">Trazer sua biblioteca antiga</button></p></div>`; return; }
   if (!list.length) { main.innerHTML = `<div class="empty"><h3>Nenhum jogo com esses filtros</h3><p><button class="link" onclick="clearFilters()">Limpar filtros</button></p></div>`; return; }
@@ -2062,7 +2185,7 @@ function applyFiltMode(){
 }
 function dkTexto(k, o){
   const t = o.textContent.trim();
-  if (!o.value && DK[k].todos) return [DK[k].todos, ''];
+  if (!o.value && DK[k].todos) return [T(DK[k].todos), ''];
   if (k === 'ano') return [t.replace(/^Terminados em /, ''), ''];
   if (k === 'nota') { const m = t.match(/^(Nota \d+)\s*\((.*)\)$/); return m ? [m[1], m[2]] : [t, '']; }
   if (k === 'group') return [t.replace(/^Agrupar: /, 'Por '), ''];
@@ -2076,7 +2199,7 @@ function renderDock(){
       const sel = $(d.sel), o = sel.options[sel.selectedIndex];
       const ativo = k === 'sort' ? sel.value !== 'ano-desc' : k === 'group' ? sel.value !== 'ano' : !!sel.value;
       b.classList.toggle('on', ativo);
-      b.dataset.tip = ativo && o ? `${d.nome}: ${dkTexto(k, o).filter(Boolean).join(' ')}` : d.nome;
+      b.dataset.tip = ativo && o ? `${T(d.nome)}: ${dkTexto(k, o).filter(Boolean).join(' ')}` : T(d.nome);
     } else if (k === 'fav') { b.classList.toggle('on', !!view.fav); b.dataset.tip = view.fav ? 'Só favoritos (clique pra ver todos)' : 'Só favoritos'; }
     else if (k === 'pend') { const n = games.filter(g => g.pendente).length; b.classList.toggle('off', !n); b.classList.toggle('on', !!view.pend); b.dataset.tip = `Completar (${n} faltando infos)`; }
     else if (k === 'export') b.dataset.tip = 'Exportar imagem';
@@ -2089,7 +2212,7 @@ function abrirDk(k, so){
   const d = DK[k], box = $('#dkDrawer'), sel = $(d.sel);
   const ops = [...sel.options];
   box.classList.toggle('c3', ops.length <= 6);
-  box.innerHTML = `<h4><span>${d.nome}</span>${k === 'sort' || k === 'group' ? '' : `<span>${ops.filter(o => o.value).length}</span>`}</h4>
+  box.innerHTML = `<h4><span>${T(d.nome)}</span>${k === 'sort' || k === 'group' ? '' : `<span>${ops.filter(o => o.value).length}</span>`}</h4>
     <div class="dk-grid">${ops.map(o => { const [a, b] = dkTexto(k, o);
       return `<button type="button" class="dk-box${o.value === sel.value ? ' on' : ''}" data-v="${esc(o.value)}">${esc(a)}${b ? `<small>${esc(b)}</small>` : ''}</button>`; }).join('')}</div>`;
   box.querySelectorAll('.dk-box').forEach(b => b.onclick = () => {
@@ -2170,7 +2293,7 @@ function openDetail(id, manterModo){
     ['Terminado em', g.ano ?? ''],
     ['Lançamento', g.lancamento ?? ''],
     ['Horas', g.horas != null ? fmtNum(g.horas) + ' h' : ''],
-    ['Gêneros', (g.generos || []).length ? `<div class="tagrow">${sortGens(g.generos).map(t => `<span class="tag">${esc(t)}</span>`).join('')}</div>` : ''],
+    ['Gêneros', (g.generos || []).length ? `<div class="tagrow">${sortGens(g.generos).map(t => `<span class="tag" translate="no">${esc(t)}</span>`).join('')}</div>` : ''],
   ].filter(r => r[1] !== '' && r[1] != null);
   $('#detail').classList.add('dt');
   $('#detail').innerHTML = `
@@ -2178,11 +2301,11 @@ function openDetail(id, manterModo){
     <div class="detail">
       <div class="dc" id="dCover">${placeholder(g.titulo)}</div>
       <div class="dt-info">
-        <h1>${esc(g.titulo)} ${g.favorito ? '<span style="color:var(--warn)">★</span>' : ''}</h1>
+        <h1 translate="no">${esc(g.titulo)} ${g.favorito ? '<span style="color:var(--warn)">★</span>' : ''}</h1>
         ${st ? `<span class="pill" style="color:${st.c};border-color:${st.c}">${st.n}</span>` : ''}
         <div class="big">${g.nota != null ? `<div class="bignota" style="color:${notaColor(g.nota)}">${fmtNum(g.nota)}<small> / 10</small></div>` : `<div style="color:var(--dim)">Sem nota</div>`}</div>
         <dl class="meta">${rows.map(r => `<dt>${r[0]}</dt><dd>${r[1]}</dd>`).join('')}</dl>
-        ${g.review ? `<div class="review">${esc(g.review)}</div>` : ''}
+        ${g.review ? `<div class="review" translate="no">${esc(g.review)}</div>` : ''}
         ${playsBox(g)}
       </div>
     </div>
@@ -2213,7 +2336,7 @@ function openDetail(id, manterModo){
   if (siblingsOf(g).length) checkPlaysDiff(g);
   $('#dUnify').onclick = async () => {
     const src = oldestPlay([g, ...siblingsOf(g)]);
-    const ok = await showMsg('Igualar ao 1º registro', `<p>Copiar a <b>nota</b>, o <b>lançamento</b>, os <b>gêneros</b>, a <b>capa</b> e o <b>banner</b> da primeira jogada que você cadastrou (<b>${src.ano ?? 'sem ano'}</b>${src.plataforma ? ' · ' + esc(src.plataforma) : ''}) pras outras?</p><p style="color:var(--mut);font-size:13px">Plataforma, ano em que terminou, horas, status e comentário de cada jogada continuam como estão.</p>`,
+    const ok = await showMsg('Igualar ao 1º registro', `<p>${T('Copiar a <b>nota</b>, o <b>lançamento</b>, os <b>gêneros</b>, a <b>capa</b> e o <b>banner</b> da primeira jogada que você cadastrou ({0}) pras outras?', `<b>${src.ano ?? T('sem ano')}</b>${src.plataforma ? ' · ' + esc(src.plataforma) : ''}`)}</p><p style="color:var(--mut);font-size:13px">Plataforma, ano em que terminou, horas, status e comentário de cada jogada continuam como estão.</p>`,
       [{ label: 'Cancelar', value: false }, { label: 'Igualar', primary: true, value: true }]);
     if (!ok) return;
     await syncSiblings(src, { capa: true });
@@ -2245,8 +2368,8 @@ async function checkPlaysDiff(g0){
   for (const s of sibs) { if (await imgSig(s) !== cg) { campos.push('capa'); break; } }
   for (const s of sibs) { if (await imgSig(s.banner) !== bg) { campos.push('banner'); break; } }
   const b = $('#dUnify'); if (!b || !$('#detailBg').classList.contains('open')) return;
-  const lista = campos.length > 1 ? campos.slice(0, -1).join(', ') + ' e ' + campos.at(-1) : campos[0];
-  b.title = campos.length ? `As jogadas estão com ${lista} diferente${campos.length > 1 || campos[0] === 'gêneros' ? 's' : ''}. Clique pra deixar todas iguais à primeira que você cadastrou (${g.ano ?? 'sem ano'}).` : '';
+  const nomes = campos.map(c => T(c)), lista = nomes.length > 1 ? nomes.slice(0, -1).join(', ') + ' ' + T('e') + ' ' + nomes.at(-1) : nomes[0];
+  b.title = campos.length ? T(campos.length > 1 || campos[0] === 'gêneros' ? 'As jogadas estão com {0} diferentes. Clique pra deixar todas iguais à primeira que você cadastrou ({1}).' : 'As jogadas estão com {0} diferente. Clique pra deixar todas iguais à primeira que você cadastrou ({1}).', lista, g.ano ?? T('sem ano')) : '';
   b.classList.toggle('hidden', !campos.length);
 }
 /* a jogada cadastrada primeiro (as sem data de cadastro vêm de versões antigas, então são mais antigas) */
@@ -2258,13 +2381,13 @@ function playsBox(g){
   const all = [g, ...sibs].sort((a, b) => (a.ano ?? 9999) - (b.ano ?? 9999));
   const anos = all.map(p => p.id === g.id
     ? `<span class="py cur" title="Você está vendo esta">${p.ano ?? 'sem ano'}</span>`
-    : `<button type="button" class="py" data-pid="${p.id}" title="Abrir a jogada de ${p.ano ?? 'sem ano'}${p.plataforma ? ' · ' + esc(p.plataforma) : ''}">${p.ano ?? 'sem ano'}</button>`);
+    : `<button type="button" class="py" data-pid="${p.id}" title="${T('Abrir a jogada de {0}', (p.ano ?? T('sem ano')) + (p.plataforma ? ' · ' + esc(p.plataforma) : ''))}">${p.ano ?? 'sem ano'}</button>`);
   return `<div class="dplays"><span class="pi">🔁</span> Você jogou isso <b>${all.length} vezes</b> <span class="sep">·</span>
     <span class="anos">${anos.join('<span class="sep">, </span>')}</span></div>`;
 }
 async function deleteGame(id){
   const g = games.find(x => x.id === id); if (!g) return;
-  if (!confirm(`Excluir "${g.titulo}" do catálogo?`)) return;
+  if (!confirm(T('Excluir "{0}" do catálogo?', g.titulo))) return;
   await removeCover(g);
   if (g.banner) await removeCover(g.banner);
   games = games.filter(x => x.id !== id);
@@ -2399,7 +2522,7 @@ async function saveForm(e){
     SOM('salvar');
     closeModals(true); clearUrlCache(); render();
     if (back) openDetail(g.id, true);
-    toast(outras ? `${isNew ? `“${titulo}” adicionado` : 'Alterações salvas'} · nota, lançamento, gêneros e capa igualados em ${plural(outras, 'outra jogada', 'outras jogadas')}` : isNew ? `“${titulo}” adicionado ao catálogo` : 'Alterações salvas', outras ? 4200 : 2600);
+    toast(outras ? `${isNew ? T('“{0}” adicionado', titulo) : T('Alterações salvas')} · ${T('nota, lançamento, gêneros e capa igualados em {0}', plural(outras, 'outra jogada', 'outras jogadas'))}` : isNew ? T('“{0}” adicionado ao catálogo', titulo) : T('Alterações salvas'), outras ? 4200 : 2600);
   } catch (err) { console.error(err); }
   finally { btn.disabled = false; }
 }
@@ -2440,10 +2563,10 @@ function renderFSugg(){
       last = x.kind;
     }
     const meta = x.kind === 'jogo'
-      ? `jogado em ${[...new Set(x.plays.map(p => p.ano).filter(Boolean))].sort((a, b) => a - b).join(', ') || 'ano não informado'}${x.it.plataforma ? ' · ' + esc(x.it.plataforma) : ''}`
-      : `na lista “${esc(x.lista)}”`;
+      ? T('jogado em {0}', [...new Set(x.plays.map(p => p.ano).filter(Boolean))].sort((a, b) => a - b).join(', ') || T('ano não informado')) + (x.it.plataforma ? ' · ' + esc(x.it.plataforma) : '')
+      : T('na lista “{0}”', esc(x.lista));
     html += `<div class="sg${i === FS.hi ? ' hi' : ''}" data-i="${i}"><div class="cv">${placeholder(x.it.titulo)}</div>
-      <div><div class="t">${esc(x.it.titulo)}</div><div class="m">${meta}</div></div>
+      <div><div class="t" translate="no">${esc(x.it.titulo)}</div><div class="m">${meta}</div></div>
       ${x.kind === 'jogo' ? '<span class="k">🔁 joguei de novo</span>' : ''}</div>`;
   });
   box.innerHTML = html;
@@ -2477,7 +2600,7 @@ async function chooseFSugg(i){
   $('#fTitulo').value = x.it.titulo; gp.links();
   const b = await gameCoverBlob(x.it);
   if (b) gp.setBlob(b); else if (x.it.capaUrl) gp.setUrl(x.it.capaUrl);
-  toast('Capa puxada da lista “' + x.lista + '”');
+  toast(T('Capa puxada da lista “{0}”', x.lista));
   $('#fPlat').focus();
 }
 
@@ -2491,7 +2614,7 @@ function renderLists(){
   const arr = lists
     .filter(l => !q || norm(l.nome + ' ' + l.itens.map(i => i.titulo).join(' ')).includes(q))
     .sort((a, b) => (b.atualizadoEm || '').localeCompare(a.atualizadoEm || ''));
-  $('#stats').innerHTML = `<strong>${lists.length}</strong> lista${lists.length === 1 ? '' : 's'}` + (arr.length !== lists.length ? ` · mostrando <strong>${arr.length}</strong>` : '');
+  $('#stats').innerHTML = T(lists.length === 1 ? '<strong>{0}</strong> lista' : '<strong>{0}</strong> listas', lists.length) + (arr.length !== lists.length ? ' · ' + T('mostrando <strong>{0}</strong>', arr.length) : '');
   const m = $('#listsMain');
   if (!lists.length) { m.innerHTML = `<div class="empty"><h3>Nenhuma lista ainda</h3><p>Clique em <b>＋ Criar lista</b> pra montar a primeira — tipo um top 10, seus musous favoritos, etc.</p></div>`; return; }
   if (!arr.length) { m.innerHTML = `<div class="empty"><h3>Nenhuma lista encontrada</h3></div>`; return; }
@@ -2499,7 +2622,7 @@ function renderLists(){
     const capas = l.itens.slice(0, 4);
     return `<div class="lcard" data-id="${l.id}">
       <div class="lstack">${capas.length ? capas.map((it, i) => `<div class="cv" data-item="${it.id}" style="z-index:${10 - i}">${placeholder(it.titulo)}</div>`).join('') : '<div class="lempty">Lista vazia</div>'}</div>
-      <div class="lbody"><div class="lname">${esc(l.nome)}</div><div class="lmeta">${plural(l.itens.length, 'jogo')}${l.ranqueada ? ' · 🏅 ranqueada' : ''}</div></div>
+      <div class="lbody"><div class="lname" translate="no">${esc(l.nome)}</div><div class="lmeta">${plural(l.itens.length, 'jogo')}${l.ranqueada ? ' · ' + T('🏅 ranqueada') : ''}</div></div>
     </div>`;
   }).join('')}</div>`;
   for (const card of m.querySelectorAll('.lcard')) {
@@ -2525,7 +2648,7 @@ function renderListPage(){
   $('#lvSize').value = view.lcard;
   const q = norm($('#lvq').value).trim();
   const shown = l.itens.map((it, i) => ({ it, i })).filter(({ it }) => !q || norm(it.titulo).includes(q));
-  $('#stats').innerHTML = `<strong>${plural(l.itens.length, 'jogo')}</strong>${l.ranqueada ? ' · 🏅 ranqueada' : ''}${q ? ` · mostrando <strong>${shown.length}</strong>` : ''}`;
+  $('#stats').innerHTML = `<strong>${plural(l.itens.length, 'jogo')}</strong>${l.ranqueada ? ' · ' + T('🏅 ranqueada') : ''}${q ? ' · ' + T('mostrando <strong>{0}</strong>', shown.length) : ''}`;
   const podeArrastar = !q && l.itens.length > 1;
   const m = $('#listsMain');
   let body;
@@ -2537,7 +2660,7 @@ function renderListPage(){
 }
 async function deleteList(id){
   const l = lists.find(x => x.id === id); if (!l) return;
-  if (!confirm(`Excluir a lista "${l.nome}"? Os jogos dela também somem (o catálogo não é afetado).`)) return;
+  if (!confirm(T('Excluir a lista "{0}"? Os jogos dela também somem (o catálogo não é afetado).', l.nome))) return;
   for (const it of l.itens) await removeCover(it);
   lists = lists.filter(x => x.id !== id);
   if (openListId === id) openListId = null;
@@ -2600,7 +2723,7 @@ function renderSugg(){
   box.innerHTML = `<div class="sh">Do seu catálogo · ${editing ? 'clique pra usar' : 'clique ou ↓ Enter pra adicionar com a capa'}</div>` + hits.map((g, i) => {
     const ja = inListAlready(g);
     return `<div class="sg${i === SG.hi ? ' hi' : ''}" data-i="${i}"><div class="cv">${placeholder(g.titulo)}</div>
-      <div><div class="t">${esc(g.titulo)}</div><div class="m">${esc([g.plataforma, g.ano].filter(Boolean).join(' · '))}</div></div>
+      <div><div class="t" translate="no">${esc(g.titulo)}</div><div class="m">${esc([g.plataforma, g.ano].filter(Boolean).join(' · '))}</div></div>
       ${ja ? '<span class="k">já está na lista</span>' : ''}</div>`;
   }).join('');
   box.classList.add('open');
@@ -2618,7 +2741,7 @@ async function chooseSugg(i){
     if (b) lp.setBlob(b); else if (g.capaUrl) lp.setUrl(g.capaUrl);
     return;
   }
-  if (inListAlready(g) && !confirm(`“${g.titulo}” já está na lista. Adicionar de novo?`)) return;
+  if (inListAlready(g) && !confirm(T('“{0}” já está na lista. Adicionar de novo?', g.titulo))) return;
   const it = await itemFromGame(g);
   LE.list.itens.push(it); LE.dirty = true;
   resetItemPanel(); renderTiles();
@@ -2791,7 +2914,7 @@ $('#leGrid').addEventListener('click', e => {
 /* ---------------- modais / menu ---------------- */
 function openModal(sel){ if (!$(sel).classList.contains('open')) SOM('abrir'); $(sel).classList.add('open'); document.body.style.overflow = 'hidden'; }
 function closeModals(force){
-  if (!force && $('#leBg').classList.contains('open') && (LE.dirty || panelHasContent()) && !confirm('Descartar as alterações dessa lista?')) return false;
+  if (!force && $('#leBg').classList.contains('open') && (LE.dirty || panelHasContent()) && !confirm(T('Descartar as alterações dessa lista?'))) return false;
   // editou a partir da tela do jogo e cancelou: volta pra ela
   const volta = !force && $('#formBg').classList.contains('open') && !sgOpen() && form.backTo;
   if (volta) form.backTo = null;
@@ -2811,6 +2934,7 @@ const anyModalOpen = () => !!document.querySelector('.modal-bg.open');
 let APPVER = '';
 function renderCfg(){
   $('#cfgTema').querySelectorAll('button').forEach(b => b.classList.toggle('on', b.dataset.v === CFG.tema));
+  $('#cfgIdioma').querySelectorAll('button').forEach(b => b.classList.toggle('on', b.dataset.v === LANG));
   $('#cfgFiltros').querySelectorAll('button').forEach(b => b.classList.toggle('on', b.dataset.v === (CFG.filtros === 'dock' ? 'dock' : 'barra')));
   const preset = CORES.some(([c]) => c.toLowerCase() === CFG.cor.toLowerCase());
   $('#cfgCores').innerHTML = CORES.map(([c, n]) => `<button type="button" class="sw${c.toLowerCase() === CFG.cor.toLowerCase() ? ' on' : ''}" data-c="${c}" title="${n}" style="background:${c}"></button>`).join('')
@@ -2838,7 +2962,7 @@ async function delGenre(t){
   const usados = games.filter(g => (g.generos || []).some(x => cmpTxt(x, t) === 0));
   let tirarDosJogos = false;
   if (usados.length) {
-    const r = await showMsg(`Excluir o gênero “${t}”`, `<p>${plural(usados.length, 'jogo usa', 'jogos usam')} esse gênero. O que fazer com eles?</p>`,
+    const r = await showMsg(`Excluir o gênero “${t}”`, `<p>${T('{0} esse gênero. O que fazer com eles?', plural(usados.length, 'jogo usa', 'jogos usam'))}</p>`,
       [{ label: 'Cancelar', value: null }, { label: 'Só tirar da lista de opções', value: 'lista' }, { label: 'Tirar dos jogos também', primary: true, value: 'jogos' }]);
     if (!r) return;
     tirarDosJogos = r === 'jogos';
@@ -2850,7 +2974,7 @@ async function delGenre(t){
     render();
   }
   renderCfgGens();
-  toast(`Gênero “${t}” excluído${tirarDosJogos ? ` de ${plural(usados.length, 'jogo')}` : ''}`);
+  toast(tirarDosJogos ? T('Gênero “{0}” excluído de {1}', t, plural(usados.length, 'jogo')) : T('Gênero “{0}” excluído', t));
 }
 function openCfg(){ renderCfg(); renderCfgGens(); renderUpd(); openModal('#cfgBg'); }
 
@@ -2885,7 +3009,7 @@ function renderUpd(){
   box.innerHTML = `<div class="card-upd"><h4>🎉 Versão ${esc(r.versao)} disponível</h4>
     <div class="upd-notes">${miniMD(r.notas) || 'Sem descrição.'}</div>
     ${r.temInstalador
-      ? `<button type="button" class="btn primary sm" id="updGo"${UPD.baixando ? ' disabled' : ''}>⬇ Baixar e instalar${r.tamanho ? ` (${Math.round(r.tamanho / 1048576)} MB)` : ''}</button>`
+      ? `<button type="button" class="btn primary sm" id="updGo"${UPD.baixando ? ' disabled' : ''}>${T('⬇ Baixar e instalar')}${r.tamanho ? ` (${Math.round(r.tamanho / 1048576)} MB)` : ''}</button>`
       : '<span>Essa versão ainda não tem o instalador anexado.</span>'}
     <button type="button" class="link" id="updPage" style="margin-left:10px">Ver no GitHub</button>
     <div class="prog" id="updProg" style="${UPD.baixando ? '' : 'display:none'}"><i></i></div>
@@ -2925,7 +3049,7 @@ function setCor(c, rerender = true){ CFG.cor = c; applyAccent(); saveConfig(); i
 /* formato: Nome - ano que jogou - ano do jogo - plataforma - nota
    cada pedaço vai pro primeiro campo (nessa ordem) em que se encaixa; o que não se encaixa é pulado */
 function parseGameList(text){
-  const plats = [...new Set([...PLAT_DEF, ...games.map(g => g.plataforma).filter(Boolean)])];
+  const plats = [...new Set([...platDef(), ...games.map(g => g.plataforma).filter(Boolean)])];
   const platOf = t => plats.find(p => norm(p) === norm(t)) || null;
   const isYear = t => /^(19[5-9]\d|20\d\d)$/.test(t) ? +t : null;
   const isNota = t => { const m = t.replace(',', '.').replace(/\s*\/\s*10$/, '').trim(); if (!/^\d{1,2}(\.\d+)?$/.test(m)) return null; const n = +m; return n >= 0 && n <= 10 ? Math.round(n * 2) / 2 : null; };
@@ -2972,8 +3096,8 @@ async function importGameListFile(file){
      <div class="imp-scroll"><table class="imp-tab"><tr><th>Jogo</th><th>Jogou em</th><th>Lançamento</th><th>Plataforma</th><th>Nota</th></tr>
      ${itens.map(r => `<tr class="${r.dup ? 'dup' : ''}" title="${r.dup ? 'Já está no catálogo com esse ano. Vai ser pulado.' : r.pulados.length ? 'Pulado: ' + esc(r.pulados.join(', ')) : ''}"><td>${esc(r.titulo)}</td>${cel(r.ano)}${cel(r.lancamento)}${cel(r.plataforma)}${cel(r.nota != null ? fmtNum(r.nota) : null)}</tr>`).join('')}
      </table></div>
-     ${dups ? `<p style="font-size:12.5px;color:var(--mut);margin-top:10px">${plural(dups, 'jogo riscado já está', 'jogos riscados já estão')} no catálogo com o mesmo ano e ${dups === 1 ? 'vai' : 'vão'} ser pulado${dups === 1 ? '' : 's'}.</p>` : ''}
-     ${ignoradas ? `<p style="font-size:12.5px;color:var(--mut)">${plural(ignoradas, 'linha ignorada', 'linhas ignoradas')} por não parecer um jogo.</p>` : ''}
+     ${dups ? `<p style="font-size:12.5px;color:var(--mut);margin-top:10px">${T(dups === 1 ? '{0} no catálogo com o mesmo ano e vai ser pulado.' : '{0} no catálogo com o mesmo ano e vão ser pulados.', plural(dups, 'jogo riscado já está', 'jogos riscados já estão'))}</p>` : ''}
+     ${ignoradas ? `<p style="font-size:12.5px;color:var(--mut)">${T('{0} por não parecer um jogo.', plural(ignoradas, 'linha ignorada', 'linhas ignoradas'))}</p>` : ''}
      <p style="font-size:12.5px;color:var(--mut)">Capa, horas e gêneros ficam pra você completar depois. Os jogos aparecem com borda colorida no catálogo.</p>`,
     [{ label: 'Cancelar', value: false }, ...(novos.length ? [{ label: `Importar ${plural(novos.length, 'jogo')}`, primary: true, value: true }] : [])]);
   if (!ok || !novos.length) return;
@@ -2998,7 +3122,7 @@ async function importGameListFile(file){
   await persist(); closeModals(true); clearUrlCache();
   if (view.tab !== 'cat') setTab('cat'); else render();
   const pend = games.filter(g => g.pendente).length;
-  toast(`✓ ${plural(novos.length, 'jogo importado', 'jogos importados')}${pend ? ` · ${pend} esperando você completar (borda colorida)` : ''}`, 5000);
+  toast(`✓ ${plural(novos.length, 'jogo importado', 'jogos importados')}${pend ? ' · ' + T('{0} esperando você completar (borda colorida)', pend) : ''}`, 5000);
 }
 
 /* ---------------- trazer dados do Catalogame antigo ---------------- */
@@ -3052,7 +3176,7 @@ async function importData(data){
     nl++;
   }
   await persist(); clearUrlCache(); view.tab === 'lists' ? renderLists() : render();
-  toast(`✓ Importado: ${plural(nj, 'jogo')} e ${plural(nl, 'lista')}`, 4000);
+  toast(T('✓ Importado: {0} e {1}', plural(nj, 'jogo'), plural(nl, 'lista')), 4000);
 }
 
 /* ---------------- eventos ---------------- */
@@ -3178,6 +3302,15 @@ $('#sgBody').addEventListener('click', async e => {
 });
 $('#sgBody').addEventListener('keydown', async e => { if (e.target.id === 'sgKeyIn' && e.key === 'Enter') { e.preventDefault(); $('#sgKeySave').click(); } });
 $('#cfgTema').addEventListener('click', e => { const b = e.target.closest('button[data-v]'); if (b) setTema(b.dataset.v); });
+$('#cfgIdioma').addEventListener('click', e => { const b = e.target.closest('button[data-v]'); if (b && b.dataset.v !== LANG) trocarIdioma(b.dataset.v); });
+function trocarIdioma(l){
+  CFG.idioma = l; saveConfig();
+  carregarIdioma(l); retraduzirTudo();
+  // redesenha o que é montado na hora, já no idioma novo
+  const tab = view.tab; appIniciado = false; setTab(tab); appIniciado = true;
+  renderCfg(); renderFiltBtn(); renderDock(); moveTabInd();
+  SOM('filtro');
+}
 $('#cfgFiltros').addEventListener('click', e => { const b = e.target.closest('button[data-v]'); if (!b) return; CFG.filtros = b.dataset.v; saveConfig(); applyFiltMode(); renderCfg(); });
 $('#cfgCores').addEventListener('click', e => { const b = e.target.closest('button[data-c]'); if (b) setCor(b.dataset.c); });
 $('#cfgCores').addEventListener('input', e => { if (e.target.id === 'cfgCor') { setCor(e.target.value, false); $('#cfgCores .lbl').textContent = 'Personalizada · ' + e.target.value.toUpperCase(); $('#cfgCores .sw.on')?.classList.remove('on'); e.target.closest('.sw').classList.add('on'); } });

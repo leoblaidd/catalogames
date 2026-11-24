@@ -39,31 +39,50 @@ BrandingText "${PRODUCT} ${VERSION}"
 !define MUI_ICON "icon.ico"
 !define MUI_UNICON "icon.ico"
 !define MUI_ABORTWARNING
-!define MUI_DIRECTORYPAGE_TEXT_TOP "Escolha a pasta onde o Catalogames vai ficar. Seus jogos, listas e capas são salvos dentro dela, na subpasta $\"dados$\".$\r$\n$\r$\nPra atualizar, use a mesma pasta da instalação anterior (ela já vem preenchida)."
+!define MUI_DIRECTORYPAGE_TEXT_TOP "$(TxtPasta)"
 !define MUI_FINISHPAGE_RUN "$INSTDIR\${EXE}"
-!define MUI_FINISHPAGE_RUN_TEXT "Abrir o Catalogames"
+!define MUI_FINISHPAGE_RUN_TEXT "$(TxtAbrir)"
 
 !insertmacro MUI_PAGE_DIRECTORY
 !insertmacro MUI_PAGE_INSTFILES
 !insertmacro MUI_PAGE_FINISH
 !insertmacro MUI_UNPAGE_CONFIRM
 !insertmacro MUI_UNPAGE_INSTFILES
+; idiomas: o Windows escolhe sozinho (inglês se não for português nem espanhol)
+!insertmacro MUI_LANGUAGE "English"
 !insertmacro MUI_LANGUAGE "PortugueseBR"
+!insertmacro MUI_LANGUAGE "Spanish"
+
+LangString TxtPasta ${LANG_PORTUGUESEBR} "Escolha a pasta onde o Catalogames vai ficar. Seus jogos, listas e capas são salvos dentro dela, na subpasta $\"dados$\".$\r$\n$\r$\nPra atualizar, use a mesma pasta da instalação anterior (ela já vem preenchida)."
+LangString TxtPasta ${LANG_ENGLISH} "Choose the folder where Catalogames will live. Your games, lists and covers are saved inside it, in the $\"dados$\" subfolder.$\r$\n$\r$\nTo update, use the same folder as your previous install (it's already filled in)."
+LangString TxtPasta ${LANG_SPANISH} "Elige la carpeta donde estará Catalogames. Tus juegos, listas y portadas se guardan dentro de ella, en la subcarpeta $\"dados$\".$\r$\n$\r$\nPara actualizar, usa la misma carpeta de la instalación anterior (ya viene completada)."
+LangString TxtAbrir ${LANG_PORTUGUESEBR} "Abrir o Catalogames"
+LangString TxtAbrir ${LANG_ENGLISH} "Open Catalogames"
+LangString TxtAbrir ${LANG_SPANISH} "Abrir Catalogames"
+LangString TxtAberto ${LANG_PORTUGUESEBR} "O Catalogames está aberto.$\r$\n$\r$\nClique em OK pra fechar ele e continuar."
+LangString TxtAberto ${LANG_ENGLISH} "Catalogames is open.$\r$\n$\r$\nClick OK to close it and continue."
+LangString TxtAberto ${LANG_SPANISH} "Catalogames está abierto.$\r$\n$\r$\nHaz clic en Aceptar para cerrarlo y continuar."
+LangString TxtWebView ${LANG_PORTUGUESEBR} "Essa versão do Catalogames precisa do Microsoft Edge WebView2, que não foi encontrado nesse PC.$\r$\n$\r$\n(Ele já vem no Windows 11 e na maioria dos Windows 10 atualizados.)$\r$\n$\r$\nQuer abrir a página da Microsoft pra instalar? A instalação do Catalogames continua normalmente."
+LangString TxtWebView ${LANG_ENGLISH} "This version of Catalogames needs Microsoft Edge WebView2, which wasn't found on this PC.$\r$\n$\r$\n(It comes with Windows 11 and most updated Windows 10 PCs.)$\r$\n$\r$\nDo you want to open Microsoft's page to install it? The Catalogames install will continue normally."
+LangString TxtWebView ${LANG_SPANISH} "Esta versión de Catalogames necesita Microsoft Edge WebView2, que no se encontró en este PC.$\r$\n$\r$\n(Viene con Windows 11 y con la mayoría de los Windows 10 actualizados.)$\r$\n$\r$\n¿Quieres abrir la página de Microsoft para instalarlo? La instalación de Catalogames continúa normalmente."
+LangString TxtApagar ${LANG_PORTUGUESEBR} "Apagar também seus jogos, listas e capas?$\r$\n$\r$\nEles estão em:$\r$\n$INSTDIR\dados$\r$\n$\r$\nClique em NÃO para manter. Se instalar o Catalogames de novo nessa mesma pasta, tudo volta."
+LangString TxtApagar ${LANG_ENGLISH} "Also delete your games, lists and covers?$\r$\n$\r$\nThey're in:$\r$\n$INSTDIR\dados$\r$\n$\r$\nClick NO to keep them. If you install Catalogames again in this same folder, everything comes back."
+LangString TxtApagar ${LANG_SPANISH} "¿Borrar también tus juegos, listas y portadas?$\r$\n$\r$\nEstán en:$\r$\n$INSTDIR\dados$\r$\n$\r$\nHaz clic en NO para conservarlos. Si vuelves a instalar Catalogames en esta misma carpeta, todo regresa."
 
 VIProductVersion "${VERSION}.0"
-VIAddVersionKey /LANG=${LANG_PORTUGUESEBR} "ProductName" "${PRODUCT}"
-VIAddVersionKey /LANG=${LANG_PORTUGUESEBR} "ProductVersion" "${VERSION}"
-VIAddVersionKey /LANG=${LANG_PORTUGUESEBR} "FileVersion" "${VERSION}"
-VIAddVersionKey /LANG=${LANG_PORTUGUESEBR} "FileDescription" "Instalador do ${PRODUCT}"
-VIAddVersionKey /LANG=${LANG_PORTUGUESEBR} "CompanyName" "leoblaidd"
-VIAddVersionKey /LANG=${LANG_PORTUGUESEBR} "LegalCopyright" "leoblaidd"
+VIAddVersionKey /LANG=${LANG_ENGLISH} "ProductName" "${PRODUCT}"
+VIAddVersionKey /LANG=${LANG_ENGLISH} "ProductVersion" "${VERSION}"
+VIAddVersionKey /LANG=${LANG_ENGLISH} "FileVersion" "${VERSION}"
+VIAddVersionKey /LANG=${LANG_ENGLISH} "FileDescription" "${PRODUCT} Setup"
+VIAddVersionKey /LANG=${LANG_ENGLISH} "CompanyName" "leoblaidd"
+VIAddVersionKey /LANG=${LANG_ENGLISH} "LegalCopyright" "leoblaidd"
 
 ; ---------- fecha o app se estiver aberto ----------
 !macro FecharApp UN
 Function ${UN}FecharApp
   FindWindow $0 "" "${PRODUCT}"
   ${If} $0 <> 0
-    MessageBox MB_OKCANCEL|MB_ICONINFORMATION "O Catalogames está aberto.$\r$\n$\r$\nClique em OK pra fechar ele e continuar." /SD IDOK IDOK +2
+    MessageBox MB_OKCANCEL|MB_ICONINFORMATION "$(TxtAberto)" /SD IDOK IDOK +2
     Abort
   ${EndIf}
   nsExec::Exec 'taskkill /IM "${EXE}"'
@@ -115,7 +134,7 @@ Function ChecarWebView2
   ${EndIf}
   ${If} $0 == ""
   ${OrIf} $0 == "0.0.0.0"
-    MessageBox MB_YESNO|MB_ICONEXCLAMATION "Essa versão do Catalogames precisa do Microsoft Edge WebView2, que não foi encontrado nesse PC.$\r$\n$\r$\n(Ele já vem no Windows 11 e na maioria dos Windows 10 atualizados.)$\r$\n$\r$\nQuer abrir a página da Microsoft pra instalar? A instalação do Catalogames continua normalmente." /SD IDNO IDNO +2
+    MessageBox MB_YESNO|MB_ICONEXCLAMATION "$(TxtWebView)" /SD IDNO IDNO +2
     ExecShell "open" "https://developer.microsoft.com/microsoft-edge/webview2/#download"
   ${EndIf}
 FunctionEnd
@@ -164,7 +183,7 @@ Section "Uninstall"
   Call un.FecharApp
   Call un.LimparMenosDados
   IfFileExists "$INSTDIR\dados\*.*" 0 semdados
-    MessageBox MB_YESNO|MB_ICONQUESTION|MB_DEFBUTTON2 "Apagar também seus jogos, listas e capas?$\r$\n$\r$\nEles estão em:$\r$\n$INSTDIR\dados$\r$\n$\r$\nClique em NÃO para manter. Se instalar o Catalogames de novo nessa mesma pasta, tudo volta." /SD IDNO IDNO semdados
+    MessageBox MB_YESNO|MB_ICONQUESTION|MB_DEFBUTTON2 "$(TxtApagar)" /SD IDNO IDNO semdados
     RMDir /r "$INSTDIR\dados"
   semdados:
   RMDir "$INSTDIR"
