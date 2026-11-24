@@ -135,6 +135,14 @@ O `fazer-instalador.sh` compila pra `x86_64-pc-windows-gnu` (precisa do `mingw-w
 
 ---
 
+## ☕ Apoie
+
+O Catalogames é gratuito e vai continuar sendo. Se ele te ajudou e você quiser dar uma força, dá pra me pagar um café no **[Ko-fi](https://ko-fi.com/leoblaidd)**. 💜
+
+[![Apoie no Ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/leoblaidd)
+
+---
+
 ## 📜 Versões
 
 ### 1.9.0
@@ -213,14 +221,6 @@ O `fazer-instalador.sh` compila pra `x86_64-pc-windows-gnu` (precisa do `mingw-w
 
 ### 1.0.0
 - Primeira versão como app instalável: catálogo, listas ranqueadas, capas salvas localmente e importação da versão HTML antiga.
-
----
-
-## ☕ Apoie
-
-O Catalogames é gratuito e vai continuar sendo. Se ele te ajudou e você quiser dar uma força, dá pra me pagar um café no **[Ko-fi](https://ko-fi.com/leoblaidd)**. 💜
-
-[![Apoie no Ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/leoblaidd)
 
 ---
 
