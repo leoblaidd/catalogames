@@ -38,7 +38,7 @@ The app has three tabs at the top center: **🎮 Catalog**, **📚 Lists** and *
   - Score, release year, genres and cover always stay the same across all playthroughs.
   - The game screen only shows "🔁 You played this X times" and the years. Clicking a year opens that playthrough.
   - If the playthroughs end up with different data, a **Match the 1st entry** button appears, copying everything from the first playthrough you added.
-  - Outside of grouping by year finished, playthroughs become a stack of covers. Hover over them and they fan out to the side.
+  - Outside of grouping by year finished, playthroughs become a stack: one slightly darker cover behind. Hover over it and it fans out showing the 3 latest playthroughs, with a **+N** badge when there are more. Clicking a card in the fan opens that playthrough.
 - Genres in alphabetical order, with search: type to filter or create a new one. The list can be edited in Settings.
 - **Import a list of games** from a `.txt` or `.md` file, one per line: `Name - year played - game year - platform - score`. Anything that doesn't follow the pattern is skipped, and the app shows a preview before importing. Imported games get a colored border until you fill in the cover, hours and genres.
 
@@ -84,6 +84,9 @@ The app has three tabs at the top center: **🎮 Catalog**, **📚 Lists** and *
 - Large images are resized automatically so the folder doesn't get heavy.
 
 ### Appearance
+- **Custom title bar:** the app's top bar is also the window's title bar, with minimize, maximize and close on the right. Drag it to move the window; double-click to maximize.
+- **Outline icons** everywhere (from [Lucide](https://lucide.dev)), buttons with a subtle 3D feel, and a lighter top bar so the blur shows through.
+- **Game cover like a real card:** on the game screen (normal and art mode), the cover tilts in 3D following the mouse, with a soft light reflection.
 - **Three languages:** English, Portuguese and Spanish (🌐 **Language** in Settings, no restart needed). The first time, the app opens in your Windows language; if it's none of the three, it opens in English.
 - **Smooth scrolling** with the mouse wheel in the catalog, lists and profile.
 - Soft, low **sound effects** (switching tabs, opening and closing, saving, exporting, filters), generated on the fly by the app itself. They can be turned off in Settings.
@@ -158,6 +161,13 @@ Catalogames is free and will stay that way. If it helped you and you'd like to g
 ---
 
 ## 📜 Versions
+
+### 2.1.0
+- The top bar is now the window's title bar too, with minimize, maximize and close.
+- Emojis replaced with outline icons (Lucide); gear icon for Settings; funnel icon for the filters, dimmed while they're hidden.
+- Replayed games: one darker cover behind; on hover, a fan with the 3 latest playthroughs and a **+N** badge.
+- 3D cover with a light reflection on the game screen; art mode without the box behind the info.
+- Buttons with a subtle 3D feel, lighter top bar, "CG" logo, and the dock's group icon dims on "No grouping".
 
 ### 2.0.0
 - **Three languages:** English, Portuguese and Spanish, picked from your Windows language and switchable in Settings without restarting.
@@ -247,3 +257,4 @@ Catalogames is free and will stay that way. If it helped you and you'd like to g
 - Idea, direction and testing: **[@leoblaidd](https://github.com/leoblaidd)**
 - Code: written with AI (Claude, by Anthropic)
 - Community covers: [SteamGridDB](https://www.steamgriddb.com)
+- Icons: [Lucide](https://lucide.dev) (ISC license)

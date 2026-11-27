@@ -1,6 +1,13 @@
 {
   "identifier": "default",
-  "description": "A janela principal pode ouvir os eventos do app (progresso da atualização).",
+  "description": "A janela principal ouve os eventos do app (progresso da atualização) e controla a própria janela (a barra de título é desenhada pelo app).",
   "windows": ["main"],
-  "permissions": ["core:default"]
+  "permissions": [
+    "core:default",
+    "core:window:allow-start-dragging",
+    "core:window:allow-minimize",
+    "core:window:allow-toggle-maximize",
+    "core:window:allow-is-maximized",
+    "core:window:allow-close"
+  ]
 }

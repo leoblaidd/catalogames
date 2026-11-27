@@ -36,7 +36,7 @@ O app tem três abas no centro do topo: **🎮 Catálogo**, **📚 Listas** e **
   - Nota, lançamento, gêneros e capa ficam sempre iguais em todas as jogadas.
   - A tela do jogo mostra só "🔁 Você jogou isso X vezes" e os anos. Clicar num ano abre aquela jogada.
   - Se as jogadas ficarem com dados diferentes, aparece o botão **Igualar ao 1º registro**, que copia tudo da primeira jogada cadastrada.
-  - Fora do agrupamento por ano terminado, as jogadas viram uma pilha de capas. Passando o mouse, elas se abrem para o lado.
+  - Fora do agrupamento por ano terminado, as jogadas viram uma pilha: uma capa um pouco mais escura atrás. Passando o mouse, abre um leque com as 3 últimas jogadas e um selo **+N** quando tem mais. Clicar numa carta do leque abre aquela jogada.
 - Gêneros em ordem alfabética, com busca: digite pra filtrar ou criar um novo. A lista é editável nas configurações.
 - **Importar uma lista de jogos** de um arquivo `.txt` ou `.md`, um por linha: `Nome - ano que jogou - ano do jogo - plataforma - nota`. O que não estiver no padrão é pulado, e o app mostra uma prévia antes de importar. Os jogos importados aparecem com borda colorida até você completar capa, horas e gêneros.
 
@@ -82,6 +82,9 @@ O app tem três abas no centro do topo: **🎮 Catálogo**, **📚 Listas** e **
 - As imagens grandes são reduzidas automaticamente para não pesar a pasta.
 
 ### Aparência
+- **Barra de título integrada:** a barra de cima do app também é a barra da janela, com minimizar, maximizar e fechar à direita. Arraste pra mover a janela; clique duas vezes pra maximizar.
+- **Ícones de contorno** em tudo (do [Lucide](https://lucide.dev)), botões com um leve relevo 3D e barra de cima mais clara, deixando o desfoque aparecer.
+- **Capa como um card de verdade:** na tela do jogo (normal e modo arte), a capa inclina em 3D seguindo o mouse, com um reflexo de luz suave.
 - **Três idiomas:** português, inglês e espanhol (🌐 **Idioma** nas Configurações, sem reiniciar). Na primeira vez o app abre no idioma do Windows; se não for nenhum dos três, abre em inglês.
 - **Rolagem suave** com a roda do mouse no catálogo, nas listas e no perfil.
 - **Efeitos sonoros** suaves e graves (trocar de aba, abrir e fechar, salvar, exportar, filtros), criados na hora pelo próprio app. Dá pra desligar nas Configurações.
@@ -156,6 +159,13 @@ O Catalogames é gratuito e vai continuar sendo. Se ele te ajudou e você quiser
 ---
 
 ## 📜 Versões
+
+### 2.1.0
+- A barra de cima virou também a barra da janela, com minimizar, maximizar e fechar.
+- Emojis trocados por ícones de contorno (Lucide); engrenagem nas Configurações; funil nos filtros, escurecido quando estão ocultos.
+- Jogos rejogados: uma capa mais escura atrás; no hover, leque com as 3 últimas jogadas e selo **+N**.
+- Capa em 3D com reflexo de luz na tela do jogo; modo arte sem o box atrás das infos.
+- Botões com leve relevo 3D, barra de cima mais clara, logo "CG" e ícone de agrupar do dock apagado em "Sem agrupar".
 
 ### 2.0.0
 - **Três idiomas:** português, inglês e espanhol, com detecção do idioma do Windows e troca nas Configurações sem reiniciar.
@@ -245,3 +255,4 @@ O Catalogames é gratuito e vai continuar sendo. Se ele te ajudou e você quiser
 - Ideia, direção e testes: **[@leoblaidd](https://github.com/leoblaidd)**
 - Código: escrito com IA (Claude, da Anthropic)
 - Capas da comunidade: [SteamGridDB](https://www.steamgriddb.com)
+- Ícones: [Lucide](https://lucide.dev) (licença ISC)

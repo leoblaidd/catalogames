@@ -2068,5 +2068,21 @@ window.CG_IDIOMAS = {
 "ex: Top 10 RPGs da vida, Musous favoritos…": [
 "e.g. Top 10 RPGs of all time, Favorite musous…",
 "ej.: Top 10 RPGs de la vida, Musou favoritos…"
+],
+"Minimizar": [
+"Minimize",
+"Minimizar"
+],
+"Maximizar": [
+"Maximize",
+"Maximizar"
+],
+"Restaurar": [
+"Restore",
+"Restaurar"
+],
+"Fechar": [
+"Close",
+"Cerrar"
 ]
 };

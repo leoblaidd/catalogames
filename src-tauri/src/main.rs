@@ -645,6 +645,8 @@ fn main() {
                 .inner_size(1440.0, 920.0)
                 .min_inner_size(900.0, 600.0)
                 .maximized(true)
+                .decorations(false) // a barra de título é a própria barra de cima do app
+                .shadow(true)
                 .theme(tema)
                 .background_color(fundo)
                 .disable_drag_drop_handler() // deixa a interface receber arquivos arrastados, como no Electron

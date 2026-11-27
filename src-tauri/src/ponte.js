@@ -58,6 +58,19 @@
     sgdbSearch:     termo         => invoke('sgdb_search', { termo: String(termo || '') }),
     sgdbGrids:      (id, page, st, tipo) => invoke('sgdb_grids', { gameId: String(id ?? ''), page: Number(page) || 0, estilo: String(st || ''), tipo: String(tipo || '') }),
     importPick:     kind          => invoke('import_pick', { kind: String(kind || '') }),
+    // janela (o app desenha a própria barra de título)
+    janela: (() => {
+      const w = () => T().window && T().window.getCurrentWindow ? T().window.getCurrentWindow() : null;
+      const cmd = (c, extra = {}) => invoke('plugin:window|' + c, { label: 'main', ...extra });
+      return {
+        minimizar:  () => w() ? w().minimize() : cmd('minimize'),
+        maximizar:  () => w() ? w().toggleMaximize() : cmd('toggle_maximize'),
+        fechar:     () => w() ? w().close() : cmd('close'),
+        arrastar:   () => w() ? w().startDragging() : cmd('start_dragging'),
+        maximizada: () => w() ? w().isMaximized() : cmd('is_maximized'),
+        aoMudar:    cb => { const x = w(); if (x) x.onResized(() => cb()); },
+      };
+    })(),
   };
 
   // links pra fora (Google Imagens, SteamGridDB…) abrem no navegador do PC, como no Electron
